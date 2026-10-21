@@ -25,7 +25,7 @@ html, body {
 #pips i.c { background: #fff; }
 #pips i:nth-child(9) { border-radius: 50%; }
 
-#arena { flex: 1; position: relative; overflow: hidden; margin: 0 6px; border-radius: 12px; border: 3px solid #fff; display: flex; align-items: center; justify-content: center; min-height: 0; }
+#arena { flex: 1; position: relative; overflow: hidden; margin: 24px 6px; border-radius: 12px; border: 3px solid #fff; display: flex; align-items: center; justify-content: center; min-height: 0; }
 #arena:before { content: ""; position: absolute; inset: -60%; background: var(--bgg, repeating-conic-gradient(#6a1b9a 0 10deg, #1b0a4d 10deg 20deg, #ff2e88 20deg 30deg, #1b0a4d 30deg 40deg)); animation: spin 50s linear infinite; opacity: .6; filter: hue-rotate(var(--h,0deg)); }
 #arena:after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle, transparent 35%, #000 130%); }
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -66,6 +66,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .co { position: absolute; top: -9px; left: -9px; width: 22px; height: 22px; border-radius: 50%; background: var(--gold); color: #000; display: grid; place-items: center; border: 2px solid #000; }
 .r { display: flex; align-items: center; gap: 3px; font-size: 14px; text-align: center; line-height: 1.1; }
 .r small { font-size: 10px; opacity: .8; }
+
 #ov { position: absolute; inset: 0; background: #05020ff0; z-index: 10; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 16px; text-align: center; overflow-y: auto; }
 #ov.on { display: flex; }
 .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
@@ -155,7 +156,24 @@ const SH = {
     ring: '<path fill-rule="evenodd" d="M50 4a46 46 0 100 92 46 46 0 100-92zm0 24a22 22 0 110 44 22 22 0 110-44z"/>',
     pent: '<polygon points="50,5 95,38 78,92 22,92 5,38"/>',
     oct: '<polygon points="35,5 65,5 95,35 95,65 65,95 35,95 5,65 5,35"/>',
-    arrow: '<polygon points="50,4 92,50 68,50 68,96 32,96 32,50 8,50"/>'
+    arrow: '<polygon points="50,4 92,50 68,50 68,96 32,96 32,50 8,50"/>',
+    moon: '<path d="M 52 5 A 45 45 0 1 1 7.5 67 A 39.3 39.3 0 0 0 52 5 Z"/>',
+    trap: '<polygon points="20,30 80,30 95,85 5,85"/>',
+    kite: '<polygon points="50,5 85,35 50,95 15,35"/>',
+    shield: '<path d="M 15 20 L 85 20 L 85 50 C 85 75 65 90 50 95 C 35 90 15 75 15 50 Z"/>',
+    drop: '<path d="M50 5 C58 22 82 42 82 65 A32 32 0 0 1 18 65 C18 42 42 22 50 5 Z"/>',
+    heart: '<path d="M50 90 C10 60 5 35 25 20 C38 11 50 22 50 30 C50 22 62 11 75 20 C95 35 90 60 50 90 Z"/>',
+    bolt: '<polygon points="58,4 18,56 44,56 36,96 82,40 55,40"/>',
+    chevron: '<polygon points="50,6 94,52 94,92 50,46 6,92 6,52"/>',
+    leaf: '<path d="M10 90 C10 40 40 10 90 10 C90 60 60 90 10 90 Z"/>',
+    para: '<polygon points="28,18 96,18 72,82 4,82"/>',
+    semi: '<path d="M4 70 A46 46 0 0 1 96 70 Z"/>',
+    pill: '<rect x="4" y="30" width="92" height="40" rx="20" transform="rotate(-35 50 50)"/>',
+    pie: '<path d="M50 50 L89.8 27 A46 46 0 1 0 89.8 73 Z"/>',
+    bowtie: '<polygon points="4,20 50,50 96,20 96,80 50,50 4,80"/>',
+    crown: '<polygon points="6,82 6,25 28,50 50,15 72,50 94,25 94,82"/>',
+    arch: '<path d="M18 94 L18 48 A32 32 0 0 1 82 48 L82 94 Z"/>',
+    clover: '<path d="M27.6 41.0 A25 25 0 1 0 50.0 75.8 A25 25 0 1 0 72.4 41.0 A25 25 0 1 0 27.6 41.0 Z"/>'
 };
 
 const shape = (s, col, z = 100) => `<svg class="sh" viewBox="0 0 100 100" width="${z}" fill="${col}" stroke="#fff" stroke-width="4" stroke-linejoin="round">${s.split('+').map((k, i) => `<g transform="${i ? 'translate(25 25) scale(.5)' : ''}">${SH[k]}</g>`).join('')}</svg>`;
@@ -163,25 +181,26 @@ const shape = (s, col, z = 100) => `<svg class="sh" viewBox="0 0 100 100" width=
 const K = { c: 1, d: 6 }, D = { c: 1, k: 5 }, rep = (c, n) => Array(n).fill(c);
 
 const CL = [
-    { s: 'tri', col: '#ff4d5e', hp: 74, t: 'Hits hard', deck: [...rep(K, 5), ...rep(D, 4), { c: 2, d: 8, v: 2 }], pool: [{ c: 1, d: 3, n: 3 }, { c: 2, d: 8, all: 1 }, { c: 1, s: 2 }, { c: 2, d: 15 }, { c: 0, d: 4 }, { c: 2, d: 5, n: 3 }, { c: 1, d: 7, v: 1 }, { c: 1, d: 5, w: 1 }] },
-    { s: 'sq', col: '#4da3ff', hp: 75, t: 'Stands firm', deck: [...rep(K, 4), ...rep(D, 5), { c: 2, bd: 1 }], pool: [{ c: 2, k: 13 }, { c: 1, k: 7, w: 1 }, { c: 1, k: 6, d: 5 }, { c: 1, k: 9 }, { c: 0, k: 4 }, { c: 3, k: 19, x: 1 }, { c: 1, k: 4, v: 2 }, { c: 2, k: 8, bd: 1 }] },
-    { s: 'cir', col: '#ffe14d', hp: 72, t: 'Plays tricks', deck: [...rep(K, 4), ...rep(D, 4), { c: 1, p: 10 }, { c: 1, w: 2 }], pool: [{ c: 2, p: 14 }, { c: 1, d: 4, p: 7 }, { c: 0, e: 1, x: 1 }, { c: 1, w: 3, x: 1 }, { c: 2, p: 10, all: 1 }, { c: 1, k: 5, w: 1 }, { c: 0, d: 3, w: 1 }, { c: 1, p: 8, v: 1 }] },
-    { s: 'dia', col: '#ff6bcb', hp: 60, t: 'Rolls dice', deck: [...rep(K, 4), ...rep(D, 4), { c: 1, d: 7, z: 1 }, { c: 1, k: 6, z: 1 }], pool: [] },
-    { s: 'hex', col: '#ff9f43', hp: 64, t: 'Stacks power', deck: [...rep(K, 4), ...rep(D, 4), { c: 0, m: 30, d: 5 }, { c: 0, m: 25, k: 3 }], pool: [{ c: 2, m: 55, d: 8 }, { c: 0, m: 30, x: 1 }, { c: 1, m: 35, d: 3, n: 2 }, { c: 2, d: 4, n: 4 }, { c: 3, m: 95, x: 1 }, { c: 1, m: 25, w: 1 }, { c: 2, m: 45, d: 6, all: 1 }, { c: 1, m: 20, k: 6 }] },
-    { s: 'star', col: '#a29bfe', hp: 62, t: 'Drains life', deck: [...rep(K, 4), ...rep(D, 4), { c: 1, d: 4, h: 3 }, { c: 1, d: 5, pi: 1 }], pool: [{ c: 2, d: 9, h: 6 }, { c: 1, d: 5, h: 2, v: 1 }, { c: 0, d: 3, h: 2 }, { c: 2, d: 6, all: 1, h: 4 }, { c: 1, k: 5, h: 3 }, { c: 2, d: 10, pi: 1 }, { c: 3, d: 14, h: 10, x: 1 }, { c: 1, v: 2, h: 3 }] },
-    { s: 'cross', col: '#333333', hp: 76, t: 'Blood Oath', deck: [...rep(K, 4), ...rep(D, 4), { c: 0, d: 9, sd: 3 }, { c: 1, k: 8, x: 1 }], pool: [{ c: 1, h: 5 }, { c: 2, d: 16, sd: 3, all: 1 }, { c: 2, s: 2, x: 1 }, { c: 1, d: 9, h: 3 }, { c: 0, sd: 2, w: 2 }, { c: 3, d: 25, sd: 6 }] },
-    { s: 'ring', col: '#00cec9', hp: 66, t: 'Flow State', deck: [...rep(K, 4), ...rep(D, 4), { c: 0, d: 5, w: 1, dc: 1 }, { c: 1, s: 1, x: 1 }], pool: [{ c: 0, w: 2, dc: 1 }, { c: 1, d: 6, w: 1 }, { c: 0, k: 4, w: 1 }, { c: 2, d: 10, s: 2, x: 1 }, { c: 1, k: 12, x: 1 }, { c: 2, e: 2, w: 2, x: 1 }] }
+    { s: 'tri', col: '#ff4d5e', hp: 74, deck: [...rep(K, 5), ...rep(D, 4), { c: 2, d: 8, v: 2 }], pool: [{ c: 1, d: 3, n: 3 }, { c: 2, d: 8, all: 1 }, { c: 1, s: 2 }, { c: 2, d: 15 }, { c: 0, d: 4 }, { c: 2, d: 5, n: 3 }, { c: 1, d: 7, v: 1 }, { c: 1, d: 5, w: 1 }, { c: 3, d: 7, n: 4 }, { c: 1, d: 6, s: 1 }, { c: 2, d: 6, all: 1, v: 1 }, { c: 0, s: 2, x: 1 }, { c: 3, d: 26, x: 1 }, { c: 1, m: 40, d: 4 }, { c: 2, m: 60, d: 6, n: 2 }, { c: 3, d: 32 }, { c: 3, d: 20, all: 1, n: 2 }] },
+    
+    { s: 'sq', col: '#4da3ff', hp: 75, deck: [...rep(K, 4), ...rep(D, 5), { c: 2, bd: 1 }], pool: [{ c: 2, k: 13 }, { c: 1, k: 7, w: 1 }, { c: 1, k: 6, d: 5 }, { c: 1, k: 9 }, { c: 0, k: 4 }, { c: 3, k: 19, x: 1 }, { c: 1, k: 4, v: 2 }, { c: 2, k: 8, bd: 1 }, { c: 1, bd: 1, v: 1 }, { c: 2, k: 9, w: 2 }, { c: 0, k: 5, x: 1 }, { c: 2, k: 9, v: 1, all: 1 }, { c: 1, k: 6, h: 3 }, { c: 1, m: 30, k: 6 }, { c: 3, k: 25, bd: 1 }, { c: 2, k: 10, w: 2, bd: 1 }, { c: 3, k: 35, x: 1 }] },
+    
+    { s: 'cir', col: '#a29bfe', hp: 72, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, p: 10 }, { c: 1, w: 2 }], pool: [{ c: 2, p: 14 }, { c: 1, d: 4, p: 7 }, { c: 0, e: 1, x: 1 }, { c: 1, w: 3, x: 1 }, { c: 2, p: 10, all: 1 }, { c: 1, k: 5, w: 1 }, { c: 0, d: 3, w: 1 }, { c: 1, p: 8, v: 1 }, { c: 2, px: 1, x: 1 }, { c: 0, p: 8, x: 1 }, { c: 2, p: 9, w: 2 }, { c: 1, p: 7, all: 1 }, { c: 2, k: 5, p: 11 }, { c: 1, m: 35, p: 7 }, { c: 1, pt: 1 }, { c: 2, p: 6, pt: 1 }, { c: 3, p: 20, all: 1 }, { c: 2, px: 1, w: 1 }, { c: 2, p: 12, pt: 1 }] },
+    
+    { s: 'dia', col: '#ff6bcb', hp: 60, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, d: 7, z: 1 }, { c: 1, k: 6, z: 1 }], pool: [{ c: 2, d: 12, z: 1 }, { c: 0, d: 5, z: 1 }, { c: 2, p: 8, z: 1 }, { c: 1, k: 10, z: 1 }, { c: 3, d: 20, z: 1 }, { c: 0, e: 2, sd: 6, x: 1 }, { c: 1, m: 60, sd: 4 }, { c: 1, d: 4, n: 3, z: 1 }, { c: 3, d: 12, n: 3, z: 1 }, { c: 2, k: 18, w: 2, z: 1 }, { c: 3, m: 80, z: 1 }] },
+    
+    { s: 'moon', col: '#00cec9', hp: 64, deck: [...rep(K, 4), ...rep(D, 4), { c: 0, m: 30, d: 5 }, { c: 0, m: 25, k: 3 }], pool: [{ c: 2, m: 55, d: 8 }, { c: 0, m: 30, x: 1 }, { c: 1, m: 35, d: 3, n: 2 }, { c: 2, d: 4, n: 4 }, { c: 3, m: 95, x: 1 }, { c: 1, m: 25, w: 1 }, { c: 2, m: 45, d: 6, all: 1 }, { c: 1, m: 20, k: 6 }, { c: 3, m: 100, x: 1 }, { c: 2, m: 40, w: 2 }, { c: 3, m: 60, d: 10 }] },
+    
+    { s: 'star', col: '#2ecc71', hp: 62, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, d: 4, h: 3 }, { c: 1, d: 5, pi: 1 }], pool: [{ c: 2, d: 9, h: 6 }, { c: 1, d: 5, h: 2, v: 1 }, { c: 0, d: 3, h: 2 }, { c: 2, d: 6, all: 1, h: 4 }, { c: 1, k: 5, h: 3 }, { c: 2, d: 10, pi: 1 }, { c: 3, d: 14, h: 10, x: 1 }, { c: 1, v: 2, h: 3 }, { c: 3, d: 20, h: 10 }, { c: 2, d: 12, all: 1, h: 6 }, { c: 3, d: 30, h: 15, x: 1 }] },
+    
+    { s: 'cross', col: '#333333', hp: 76, deck: [...rep(K, 4), ...rep(D, 4), { c: 0, d: 9, sd: 3 }, { c: 1, k: 8, x: 1 }], pool: [{ c: 1, h: 5 }, { c: 2, d: 16, sd: 3, all: 1 }, { c: 2, s: 2, x: 1 }, { c: 1, d: 9, h: 3 }, { c: 0, sd: 2, w: 2 }, { c: 3, d: 25, sd: 6 }, { c: 3, d: 40, sd: 8 }, { c: 2, d: 20, all: 1, sd: 5 }, { c: 0, d: 12, sd: 3, w: 2 }] },
+    
+    { s: 'ring', col: '#ffe14d', hp: 66, deck: [...rep(K, 4), ...rep(D, 4), { c: 0, d: 5, w: 1, dc: 1 }, { c: 1, s: 1, x: 1 }], pool: [{ c: 0, w: 2, dc: 1 }, { c: 1, d: 6, w: 1 }, { c: 0, k: 4, w: 1 }, { c: 2, d: 10, s: 2, x: 1 }, { c: 1, k: 12, x: 1 }, { c: 2, e: 2, w: 2, x: 1 }, { c: 3, d: 8, n: 3, w: 2 }, { c: 0, k: 10, dc: 2 }, { c: 2, e: 3, x: 1 }] },
+    
+    { s: 'hex', col: '#ff9f43', hp: 68, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, d: 3, n: 2 }, { c: 1, v: 2, w: 1 }], pool: [{ c: 2, d: 6, n: 3 }, { c: 1, v: 3, all: 1 }, { c: 2, k: 8, v: 2 }, { c: 0, d: 5, v: 1 }, { c: 3, d: 5, n: 4 }, { c: 2, k: 14, x: 1 }, { c: 3, d: 6, n: 5, v: 2 }, { c: 2, v: 3, all: 1 }, { c: 1, d: 4, n: 3 }] }
 ];
 
-const NEU = [{ c: 1, d: 9 }, { c: 1, k: 7 }, { c: 2, d: 10, w: 1 }, { c: 0, k: 3, w: 1 }, { c: 1, d: 8, pi: 1 }, { c: 2, d: 5, h: 5 }, { c: 2, d: 7, k: 7 }, { c: 0, d: 5, x: 1 }, { c: 1, v: 2, w: 1 }, { c: 3, d: 13, all: 1 }, { c: 1, s: 1, k: 4 }];
-CL[0].pool.push({ c: 3, d: 7, n: 4 }, { c: 1, d: 6, s: 1 }, { c: 2, d: 6, all: 1, v: 1 }, { c: 0, s: 2, x: 1 }, { c: 3, d: 26, x: 1 });
-CL[1].pool.push({ c: 1, bd: 1, v: 1 }, { c: 2, k: 9, w: 2 }, { c: 0, k: 5, x: 1 }, { c: 2, k: 9, v: 1, all: 1 }, { c: 1, k: 6, h: 3 });
-CL[2].pool.push({ c: 2, px: 1, x: 1 }, { c: 0, p: 8, x: 1 }, { c: 2, p: 9, w: 2 }, { c: 1, p: 7, all: 1 }, { c: 2, k: 5, p: 11 });
-NEU.push({ c: 1, m: 50 }, { c: 0, m: 25, x: 1 });
-CL[0].pool.push({ c: 1, m: 40, d: 4 }, { c: 2, m: 60, d: 6, n: 2 });
-CL[1].pool.push({ c: 1, m: 30, k: 6 });
-CL[2].pool.push({ c: 1, m: 35, p: 7 }, { c: 1, pt: 1 }, { c: 2, p: 6, pt: 1 });
-CL[3].pool.push({ c: 2, d: 12, z: 1 }, { c: 0, d: 5, z: 1 }, { c: 2, p: 8, z: 1 }, { c: 1, k: 10, z: 1 }, { c: 3, d: 20, z: 1 }, { c: 0, e: 2, sd: 6, x: 1 }, { c: 1, m: 60, sd: 4 }, { c: 1, d: 4, n: 3, z: 1 });
+const NEU = [{ c: 1, d: 9 }, { c: 1, k: 7 }, { c: 2, d: 10, w: 1 }, { c: 0, k: 3, w: 1 }, { c: 1, d: 8, pi: 1 }, { c: 2, d: 5, h: 5 }, { c: 2, d: 7, k: 7 }, { c: 0, d: 5, x: 1 }, { c: 1, v: 2, w: 1 }, { c: 3, d: 13, all: 1 }, { c: 1, s: 1, k: 4 }, { c: 1, m: 50 }, { c: 0, m: 25, x: 1 }, { c: 3, d: 25 }, { c: 3, k: 25 }, { c: 2, d: 10, w: 2 }, { c: 3, e: 2, w: 3, x: 1 }];
 
 const POTIONS = [
     { c: 0, h: 15, pot: 1 },
@@ -191,9 +210,26 @@ const POTIONS = [
     { c: 0, w: 3, pot: 1 }
 ];
 
-const E1 = [{ s: 'cir', col: '#ffb347', g: '●', hp: 14, mv: [{ a: 5 }, { a: 5 }, { k: 6 }] }, { s: 'tri', col: '#7bed9f', g: '▲', hp: 12, mv: [{ a: 7 }, { u: 2 }, { a: 4 }] }, { s: 'sq', col: '#70a1ff', g: '■', hp: 18, mv: [{ k: 6 }, { a: 7 }] }, { s: 'pent', col: '#ff9ff3', g: '⬟', hp: 16, mv: [{ a: 3, n: 2 }, { k: 5 }, { a: 6 }] }];
-const E2 = [{ s: 'dia', col: '#ff6bcb', g: '◆', hp: 30, mv: [{ a: 9 }, { a: 4, n: 2 }, { k: 9 }] }, { s: 'hex', col: '#c56cf0', g: '⬢', hp: 36, mv: [{ k: 10 }, { a: 13 }, { u: 2 }] }, { s: 'star', col: '#fff200', g: '★', hp: 26, mv: [{ a: 4, n: 3 }, { a: 8, k: 4 }, { u: 1 }] }, { s: 'oct', col: '#54a0ff', g: '◉', hp: 32, mv: [{ k: 8, u: 1 }, { a: 6, n: 2 }, { a: 11 }] }];
-const E3 = [{ s: 'cross', col: '#ff7675', g: '✚', hp: 48, mv: [{ a: 12 }, { k: 12 }, { a: 5, n: 3 }, { u: 2 }] }, { s: 'ring', col: '#00cec9', g: '◯', hp: 44, mv: [{ a: 8, k: 8 }, { a: 14 }, { u: 2, k: 6 }] }, { s: 'arrow', col: '#ff9f1a', g: '▶', hp: 40, mv: [{ u: 2 }, { a: 10, n: 2 }, { a: 16 }] }];
+const E1 = [
+    { s: 'drop', col: '#ffb347', g: '💧', hp: 16, mv: [{ a: 4 }, { a: 5, k: 4 }, { u: 1 }] }, 
+    { s: 'chevron', col: '#7bed9f', g: '⌃', hp: 12, mv: [{ a: 6 }, { a: 4, u: 1 }, { k: 6 }] }, 
+    { s: 'pill', col: '#70a1ff', g: '▬', hp: 20, mv: [{ k: 8, u: 1 }, { a: 8 }] }, 
+    { s: 'pent', col: '#ff9ff3', g: '⬟', hp: 18, mv: [{ a: 3, n: 2 }, { a: 4, k: 5 }] },
+    { s: 'trap', col: '#a4b0be', g: '⏢', hp: 25, mv: [{ k: 6 }, { k: 6, a: 3 }, { u: 1, k: 8 }] }
+];
+const E2 = [
+    { s: 'leaf', col: '#ff6bcb', g: '❦', hp: 32, mv: [{ a: 8, u: 1 }, { k: 9 }, { a: 4, n: 2 }] }, 
+    { s: 'para', col: '#c56cf0', g: '▰', hp: 38, mv: [{ u: 2 }, { a: 11 }, { a: 6, k: 6 }] }, 
+    { s: 'pie', col: '#fff200', g: '◔', hp: 28, mv: [{ a: 3, n: 3 }, { u: 1, k: 5 }, { a: 5, n: 2 }] }, 
+    { s: 'oct', col: '#54a0ff', g: '◉', hp: 35, mv: [{ h: 8, k: 8 }, { a: 7, n: 2 }, { u: 2 }] },
+    { s: 'kite', col: '#ff7f50', g: '⟠', hp: 26, mv: [{ k: 12, u: 1 }, { a: 2, n: 4 }, { a: 10 }] }
+];
+const E3 = [
+    { s: 'bowtie', col: '#ff7675', g: '⧓', hp: 50, mv: [{ h: 10, u: 2 }, { a: 12 }, { a: 5, n: 3 }] }, 
+    { s: 'semi', col: '#00cec9', g: '◗', hp: 48, mv: [{ k: 15, u: 2 }, { a: 18 }, { a: 8, k: 10 }] }, 
+    { s: 'arrow', col: '#ff9f1a', g: '▶', hp: 42, mv: [{ u: 3, k: 5 }, { a: 6, n: 3 }, { a: 20 }] },
+    { s: 'shield', col: '#eccc68', g: '🛡', hp: 60, mv: [{ k: 20, h: 5 }, { a: 10, u: 2 }, { a: 15, k: 10 }] }
+];
 const BOSSES = [{ b: 1, s: 'ring+star', col: '#ff3860', g: '◎', hp: 85, mv: [{ u: 2 }, { a: 14 }, { a: 5, n: 3 }, { k: 15 }, { a: 18 }] }, { b: 1, s: 'hex+dia', col: '#a29bfe', g: '◈', hp: 105, mv: [{ k: 12, u: 1 }, { a: 6, n: 4 }, { a: 18 }, { u: 2, k: 8 }, { a: 9, n: 3 }] }, { b: 1, s: 'cross+cir', col: '#fdcb6e', g: '✦', hp: 130, mv: [{ a: 12, k: 12 }, { a: 30 }, { u: 4, k: 10 }, { a: 8, n: 5 }, { h: 30, k: 10 }] }];
 const ALLE = [...E1.map(x => ({ ...x, w: 1 })), ...E2.map(x => ({ ...x, w: 2 })), ...E3.map(x => ({ ...x, w: 3 }))];
 
@@ -515,7 +551,7 @@ const ov = h => { $('#ov').innerHTML = h; $('#ov').classList.add('on'); }, hide 
 
 function menu() {
     B = null; S = null; $('#en').innerHTML = ''; $('#hand').innerHTML = ''; $('#hpn').textContent = '0'; dv = 0; $('#hpm').textContent = '';
-    ov(`<div style="font-size:16px">Choose a shape</div><div class="row">${CL.map((c, i) => `<button class="win big" data-i="${i}">${shape(c.s, c.col, 64)}<span>${c.t}</span><span class="ch" style="color:var(--sp)">${ic('hrt', 13)}${c.hp}</span></button>`).join('')}</div>`);
+    ov(`<div style="font-size:16px">Choose a shape</div><div style="display:grid;grid-template-columns:repeat(3, 86px);gap:16px;justify-content:center;margin-top:20px">${[0, 8, 7, 3, 6, 5, 2, 1, 4].map(i => [CL[i], i]).map(([c, i]) => `<button class="win big" data-i="${i}" style="width: 86px; height: 86px; padding: 0; justify-content: center;">${shape(c.s, c.col, 54)}</button>`).join('')}</div>`);
     document.querySelectorAll('.big').forEach(b => b.onclick = () => {
         const c = CL[b.dataset.i];
         S = { cl: c, hp: c.hp, mhp: c.hp, me: 3, f: 0, gold: 20, rel: [], rm: 0, deck: [...c.deck] };
@@ -562,15 +598,15 @@ function reward(bs, el) {
     $('#sk').onclick = nx;
 }
 
-const RL = [0, { t: 'First attack each turn hits twice', s: 'tri', c: '#ff4d5e', w: 4 }, { t: 'Block carries over', s: 'sq', c: '#4da3ff', w: 4 }, { t: 'Poison never decays', s: 'dia', c: '#b46bff', w: 1 }, { t: 'Every 5th card is free', s: 'hex', c: '#ffd54a', w: 3 }, { t: 'Draw 1 extra card', s: 'cir', c: '#9be7ff', w: 3 }, { t: 'Fights start with +2 strength', s: 'star', c: '#ff9f43', w: 4 }, { t: 'Heal 3 on every kill', s: 'cross', c: '#59e07a', w: 4 }, { t: 'Turns start with +20% amp', s: 'arrow', c: '#ff8a3d', w: 3 }, { t: 'Unspent energy carries over', s: 'ring', c: '#fff', w: 1 }, { t: 'Hand is kept between turns', s: 'oct', c: '#fd79a8', w: 1 }, { t: 'Start each fight with 8 block', s: 'oct', c: '#4da3ff', w: 3 }, { t: 'Double gold interest', s: 'cir', c: '#ffe14d', w: 3 }, { t: 'Enemies start vulnerable', s: 'tri', c: '#ff9ff3', w: 3 },
+const RL = [0, { t: 'First attack each turn hits twice', s: 'tri', c: '#ff4d5e', w: 4 }, { t: 'Block carries over', s: 'sq', c: '#4da3ff', w: 4 }, { t: 'Poison never decays', s: 'dia', c: '#b46bff', w: 1 }, { t: 'Every 5th card is free', s: 'moon', c: '#ffd54a', w: 3 }, { t: 'Draw 1 extra card', s: 'cir', c: '#9be7ff', w: 3 }, { t: 'Fights start with +2 strength', s: 'star', c: '#ff9f43', w: 4 }, { t: 'Heal 3 on every kill', s: 'cross', c: '#59e07a', w: 4 }, { t: 'Turns start with +20% amp', s: 'arrow', c: '#ff8a3d', w: 3 }, { t: 'Unspent energy carries over', s: 'ring', c: '#fff', w: 1 }, { t: 'Hand is kept between turns', s: 'oct', c: '#fd79a8', w: 1 }, { t: 'Start each fight with 8 block', s: 'oct', c: '#4da3ff', w: 3 }, { t: 'Double gold interest', s: 'cir', c: '#ffe14d', w: 3 }, { t: 'Enemies start vulnerable', s: 'tri', c: '#ff9ff3', w: 3 },
     { t: 'Heal 2 at the start of each turn', s: 'cross', c: '#59e07a', w: 3 },
     { t: 'Poison you apply is 30% stronger', s: 'star', c: '#b46bff', w: 3 },
     { t: 'Vulnerable you apply lasts 1 turn longer', s: 'dia', c: '#ff9f43', w: 3 },
     { t: '0-cost cards draw a card', s: 'ring', c: '#9be7ff', w: 2 },
-    { t: 'Playing an attack gives 2 block', s: 'pent', c: '#4da3ff', w: 3 },
+    { t: 'Playing an attack gives 2 block', s: 'hex', c: '#4da3ff', w: 3 },
     { t: 'Exhausted cards go to discard instead', s: 'arrow', c: '#fd79a8', w: 1 },
     { t: 'Fights start with 5 damage to all enemies', s: 'tri', c: '#ff4d5e', w: 3 },
-    { t: 'Fights award 50% more gold', s: 'hex', c: '#ffd54a', w: 3 },
+    { t: 'Fights award 50% more gold', s: 'moon', c: '#ffd54a', w: 3 },
     { t: 'Once per run: survive death at 30% HP', s: 'cir', c: '#fff', w: 1 }];
 const rs = (n, z = 22) => `<svg viewBox='0 0 100 100' width='${z}' height='${z}' fill='${RL[n].c}' stroke='#fff' stroke-width='5'>${SH[RL[n].s]}</svg>`;
 const rollRel = k => { const p = []; RL.forEach((r, n) => { if (n && !S.rel.includes(n)) for (let i = 0; i < r.w; i++) p.push(n); }); const o = []; while (o.length < k) { const n = pick(p); if (!o.includes(n)) o.push(n); } return o; };
@@ -595,7 +631,7 @@ function addRel(n, onSuccess, onCancel) {
     $('#sk').onclick = onCancel;
 }
 
-const DR = { f: ['sq', '#70a1ff', 'Fight', 'steady'], e: ['star', '#ff4d5e', 'Elite', 'tough, relic'], s: ['hex', '#ffd54a', 'Shop', 'spend gold'], v: ['dia', '#c56cf0', 'Event', 'a gamble'], r: ['cir', '#59e07a', 'Rest', 'heal or upgrade'] };
+const DR = { f: ['bolt', '#70a1ff', 'Fight', 'steady'], e: ['crown', '#ff4d5e', 'Elite', 'tough, relic'], s: ['arch', '#ffd54a', 'Shop', 'spend gold'], v: ['clover', '#c56cf0', 'Event', 'a gamble'], r: ['heart', '#59e07a', 'Rest', 'heal or upgrade'] };
 
 function restSite() {
     ov(`<div>Rest Site</div><div class='row'><button class='win big' id='rh'><div style="font-size:24px;margin-bottom:4px">☕</div>Heal ${Math.round(S.mhp * .25)}</button><button class='win big' id='ru'><div style="font-size:24px;margin-bottom:4px">⚒️</div>Upgrade</button></div><button class='win pb' id='lv'>Skip</button>`);
@@ -632,12 +668,13 @@ function shop() {
     const cs = shuf([...S.cl.pool, ...NEU]).slice(0, 3);
     const rl = rollRel(1);
     const pt = [ { ...pick(POTIONS) } ]; 
-    const pr = c => c.pot ? 30 : 14 + c.c * 8;
-    const rp = n => RL[n].w < 2 ? 60 : 35;
+    const fsc = 1 + (S.f * 0.08);
+    const pr = c => Math.round((c.pot ? 30 : 14 + c.c * 8) * fsc);
+    const rp = n => Math.round((RL[n].w < 2 ? 60 : 35) * fsc);
     const op = ok => ok ? '' : 'opacity:.4';
     
     const dr = () => {
-        const rm = 25 + 10 * S.rm;
+        const rm = Math.round((25 + 10 * S.rm) * fsc);
         ov(`<div>${ic('gld', 14)} ${S.gold}</div>
         <div class='row L'>${cs.map((c, i) => `<div>${c ? cardH(c, i) : '<div class=cd></div>'}<button class='win pb' data-c='${i}' style='${op(c && S.gold >= pr(c))}'>${c ? pr(c) : '-'}</button></div>`).join('')}</div>
         <div class='row'>
