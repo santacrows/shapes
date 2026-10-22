@@ -29,6 +29,11 @@ html, body {
 #arena:before { content: ""; position: absolute; inset: -60%; background: var(--bgg, repeating-conic-gradient(#6a1b9a 0 10deg, #1b0a4d 10deg 20deg, #ff2e88 20deg 30deg, #1b0a4d 30deg 40deg)); animation: spin 50s linear infinite; opacity: .6; filter: hue-rotate(var(--h,0deg)); }
 #arena:after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle, transparent 35%, #000 130%); }
 @keyframes spin { to { transform: rotate(360deg); } }
+#arena.a2:before { inset: -50px 0 -50px -120px; background: var(--bgg); background-size: 120px 80px; opacity: .7; animation: wvx 3.5s linear infinite, wvy 4s ease-in-out infinite alternate; }
+#arena.a3:before { inset: auto; left: 50%; top: 50%; width: var(--sz); height: var(--sz); margin: calc(var(--sz) / -2) 0 0 calc(var(--sz) / -2); background: var(--bgg) center / 100% 100%; animation: spin 30s linear infinite reverse, breathe 6s ease-in-out infinite alternate; }
+@keyframes wvx { to { translate: 120px 0; } }
+@keyframes wvy { from { transform: translateY(-30px); } to { transform: translateY(30px); } }
+@keyframes breathe { from { scale: 1; } to { scale: 1.35; } }
 @keyframes wob { 50% { transform: translateY(7px) rotate(4deg); } }
 #fx { position: absolute; inset: 0; z-index: 6; pointer-events: none; opacity: 0; }
 #en { position: relative; z-index: 2; display: flex; gap: 4px; align-items: flex-end; justify-content: center; width: 100%; padding: 0 6px; }
@@ -173,7 +178,29 @@ const SH = {
     bowtie: '<polygon points="4,20 50,50 96,20 96,80 50,50 4,80"/>',
     crown: '<polygon points="6,82 6,25 28,50 50,15 72,50 94,25 94,82"/>',
     arch: '<path d="M18 94 L18 48 A32 32 0 0 1 82 48 L82 94 Z"/>',
-    clover: '<path d="M27.6 41.0 A25 25 0 1 0 50.0 75.8 A25 25 0 1 0 72.4 41.0 A25 25 0 1 0 27.6 41.0 Z"/>'
+    clover: '<path d="M27.6 41.0 A25 25 0 1 0 50.0 75.8 A25 25 0 1 0 72.4 41.0 A25 25 0 1 0 27.6 41.0 Z"/>',
+    slash2: '<polygon points="8,92 26,92 62,8 44,8"/><polygon points="40,92 58,92 94,8 76,8"/>',
+    castle: '<polygon points="8,92 8,14 30,14 30,30 42,30 42,14 58,14 58,30 70,30 70,14 92,14 92,92"/>',
+    flask: '<polygon points="38,6 62,6 62,38 94,88 6,88 38,38"/>',
+    ticket: '<path d="M8 24 H92 V40 A10 10 0 0 0 92 60 V76 H8 V60 A10 10 0 0 0 8 40 Z"/>',
+    page: '<polygon points="18,6 62,6 86,30 86,94 18,94"/><polygon points="62,6 62,30 86,30"/>',
+    dumbbell: '<polygon points="4,32 22,32 22,20 36,20 36,42 64,42 64,20 78,20 78,32 96,32 96,68 78,68 78,80 64,80 64,58 36,58 36,80 22,80 22,68 4,68"/>',
+    sprout: '<path d="M46 94 V52 C20 52 10 34 10 14 C32 14 46 26 46 46 C46 34 58 22 90 24 C90 50 72 62 54 62 V94 Z"/>',
+    stairs: '<polygon points="6,94 6,72 28,72 28,52 50,52 50,32 72,32 72,12 94,12 94,94"/>',
+    battery: '<path d="M6 28 H80 V40 H94 V60 H80 V72 H6 Z"/>',
+    magnet: '<path d="M14 8 H38 V56 A12 12 0 0 0 62 56 V8 H86 V56 A36 36 0 0 1 14 56 Z"/>',
+    helm: '<path fill-rule="evenodd" d="M12 60 A38 38 0 0 1 88 60 V92 H66 V76 H34 V92 H12 Z M26 46 H74 V60 H26 Z"/>',
+    gem: '<polygon points="25,12 75,12 94,38 50,92 6,38"/><path fill="none" d="M6 38 H94 M38 38 L50 92 L62 38"/>',
+    eye: '<path fill-rule="evenodd" d="M4 50 Q50 -6 96 50 Q50 106 4 50 Z M34 50 a16 16 0 1 0 32 0 a16 16 0 1 0 -32 0 Z"/>',
+    ankh: '<path fill-rule="evenodd" d="M50 4 L70 12 L78 28 L70 44 L58 52 V62 H86 V76 H58 V96 H42 V76 H14 V62 H42 V52 L30 44 L22 28 L30 12 Z M50 18 L58 22 L62 28 L58 36 L50 40 L42 36 L38 28 L42 22 Z"/>',
+    fang: '<path d="M14 6 C74 8 98 52 76 94 C74 62 44 48 14 6 Z"/>',
+    hourglass: '<polygon points="16,6 84,6 84,18 58,50 84,82 84,94 16,94 16,82 42,50 16,18"/>',
+    uturn: '<path d="M10 94 V40 A30 30 0 0 1 70 40 V50 H90 L60 86 L30 50 H50 V40 A10 10 0 0 0 30 40 V94 Z"/>',
+    sword: '<polygon points="50,2 60,14 60,62 78,62 78,72 56,72 56,88 66,88 66,96 34,96 34,88 44,88 44,72 22,72 22,62 40,62 40,14"/>',
+    bin: '<rect x="6" y="22" width="88" height="14" rx="3"/><path d="M38 22 V8 H62 V22 Z"/><polygon points="14,40 86,40 77,94 23,94"/>',
+    blast: '<polygon points="50,2 58,28 84,10 72,38 98,44 74,58 92,84 62,72 56,98 44,74 16,92 28,62 2,50 30,40 14,14 40,30"/>',
+    sack: '<path d="M38 8 H62 L56 26 C84 40 92 70 80 86 C70 98 30 98 20 86 C8 70 16 40 44 26 Z"/><path fill="none" d="M44 26 H56"/>',
+    ghost: '<path fill-rule="evenodd" d="M12 94 V48 A38 38 0 0 1 88 48 V94 L74 82 L62 94 L50 82 L38 94 L26 82 Z M28 40 h12 v16 h-12 Z M60 40 h12 v16 h-12 Z"/>'
 };
 
 const shape = (s, col, z = 100) => `<svg class="sh" viewBox="0 0 100 100" width="${z}" fill="${col}" stroke="#fff" stroke-width="4" stroke-linejoin="round">${s.split('+').map((k, i) => `<g transform="${i ? 'translate(25 25) scale(.5)' : ''}">${SH[k]}</g>`).join('')}</svg>`;
@@ -357,11 +384,33 @@ function build() {
     });
 }
 
+const bgFx = (act, p) => {
+    const ar = $('#arena');
+    ar.classList.toggle('a2', act == 1); ar.classList.toggle('a3', act == 2);
+    const url = sv => `url("data:image/svg+xml,${encodeURIComponent(sv)}")`;
+    let bg;
+    if (act == 1) {
+        bg = url(`<svg xmlns='http://www.w3.org/2000/svg' width='120' height='80' viewBox='0 0 120 80'><rect width='120' height='80' fill='${p[1]}'/><path d='M0 20 Q30 5 60 20 T120 20 L120 60 Q90 75 60 60 Q30 45 0 60 Z' fill='${p[0]}'/><path d='M0 20 Q30 5 60 20 T120 20' fill='none' stroke='${p[2]}' stroke-width='4'/></svg>`);
+    } else if (act == 2) {
+        let arms = '';
+        for (let a = 0; a < 4; a++) {
+            let d = '';
+            for (let i = 0; i <= 60; i++) { const t = i / 60, r = t * 106, th = a * Math.PI / 2 + t * 5 * Math.PI; d += (i ? 'L' : 'M') + (r * Math.cos(th)).toFixed(1) + ' ' + (r * Math.sin(th)).toFixed(1); }
+            arms += `<path d='${d}' fill='none' stroke='${a % 2 ? p[2] : p[0]}' stroke-width='8' stroke-linecap='round'/>`;
+        }
+        bg = url(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='-100 -100 200 200'><rect x='-100' y='-100' width='200' height='200' fill='${p[1]}'/>${arms}</svg>`);
+        ar.style.setProperty('--sz', Math.ceil(Math.hypot(ar.clientWidth || 380, ar.clientHeight || 520)) + 'px');
+    } else {
+        bg = `repeating-conic-gradient(${p[0]} 0 10deg,${p[1]} 10deg 20deg,${p[2]} 20deg 30deg,${p[3]} 30deg 40deg)`;
+    }
+    ar.style.setProperty('--bgg', bg);
+};
+
 function start(el) {
     const f = S.f;
     $('#arena').style.setProperty('--h', (f % 9) * 25 + 'deg');
     const pals = [['#6a1b9a', '#1b0a4d', '#ff2e88', '#1b0a4d'], ['#009432', '#00220a', '#c4e538', '#00220a'], ['#0652dd', '#000b22', '#9980fa', '#000b22'], ['#ea2027', '#220000', '#ffc312', '#220000']], p = pals[Math.min(f / 9 | 0, 3)];
-    $('#arena').style.setProperty('--bgg', `repeating-conic-gradient(${p[0]} 0 10deg,${p[1]} 10deg 20deg,${p[2]} 20deg 30deg,${p[3]} 30deg 40deg)`);
+    bgFx(Math.min(f / 9 | 0, 3), p);
     
     const hm = (1 + f * .04) * (el ? 1.5 : 1), dm = (1 + f * .02) * (el ? 1.2 : 1);
     let raw_en = [];
@@ -598,16 +647,16 @@ function reward(bs, el) {
     $('#sk').onclick = nx;
 }
 
-const RL = [0, { t: 'First attack each turn hits twice', s: 'tri', c: '#ff4d5e', w: 4 }, { t: 'Block carries over', s: 'sq', c: '#4da3ff', w: 4 }, { t: 'Poison never decays', s: 'dia', c: '#b46bff', w: 1 }, { t: 'Every 5th card is free', s: 'moon', c: '#ffd54a', w: 3 }, { t: 'Draw 1 extra card', s: 'cir', c: '#9be7ff', w: 3 }, { t: 'Fights start with +2 strength', s: 'star', c: '#ff9f43', w: 4 }, { t: 'Heal 3 on every kill', s: 'cross', c: '#59e07a', w: 4 }, { t: 'Turns start with +20% amp', s: 'arrow', c: '#ff8a3d', w: 3 }, { t: 'Unspent energy carries over', s: 'ring', c: '#fff', w: 1 }, { t: 'Hand is kept between turns', s: 'oct', c: '#fd79a8', w: 1 }, { t: 'Start each fight with 8 block', s: 'oct', c: '#4da3ff', w: 3 }, { t: 'Double gold interest', s: 'cir', c: '#ffe14d', w: 3 }, { t: 'Enemies start vulnerable', s: 'tri', c: '#ff9ff3', w: 3 },
-    { t: 'Heal 2 at the start of each turn', s: 'cross', c: '#59e07a', w: 3 },
-    { t: 'Poison you apply is 30% stronger', s: 'star', c: '#b46bff', w: 3 },
-    { t: 'Vulnerable you apply lasts 1 turn longer', s: 'dia', c: '#ff9f43', w: 3 },
-    { t: '0-cost cards draw a card', s: 'ring', c: '#9be7ff', w: 2 },
-    { t: 'Playing an attack gives 2 block', s: 'hex', c: '#4da3ff', w: 3 },
-    { t: 'Exhausted cards go to discard instead', s: 'arrow', c: '#fd79a8', w: 1 },
-    { t: 'Fights start with 5 damage to all enemies', s: 'tri', c: '#ff4d5e', w: 3 },
-    { t: 'Fights award 50% more gold', s: 'moon', c: '#ffd54a', w: 3 },
-    { t: 'Once per run: survive death at 30% HP', s: 'cir', c: '#fff', w: 1 }];
+const RL = [0, { t: 'First attack each turn hits twice', s: 'slash2', c: '#ff4d5e', w: 4 }, { t: 'Block carries over', s: 'castle', c: '#4da3ff', w: 4 }, { t: 'Poison never decays', s: 'flask', c: '#b46bff', w: 1 }, { t: 'Every 5th card is free', s: 'ticket', c: '#ffd54a', w: 3 }, { t: 'Draw 1 extra card', s: 'page', c: '#9be7ff', w: 3 }, { t: 'Fights start with +2 strength', s: 'dumbbell', c: '#ff9f43', w: 4 }, { t: 'Heal 3 on every kill', s: 'sprout', c: '#59e07a', w: 4 }, { t: 'Turns start with +20% amp', s: 'stairs', c: '#ff8a3d', w: 3 }, { t: 'Unspent energy carries over', s: 'battery', c: '#fff', w: 1 }, { t: 'Hand is kept between turns', s: 'magnet', c: '#fd79a8', w: 1 }, { t: 'Start each fight with 8 block', s: 'helm', c: '#4da3ff', w: 3 }, { t: 'Double gold interest', s: 'gem', c: '#ffe14d', w: 3 }, { t: 'Enemies start vulnerable', s: 'eye', c: '#ff9ff3', w: 3 },
+    { t: 'Heal 2 at the start of each turn', s: 'ankh', c: '#59e07a', w: 3 },
+    { t: 'Poison you apply is 30% stronger', s: 'fang', c: '#b46bff', w: 3 },
+    { t: 'Vulnerable you apply lasts 1 turn longer', s: 'hourglass', c: '#ff9f43', w: 3 },
+    { t: '0-cost cards draw a card', s: 'uturn', c: '#9be7ff', w: 2 },
+    { t: 'Playing an attack gives 2 block', s: 'sword', c: '#4da3ff', w: 3 },
+    { t: 'Exhausted cards go to discard instead', s: 'bin', c: '#fd79a8', w: 1 },
+    { t: 'Fights start with 5 damage to all enemies', s: 'blast', c: '#ff4d5e', w: 3 },
+    { t: 'Fights award 50% more gold', s: 'sack', c: '#ffd54a', w: 3 },
+    { t: 'Once per run: survive death at 30% HP', s: 'ghost', c: '#fff', w: 1 }];
 const rs = (n, z = 22) => `<svg viewBox='0 0 100 100' width='${z}' height='${z}' fill='${RL[n].c}' stroke='#fff' stroke-width='5'>${SH[RL[n].s]}</svg>`;
 const rollRel = k => { const p = []; RL.forEach((r, n) => { if (n && !S.rel.includes(n)) for (let i = 0; i < r.w; i++) p.push(n); }); const o = []; while (o.length < k) { const n = pick(p); if (!o.includes(n)) o.push(n); } return o; };
 const fight = () => { hide(); start(); };
