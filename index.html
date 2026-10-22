@@ -57,7 +57,7 @@ html, body {
 #hpn { font-size: 26px; line-height: 1; color: var(--sp); letter-spacing: 1px; }
 #hpn.lo { color: var(--atk); }
 #hpm { font-size: 14px; color: #aaa; margin-left: 2px; }
-#nrg { flex: 1; display: flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap; padding: 4px; }
+#nrg { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 4px; transition: border-color .2s; }
 .o { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--gold); }
 .o.f { background: var(--gold); }
 button { font: inherit; color: inherit; cursor: pointer; }
@@ -83,6 +83,44 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .pb { display: block; padding: 4px 12px; margin: 6px auto 0; }
 .big small { font-size: 10px; font-weight: 400; line-height: 1.2; }
 @keyframes dl { from { transform: translateY(60px); opacity: 0; } }
+
+#nrg .or { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
+#nrg .fc { display: flex; align-items: center; gap: 3px; font-size: 10px; color: var(--gold); }
+#nrg .fc i { width: 8px; height: 8px; border: 1.5px solid var(--gold); border-radius: 2px; }
+#nrg .fc i.d { background: var(--gold); }
+#nrg .fc i.l { border-radius: 50%; }
+#nrg .fc b { margin-left: 3px; letter-spacing: 1px; }
+#nrg.free { border-color: var(--gold); animation: freeGlow .8s ease-in-out infinite alternate; }
+#nrg.free .o { background: var(--gold); animation: freeOrb .8s ease-in-out infinite alternate; }
+@keyframes freeGlow { from { box-shadow: 0 0 0 2px #000, inset 0 0 6px 1px #ffd54a55, 0 0 6px 1px #ffd54a55; } to { box-shadow: 0 0 0 2px #000, inset 0 0 14px 4px #ffd54acc, 0 0 16px 4px #ffd54a99; } }
+@keyframes freeOrb { from { transform: scale(.85); } to { transform: scale(1.2); box-shadow: 0 0 8px #ffd54a; } }
+.co.fr { background: #59e07a; }
+.cd.fr { box-shadow: 0 0 0 2px #000, 0 0 10px 2px #ffd54a99; }
+#pips .as { margin-left: 6px; padding: 0 5px; border: 2px solid #c56cf0; border-radius: 6px; color: #c56cf0; font-size: 11px; line-height: 14px; }
+#pips .as.z { border-color: #555; color: #777; }
+input.cin { font: 700 16px ui-monospace, Menlo, Consolas, monospace; letter-spacing: 3px; text-align: center; text-transform: uppercase; width: 150px; padding: 7px 6px; background: #000; color: #fff; border: 3px solid #fff; border-radius: 10px; outline: none; user-select: text; -webkit-user-select: text; }
+input.cin:focus { border-color: var(--gold); }
+#vic { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
+#vic .ttl { font-size: 34px; letter-spacing: 4px; background: linear-gradient(90deg,#ff4d5e,#ffd54a,#59e07a,#4da3ff,#c56cf0,#ff4d5e); background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: vPop .7s cubic-bezier(.2,1.6,.4,1) both, vHue 3s linear infinite; filter: drop-shadow(0 0 10px #ffd54a99); }
+#vic .rays { position: absolute; left: 50%; top: 110px; width: 420px; height: 420px; margin: -210px 0 0 -210px; z-index: -1; background: repeating-conic-gradient(#ffd54a33 0 8deg, transparent 8deg 24deg); -webkit-mask: radial-gradient(circle, #000 20%, transparent 70%); mask: radial-gradient(circle, #000 20%, transparent 70%); animation: spin 14s linear infinite; }
+#vic .hero { animation: vSpin 4s ease-in-out infinite; filter: drop-shadow(0 0 14px var(--hc)); }
+#vic .sub { font-size: 15px; animation: vUp .6s .35s both; }
+#vic .stats { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; animation: vUp .6s .55s both; }
+#vic .stats span { padding: 3px 8px; font-size: 12px; }
+#vic .code { user-select: text; -webkit-user-select: text; font-size: 22px; letter-spacing: 4px; color: var(--gold); padding: 8px 14px; animation: vUp .6s .8s both, codeGlow 1.2s 1.4s ease-in-out infinite alternate; }
+#vic .lbl { font-size: 12px; color: #ccc; animation: vUp .6s .75s both; }
+#vic .btns { display: flex; gap: 10px; animation: vUp .6s 1s both; }
+#vic .btns button { padding: 8px 16px; }
+@keyframes vPop { from { transform: scale(.2) rotate(-8deg); opacity: 0; } }
+@keyframes vHue { to { background-position: 300% 0; } }
+@keyframes vSpin { 0%,100% { transform: rotate(-8deg) scale(1); } 50% { transform: rotate(8deg) scale(1.12); } }
+@keyframes vUp { from { transform: translateY(20px); opacity: 0; } }
+@keyframes codeGlow { from { box-shadow: 0 0 0 2px #000, inset 0 0 0 2px #444, 0 0 4px #ffd54a55; } to { box-shadow: 0 0 0 2px #000, inset 0 0 0 2px #444, 0 0 18px 3px #ffd54acc; } }
+#cf { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+#cf > div { position: absolute; top: -40px; animation: cfall linear infinite; }
+@keyframes cfall { to { transform: translateY(calc(100vh + 80px)) rotate(var(--r)); } }
+#vflash { position: absolute; inset: 0; background: #fff; z-index: 20; pointer-events: none; animation: vfl .9s ease-out forwards; }
+@keyframes vfl { from { opacity: .9; } to { opacity: 0; } }
 </style>
 </head>
 <body>
@@ -293,7 +331,7 @@ const rows = c => [
     c.bd && ['atk', '=' + ic('blk', 13)],
     c.k && ['blk', c.k],
     c.p && ['psn', c.p + (c.all ? ic('aoe', 14) : '')],
-    c.v && ['vul', c.v + (c.all ? ic('aoe', 14) : '')],
+  	c.v && ['vul', c.v + (c.all ? ic('aoe', 14) : '')],
     c.s && ['str', '+' + c.s],
     c.w && ['drw', '+' + c.w],
     c.e && ['nrg', '+' + c.e],
@@ -342,7 +380,7 @@ function viewCards(t, arr) {
 }
 
 function hud() {
-    $('#pips').innerHTML = Array.from({ length: 9 }, (_, i) => `<i class="${i < S.f % 9 ? 'd' : i == S.f % 9 ? 'c' : ''}"></i>`).join('') + `<span style="margin-left:6px">${S.f + 1}</span>`;
+    $('#pips').innerHTML = Array.from({ length: 9 }, (_, i) => `<i class="${i < S.f % 9 ? 'd' : i == S.f % 9 ? 'c' : ''}"></i>`).join('') + `<span style="margin-left:6px">${S.f + 1}</span><span class="as ${S.asc ? '' : 'z'}" title="Ascension level">ASC ${S.asc || 0}</span>`;
     $('#hpm').textContent = `/${S.mhp}`;
     $('#hpx').innerHTML = `${B && B.amp ? `<span class='ch'>${ic('amp', 13)}${B.amp}%</span>` : ''}${B && B.blk ? `<span class="ch" style="color:var(--blk)">${ic('blk', 13)}${B.blk}</span>` : ''}${B && B.str ? `<span class="ch">${ic('str', 13)}${B.str}</span>` : ''}`;
     
@@ -350,11 +388,13 @@ function hud() {
         $('#piles').innerHTML = `${S.rel.map(n => `<span title="${RL[n].t}" onclick='say(RL[${n}].t)' style="cursor:help">${rs(n, 18)}</span>`).join('')} <span id="p-drw" style="cursor:pointer;color:var(--drw)">${ic('drw', 13)} ${B.draw.length}</span>·<span id="p-dsc" style="cursor:pointer;color:#aaa">${B.disc.length}</span> <span style="color:var(--gold)">${ic('gld', 13)} ${S.gold}</span>`;
         $('#p-drw').onclick = () => viewCards('Draw Pile', [...B.draw].reverse());
         $('#p-dsc').onclick = () => viewCards('Discard Pile', [...B.disc].reverse());
-        $('#nrg').innerHTML = Array.from({ length: Math.max(S.me, B.energy) }, (_, i) => `<div class="o ${i < B.energy ? 'f' : ''}"></div>`).join('');
+        const fr = freeNow();
+        $('#nrg').className = 'win' + (fr ? ' free' : '');
+        $('#nrg').innerHTML = `<div class="or">${Array.from({ length: Math.max(S.me, B.energy) }, (_, i) => `<div class="o ${i < B.energy ? 'f' : ''}"></div>`).join('')}</div>` + (R(4) ? `<div class="fc" title="Every 5th card is free">${Array.from({ length: 5 }, (_, i) => `<i class="${i < B.cn % 5 || (fr && i == 4) ? 'd' : ''}${i == 4 ? ' l' : ''}"></i>`).join('')}${fr ? '<b>FREE</b>' : `<b>${B.cn % 5}/5</b>`}</div>` : '');
         
         const h = $('#hand'), n = B.hand.length, ovh = n > 5 ? -Math.ceil((n * 74 - (h.clientWidth - 8)) / (n - 1)) : 4;
-        h.innerHTML = B.hand.map((c, i) => cardH(c, i, (c.c > B.energy ? 'no ' : '') + (B.sel === i ? 'sel' : '')).replace('class="cd', 'style0 class="cd').replace('style0 ', '')).join('');
-        h.querySelectorAll('.cd').forEach((el, i) => { el.style.marginLeft = i ? ovh + 'px' : 0; el.onclick = () => tapCard(i); });
+        h.innerHTML = B.hand.map((c, i) => cardH(c, i, (cost(c) > B.energy ? 'no ' : '') + (freeNow() ? 'fr ' : '') + (B.sel === i ? 'sel' : '')).replace('class="cd', 'style0 class="cd').replace('style0 ', '')).join('');
+        h.querySelectorAll('.cd').forEach((el, i) => { el.style.marginLeft = i ? ovh + 'px' : 0; el.onclick = () => tapCard(i); if (freeNow()) { const co = el.querySelector('.co'); co.textContent = '0'; co.classList.add('fr'); } });
         
         B.en.forEach(upd);
     }
@@ -412,7 +452,7 @@ function start(el) {
     const pals = [['#6a1b9a', '#1b0a4d', '#ff2e88', '#1b0a4d'], ['#009432', '#00220a', '#c4e538', '#00220a'], ['#0652dd', '#000b22', '#9980fa', '#000b22'], ['#ea2027', '#220000', '#ffc312', '#220000']], p = pals[Math.min(f / 9 | 0, 3)];
     bgFx(Math.min(f / 9 | 0, 3), p);
     
-    const hm = (1 + f * .04) * (el ? 1.5 : 1), dm = (1 + f * .02) * (el ? 1.2 : 1);
+    const A = S.asc || 0, hb = (1 + f * .04) * (el ? 1.5 : 1), hm = hb * (1 + .08 * A), dm = (1 + f * .02) * (el ? 1.2 : 1) * (1 + .06 * A);
     let raw_en = [];
     mkEnc(f).forEach(x => {
         if (!x.b && Math.random() < .15) {
@@ -426,7 +466,7 @@ function start(el) {
     
     const en = raw_en.map(x => {
         const h = Math.round(x.hp * hm);
-        let sz = 1 + (hm - 1) * 0.2; if (x.split) sz *= 0.7; if (x.b) sz *= 1.5;
+        let sz = 1 + (hb - 1) * 0.2; if (x.split) sz *= 0.7; if (x.b) sz *= 1.5;
         return { ...x, hp: h, mhp: h, sz, mv: x.mv.map(m => ({ ...m, a: m.a && Math.round(m.a * dm), k: m.k && Math.round(m.k * dm) })), blk: 0, vul: R(13) ? 2 : 0, psn: 0, str: 0, i: x.b ? 0 : rnd(x.mv.length) };
     });
     
@@ -461,7 +501,7 @@ function turn(first) {
 function tapCard(i) {
     if (B.busy) return;
     const c = B.hand[i];
-    if (c.c > B.energy) return say('Not enough energy.');
+    if (cost(c) > B.energy) return say('Not enough energy.');
     if (c.sd && S.hp <= c.sd) return say('Need more HP.');
     const alive = B.en.filter(e => e.hp > 0);
     
@@ -476,6 +516,7 @@ function tapCard(i) {
 }
 
 const R = n => S.rel.includes(n), amp = d => d * (1 + B.amp / 100) | 0;
+const freeNow = () => R(4) && B.cn % 5 == 4, cost = c => freeNow() ? 0 : c.c;
 
 function dmgE(e, d, pi) {
     if (e.vul) d = d * 1.5 | 0;
@@ -495,16 +536,16 @@ function kill(e) {
 
 async function play(i, t) {
     const o = B.hand[i]; let c = o;
-    if (c.z && !B.busy && c.c <= B.energy) {
+    if (c.z && !B.busy && cost(c) <= B.energy) {
         const g = Math.random() < .5 + B.lk ? (B.lk = 0, 2.4) : (B.lk = Math.min(.4, B.lk + .1), .4);
         c = { ...o };
         ['d', 'k', 'p'].forEach(k => c[k] && (c[k] = Math.max(1, Math.round(c[k] * g))));
         fl($('#hpw'), g > 1 ? 'JACKPOT' : 'miss', g > 1 ? '#ffd54a' : '#aaa');
     }
-    if (B.busy || c.c > B.energy) return;
+    if (B.busy || cost(c) > B.energy) return;
     
-    B.busy = true; B.energy -= c.c;
-    if (R(4) && ++B.cn % 5 == 0) B.energy += c.c;
+    B.busy = true; B.energy -= cost(c);
+    if (R(4)) B.cn++;
     B.hand.splice(i, 1); B.sel = null;
     B.en.forEach(e => e.el.classList.remove('tg'));
     const tg = c.all ? B.en.filter(e => e.hp > 0) : [t];
@@ -551,6 +592,7 @@ async function play(i, t) {
     
     if (B.en.every(e => e.hp <= 0)) return win();
     B.busy = false; hud();
+    if (freeNow()) say('Your next card is free!');
 }
 
 $('#end').onclick = async () => {
@@ -598,25 +640,56 @@ $('#end').onclick = async () => {
 
 const ov = h => { $('#ov').innerHTML = h; $('#ov').classList.add('on'); }, hide = () => $('#ov').classList.remove('on');
 
+const AB = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', ASALT = 'shapes-ascension-v1';
+const ahash = str => { let a = 0xdeadbeef, b = 0x41c6ce57; for (let i = 0; i < str.length; i++) { const k = str.charCodeAt(i); a = Math.imul(a ^ k, 2654435761); b = Math.imul(b ^ k, 1597334677); } a = Math.imul(a ^ (a >>> 16), 2246822507) ^ Math.imul(b ^ (b >>> 13), 3266489909); b = Math.imul(b ^ (b >>> 16), 2246822507) ^ Math.imul(a ^ (a >>> 13), 3266489909); return [a >>> 0, b >>> 0]; };
+const ab5 = (v, n) => { let o = ''; for (let i = n - 1; i >= 0; i--) o += AB[(v >>> (i * 5)) & 31]; return o; };
+// code = class + ascension (masked) + checksum; a code only decodes to the class that earned it
+const ascEnc = (cls, asc) => { const p = (cls << 11) | Math.min(asc, 2047), m = p ^ (ahash(ASALT)[0] & 0x7fff), c = ahash(ASALT + ':' + p)[1] & 0x1ffffff, t = ab5(m, 3) + ab5(c, 5); return t.slice(0, 4) + '-' + t.slice(4); };
+const ascDec = str => {
+    const t = String(str).toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (t.length != 8 || [...t].some(ch => AB.indexOf(ch) < 0)) return null;
+    const v = [...t].map(ch => AB.indexOf(ch)), m = (v[0] << 10) | (v[1] << 5) | v[2];
+    let c = 0; for (let i = 3; i < 8; i++) c = c * 32 + v[i];
+    const p = m ^ (ahash(ASALT)[0] & 0x7fff), cls = p >> 11, asc = p & 2047;
+    if (cls >= CL.length || asc < 1 || (ahash(ASALT + ':' + p)[1] & 0x1ffffff) !== c) return null;
+    return { cls, asc };
+};
+
+function startRun(c, asc) {
+    S = { cl: c, hp: c.hp, mhp: c.hp, me: 3, f: 0, gold: 20, rel: [], rm: 0, deck: [...c.deck], asc: asc || 0 };
+    dv = S.hp; $('#hpn').textContent = String(dv); $('#hpm').textContent = `/${S.mhp}`; $('#avw').innerHTML = shape(c.s, c.col, 34);
+    hide(); start();
+}
+
 function menu() {
     B = null; S = null; $('#en').innerHTML = ''; $('#hand').innerHTML = ''; $('#hpn').textContent = '0'; dv = 0; $('#hpm').textContent = '';
-    ov(`<div style="font-size:16px">Choose a shape</div><div style="display:grid;grid-template-columns:repeat(3, 86px);gap:16px;justify-content:center;margin-top:20px">${[0, 8, 7, 3, 6, 5, 2, 1, 4].map(i => [CL[i], i]).map(([c, i]) => `<button class="win big" data-i="${i}" style="width: 86px; height: 86px; padding: 0; justify-content: center;">${shape(c.s, c.col, 54)}</button>`).join('')}</div>`);
-    document.querySelectorAll('.big').forEach(b => b.onclick = () => {
-        const c = CL[b.dataset.i];
-        S = { cl: c, hp: c.hp, mhp: c.hp, me: 3, f: 0, gold: 20, rel: [], rm: 0, deck: [...c.deck] };
-        dv = S.hp; $('#hpn').textContent = String(dv); $('#hpm').textContent = `/${S.mhp}`; $('#avw').innerHTML = shape(c.s, c.col, 34);
-        hide(); start();
-    });
+    ov(`<div style="font-size:16px">Choose a shape</div><div style="display:grid;grid-template-columns:repeat(3, 86px);gap:16px;justify-content:center;margin-top:20px">${[0, 8, 7, 3, 6, 5, 2, 1, 4].map(i => [CL[i], i]).map(([c, i]) => `<button class="win big" data-i="${i}" style="width: 86px; height: 86px; padding: 0; justify-content: center;">${shape(c.s, c.col, 54)}</button>`).join('')}</div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:8px"><div style="font-size:11px;color:#aaa">Ascension code</div><div style="display:flex;gap:8px;align-items:center"><input class="cin" id="ci" maxlength="9" placeholder="XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false"><button class="win pb" id="cg" style="margin:0;padding:8px 14px">Go</button></div><div id="cm" style="font-size:12px;min-height:16px"></div></div>`);
+    document.querySelectorAll('.big').forEach(b => b.onclick = () => startRun(CL[b.dataset.i], 0));
+    const ci = $('#ci'), go = () => {
+        const d = ascDec(ci.value);
+        if (!d) { $('#cm').style.color = '#ff4d5e'; $('#cm').textContent = 'Invalid code.'; return; }
+        startRun(CL[d.cls], d.asc);
+    };
+    ci.oninput = () => { const t = ci.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8); ci.value = t.length > 4 ? t.slice(0, 4) + '-' + t.slice(4) : t; $('#cm').textContent = ''; };
+    ci.onkeydown = e => { if (e.key == 'Enter') go(); };
+    $('#cg').onclick = go;
+}
+
+function victory() {
+    const ci = CL.indexOf(S.cl), cur = S.asc || 0, nx = cur + 1, code = ascEnc(ci, nx);
+    const cf = Array.from({ length: 44 }, () => { const c = pick(CL); return `<div style="left:${rnd(100)}%;animation-duration:${(2.6 + Math.random() * 2.6).toFixed(2)}s;animation-delay:${(Math.random() * 3).toFixed(2)}s;--r:${360 + rnd(720)}deg">${shape(c.s, c.col, 14 + rnd(22))}</div>`; }).join('');
+    ov(`<div id="cf">${cf}</div><div id="vflash"></div><div id="vic"><div class="rays"></div><div class="ttl">VICTORY!</div><div class="hero" style="--hc:${S.cl.col}">${shape(S.cl.s, S.cl.col, 96)}</div><div class="sub">You have conquered the shapes${cur ? ` on Ascension ${cur}` : ''}!</div><div class="stats"><span class="win">Floors 27</span><span class="win">Deck ${S.deck.length}</span><span class="win">Relics ${S.rel.length}</span><span class="win">ASC ${cur}</span></div><div class="lbl">Ascension ${nx} code (this shape only)</div><div class="code win" id="vc">${code}</div><div class="btns"><button class="win" id="cp">Copy Code</button><button class="win" id="re">Play Again</button></div></div>`);
+    const lab = t => { const b = $('#cp'); if (!b) return; b.textContent = t; setTimeout(() => $('#cp') && ($('#cp').textContent = 'Copy Code'), 1600); };
+    $('#cp').onclick = () => navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(code).then(() => lab('Copied!'), () => lab('Select it')) : lab('Select it');
+    $('#re').onclick = menu;
+    say('The shapes bow before you.');
 }
 
 function win() {
     setTimeout(() => {
         const bs = S.f % 9 == 8; 
-        if (bs && S.f === 26) {
-            ov(`<div style="font-size:24px;color:var(--gold);margin-bottom:12px">VICTORY</div><div style="font-size:16px;margin-bottom:24px">You have conquered the shapes.</div><button class="win big" style="width:auto;padding:10px 24px" id="re">Play Again</button>`);
-            $('#re').onclick = menu;
-            return;
-        }
+        if (bs && S.f === 26) { victory(); return; }
         S.f++; if (bs) S.me++;
         S.gold += Math.round((R(21) ? 1.5 : 1) * (8 + rnd(6) + S.f) * (bs ? 3 : B.el ? 2 : 1)) + Math.min(R(12) ? 10 : 5, S.gold / 10 | 0);
         S.hp = bs ? S.mhp : Math.min(S.mhp, S.hp + 9);
@@ -635,7 +708,7 @@ function reward(bs, el) {
     const nx = () => {
         if (bs) {
             ov(`<div>Boss Defeated!</div><div style="font-size:24px;margin:20px 0;color:var(--gold)">+1 Maximum Energy</div><button class='win pb' id='ok'>Continue</button>`);
-            $('#ok').onclick = aft;
+            $('#ok').onclick = fight;
         } else if (el) {
             relicPick(aft, 2);
         } else {
@@ -753,7 +826,7 @@ function event(e) {
 
 function lose() {
     say('You fade away…');
-    setTimeout(() => ov(`<div>${shape(S.cl.s, '#444', 80)}</div><div style="font-size:16px">Reached floor ${S.f + 1}</div><button class="win big" style="width:auto;padding:10px 24px" id="re">Again</button>`) || ($('#re').onclick = menu), 900);
+    setTimeout(() => ov(`<div>${shape(S.cl.s, '#444', 80)}</div><div style="font-size:16px">Reached floor ${S.f + 1}${S.asc ? ' · ASC ' + S.asc : ''}</div><button class="win big" style="width:auto;padding:10px 24px" id="re">Again</button>`) || ($('#re').onclick = menu), 900);
 }
 
 menu();
