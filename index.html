@@ -293,7 +293,7 @@ const rows = c => [
     c.bd && ['atk', '=' + ic('blk', 13)],
     c.k && ['blk', c.k],
     c.p && ['psn', c.p + (c.all ? ic('aoe', 14) : '')],
-    c.v && ['vul', c.v],
+    c.v && ['vul', c.v + (c.all ? ic('aoe', 14) : '')],
     c.s && ['str', '+' + c.s],
     c.w && ['drw', '+' + c.w],
     c.e && ['nrg', '+' + c.e],
