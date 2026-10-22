@@ -51,7 +51,12 @@ html, body {
 .st { font-size: 11px; display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; text-shadow: 1px 1px 0 #000; }
 .fl { position: absolute; left: 0; right: 0; top: 10%; text-align: center; font-size: 22px; text-shadow: 2px 2px 0 #000; pointer-events: none; z-index: 5; }
 
-#log { margin: 6px; min-height: 46px; padding: 6px 10px; font-size: 14px; display: flex; align-items: center; }
+#lr { display: flex; gap: 6px; margin: 6px; height: 50px; }
+#log { flex: 1; min-width: 0; margin: 0; padding: 3px 8px; font-size: 12px; line-height: 1.15; display: flex; align-items: center; overflow: hidden; }
+#pots { display: flex; gap: 4px; padding: 3px; align-items: center; flex: none; }
+.ps { width: 32px; height: 38px; padding: 0; border: 2px dashed #555; border-radius: 7px; background: transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px; line-height: 1; color: #fff; }
+.ps.f { border: 2px solid var(--gold); background: #14102a; box-shadow: 0 0 6px #ffd54a55; }
+.ps.f:active { background: #333; }
 #pl { display: flex; gap: 6px; padding: 0 6px; height: 58px; }
 #hpw { position: relative; padding: 3px 10px; display: flex; flex-direction: column; justify-content: center; flex: 1.4; }
 #hpn { font-size: 26px; line-height: 1; color: var(--sp); letter-spacing: 1px; }
@@ -66,7 +71,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 #hand { display: flex; justify-content: center; align-items: flex-end; height: 134px; padding: 14px 4px 8px; }
 .cd { width: 74px; height: 108px; flex: none; border-radius: 9px; border: 3px solid var(--c); background: #14102a; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; transition: transform .12s; box-shadow: 0 0 0 2px #000; }
-.cd.sel { transform: translateY(-18px); }
+.cd.sel { transform: translateY(-18px); z-index: 15; }
+.cd:hover { z-index: 20; }
 .cd.no { opacity: .45; }
 .co { position: absolute; top: -9px; left: -9px; width: 22px; height: 22px; border-radius: 50%; background: var(--gold); color: #000; display: grid; place-items: center; border: 2px solid #000; }
 .r { display: flex; align-items: center; gap: 3px; font-size: 14px; text-align: center; line-height: 1.1; }
@@ -133,7 +139,7 @@ input.cin:focus { border-color: var(--gold); }
         <div id="en"></div>
         <div id="fx"></div>
     </div>
-    <div id="log" class="win"></div>
+    <div id="lr"><div id="log" class="win"></div><div id="pots" class="win"></div></div>
     
     <div id="pl">
         <div id="hpw" class="win">
@@ -396,6 +402,14 @@ function hud() {
         h.innerHTML = B.hand.map((c, i) => cardH(c, i, (cost(c) > B.energy ? 'no ' : '') + (freeNow() ? 'fr ' : '') + (B.sel === i ? 'sel' : '')).replace('class="cd', 'style0 class="cd').replace('style0 ', '')).join('');
         h.querySelectorAll('.cd').forEach((el, i) => { el.style.marginLeft = i ? ovh + 'px' : 0; el.onclick = () => tapCard(i); if (freeNow()) { const co = el.querySelector('.co'); co.textContent = '0'; co.classList.add('fr'); } });
         
+        $('#pots').innerHTML = Array.from({ length: 3 }, (_, i) => {
+            const p = S.potions[i];
+            if (!p) return '<button class="ps" disabled></button>';
+            const [k, t] = rows(p)[1];
+            return `<button class="ps f" data-i="${i}" title="Use potion">${ic(k, 14)}<span>${t}</span></button>`;
+        }).join('');
+        document.querySelectorAll('#pots .f').forEach(b => b.onclick = () => usePotion(+b.dataset.i));
+        
         B.en.forEach(upd);
     }
     roll();
@@ -487,8 +501,8 @@ function drawN(n) {
 
 function turn(first) {
     B.en.forEach(e => e.hid = 0);
-    B.energy = S.me + (R(9) ? B.energy : 0);
-    B.blk = (R(2) || (first && R(11))) ? B.blk : 0;
+    B.energy = S.me + (R(9) ? Math.min(B.energy, 2) : 0);
+    B.blk = first ? B.blk : (R(2) ? Math.floor(B.blk / 2) : 0);
     B.amp = Math.max(R(8) ? 20 : 0, B.amp / 2 | 0);
     B.cn = 0; B.fa = 0;
     drawN(5 + (R(5) ? 1 : 0));
@@ -496,6 +510,19 @@ function turn(first) {
     B.busy = false; B.sel = null;
     hud(); $('#hand').classList.remove('deal'); void $('#hand').offsetWidth; $('#hand').classList.add('deal');
     say(first ? 'Shapes drift into view.' : 'Your move.');
+}
+
+function usePotion(i) {
+    if (!B || B.busy) return;
+    const p = S.potions[i];
+    if (!p) return;
+    S.potions.splice(i, 1);
+    if (p.h) { S.hp = Math.min(S.mhp, S.hp + p.h); fl($('#hpw'), '+' + p.h, '#59e07a'); }
+    if (p.e) B.energy += p.e;
+    if (p.s) B.str += p.s;
+    if (p.k) { B.blk += p.k; fx('#4da3ff55'); }
+    if (p.w) drawN(p.w);
+    hud(); say('Potion used.');
 }
 
 function tapCard(i) {
@@ -550,12 +577,6 @@ async function play(i, t) {
     B.en.forEach(e => e.el.classList.remove('tg'));
     const tg = c.all ? B.en.filter(e => e.hp > 0) : [t];
     
-    if (c.pot) {
-        const idx = S.deck.indexOf(o);
-        if (idx > -1) S.deck.splice(idx, 1);
-        c.x = 1;
-    }
-    
     if (c.m) B.amp += c.m; if (c.s) B.str += c.s; if (c.k) { B.blk += c.k; fx('#4da3ff55'); }
     if (R(18) && (c.d || c.bd)) B.blk += 2;
     if (c.dc) { B.hand = shuf(B.hand); for (let j = 0; j < c.dc; j++) if (B.hand.length) B.disc.push(B.hand.pop()); }
@@ -563,11 +584,11 @@ async function play(i, t) {
     
     if (c.d || c.bd) {
         say(`${tg[0].g} is struck!`);
-        const hn = (c.n || 1) * (R(1) && !B.fa ? 2 : 1);
+        const hn = c.n || 1, fm = R(1) && !B.fa ? 1.5 : 1;
         B.fa = 1;
         for (let h = 0; h < hn; h++) {
             for (const e of tg) if (e.hp > 0) {
-                dmgE(e, amp(c.bd ? B.blk : c.d + B.str), c.pi);
+                dmgE(e, Math.floor(amp(c.bd ? B.blk : c.d + B.str) * fm), c.pi);
                 if (e.hp <= 0 && R(7)) S.hp = Math.min(S.mhp, S.hp + 3);
             }
             await sleep(170);
@@ -588,7 +609,7 @@ async function play(i, t) {
     if (c.w) drawN(c.w); if (c.e) B.energy += c.e;
     if (R(17) && c.c === 0) drawN(1);
     
-    if (!c.x || (R(19) && !c.pot)) B.disc.push(o);
+    if (!c.x || R(19)) B.disc.push(o);
     
     if (B.en.every(e => e.hp <= 0)) return win();
     B.busy = false; hud();
@@ -598,7 +619,7 @@ async function play(i, t) {
 $('#end').onclick = async () => {
     if (B.busy) return;
     B.busy = true;
-    if (!R(10)) { B.disc.push(...B.hand); B.hand = []; }
+    if (R(10)) { const k = shuf(B.hand); B.hand = k.slice(0, 3); B.disc.push(...k.slice(3)); } else { B.disc.push(...B.hand); B.hand = []; }
     B.sel = null; B.en.forEach(e => e.el.classList.remove('tg')); hud();
     
     for (const e of B.en) if (e.hp > 0) {
@@ -656,13 +677,13 @@ const ascDec = str => {
 };
 
 function startRun(c, asc) {
-    S = { cl: c, hp: c.hp, mhp: c.hp, me: 3, f: 0, gold: 20, rel: [], rm: 0, deck: [...c.deck], asc: asc || 0 };
+    S = { cl: c, hp: c.hp, mhp: c.hp, me: 3, f: 0, gold: 20, rel: [], rm: 0, deck: [...c.deck], potions: [], asc: asc || 0 };
     dv = S.hp; $('#hpn').textContent = String(dv); $('#hpm').textContent = `/${S.mhp}`; $('#avw').innerHTML = shape(c.s, c.col, 34);
     hide(); start();
 }
 
 function menu() {
-    B = null; S = null; $('#en').innerHTML = ''; $('#hand').innerHTML = ''; $('#hpn').textContent = '0'; dv = 0; $('#hpm').textContent = '';
+    B = null; S = null; $('#en').innerHTML = ''; $('#hand').innerHTML = ''; $('#pots').innerHTML = ''; $('#hpn').textContent = '0'; dv = 0; $('#hpm').textContent = '';
     ov(`<div style="font-size:16px">Choose a shape</div><div style="display:grid;grid-template-columns:repeat(3, 86px);gap:16px;justify-content:center;margin-top:20px">${[0, 8, 7, 3, 6, 5, 2, 1, 4].map(i => [CL[i], i]).map(([c, i]) => `<button class="win big" data-i="${i}" style="width: 86px; height: 86px; padding: 0; justify-content: center;">${shape(c.s, c.col, 54)}</button>`).join('')}</div>
     <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:8px"><div style="font-size:11px;color:#aaa">Ascension code</div><div style="display:flex;gap:8px;align-items:center"><input class="cin" id="ci" maxlength="9" placeholder="XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false"><button class="win pb" id="cg" style="margin:0;padding:8px 14px">Go</button></div><div id="cm" style="font-size:12px;min-height:16px"></div></div>`);
     document.querySelectorAll('.big').forEach(b => b.onclick = () => startRun(CL[b.dataset.i], 0));
@@ -720,7 +741,7 @@ function reward(bs, el) {
     $('#sk').onclick = nx;
 }
 
-const RL = [0, { t: 'First attack each turn hits twice', s: 'slash2', c: '#ff4d5e', w: 4 }, { t: 'Block carries over', s: 'castle', c: '#4da3ff', w: 4 }, { t: 'Poison never decays', s: 'flask', c: '#b46bff', w: 1 }, { t: 'Every 5th card is free', s: 'ticket', c: '#ffd54a', w: 3 }, { t: 'Draw 1 extra card', s: 'page', c: '#9be7ff', w: 3 }, { t: 'Fights start with +2 strength', s: 'dumbbell', c: '#ff9f43', w: 4 }, { t: 'Heal 3 on every kill', s: 'sprout', c: '#59e07a', w: 4 }, { t: 'Turns start with +20% amp', s: 'stairs', c: '#ff8a3d', w: 3 }, { t: 'Unspent energy carries over', s: 'battery', c: '#fff', w: 1 }, { t: 'Hand is kept between turns', s: 'magnet', c: '#fd79a8', w: 1 }, { t: 'Start each fight with 8 block', s: 'helm', c: '#4da3ff', w: 3 }, { t: 'Double gold interest', s: 'gem', c: '#ffe14d', w: 3 }, { t: 'Enemies start vulnerable', s: 'eye', c: '#ff9ff3', w: 3 },
+const RL = [0, { t: 'First attack each turn deals 1.5x damage', s: 'slash2', c: '#ff4d5e', w: 4 }, { t: '50% of your block carries over', s: 'castle', c: '#4da3ff', w: 4 }, { t: 'Poison never decays', s: 'flask', c: '#b46bff', w: 1 }, { t: 'Every 5th card is free', s: 'ticket', c: '#ffd54a', w: 3 }, { t: 'Draw 1 extra card', s: 'page', c: '#9be7ff', w: 3 }, { t: 'Fights start with +2 strength', s: 'dumbbell', c: '#ff9f43', w: 4 }, { t: 'Heal 3 on every kill', s: 'sprout', c: '#59e07a', w: 4 }, { t: 'Turns start with +20% amp', s: 'stairs', c: '#ff8a3d', w: 3 }, { t: 'Up to 2 unspent energy carries over', s: 'battery', c: '#fff', w: 1 }, { t: 'Keep 3 random cards between turns', s: 'magnet', c: '#fd79a8', w: 1 }, { t: 'Start each fight with 8 block', s: 'helm', c: '#4da3ff', w: 3 }, { t: 'Double gold interest', s: 'gem', c: '#ffe14d', w: 3 }, { t: 'Enemies start vulnerable', s: 'eye', c: '#ff9ff3', w: 3 },
     { t: 'Heal 2 at the start of each turn', s: 'ankh', c: '#59e07a', w: 3 },
     { t: 'Poison you apply is 30% stronger', s: 'fang', c: '#b46bff', w: 3 },
     { t: 'Vulnerable you apply lasts 1 turn longer', s: 'hourglass', c: '#ff9f43', w: 3 },
@@ -753,30 +774,42 @@ function addRel(n, onSuccess, onCancel) {
     $('#sk').onclick = onCancel;
 }
 
-const DR = { f: ['bolt', '#70a1ff', 'Fight', 'steady'], e: ['crown', '#ff4d5e', 'Elite', 'tough, relic'], s: ['arch', '#ffd54a', 'Shop', 'spend gold'], v: ['clover', '#c56cf0', 'Event', 'a gamble'], r: ['heart', '#59e07a', 'Rest', 'heal or upgrade'] };
+// [shape, color, name, subtitle, % chance the door appears]
+const DR = { f: ['bolt', '#70a1ff', 'Proceed', 80], e: ['crown', '#ff4d5e', 'Elite', 30], s: ['arch', '#ffd54a', 'Shop', 35], v: ['clover', '#c56cf0', 'Event', 40], r: ['heart', '#59e07a', 'Rest', 30] };
 
 function restSite() {
-    ov(`<div>Rest Site</div><div class='row'><button class='win big' id='rh'><div style="font-size:24px;margin-bottom:4px">☕</div>Heal ${Math.round(S.mhp * .25)}</button><button class='win big' id='ru'><div style="font-size:24px;margin-bottom:4px">⚒️</div>Upgrade</button></div><button class='win pb' id='lv'>Skip</button>`);
-    $('#rh').onclick = () => { S.hp = Math.min(S.mhp, S.hp + Math.round(S.mhp * .25)); fight(); };
-    $('#ru').onclick = () => {
-        ov(`<div>Upgrade how?</div><div class='row'><button class='win big' id='us'>Sharpen (+40%)</button><button class='win big' id='ul'>Lighten (-1 Cost)</button></div><button class='win pb' id='lv2'>Back</button>`);
-        $('#us').onclick = () => pickCard('Sharpen which?', i => { S.deck[i] = up(S.deck[i]); fight(); }, restSite, c => !c.pot && (c.d || c.k || c.p || c.h));
-        $('#ul').onclick = () => pickCard('Lighten which?', i => { S.deck[i] = { ...S.deck[i], c: Math.max(0, S.deck[i].c - 1) }; fight(); }, restSite, c => !c.pot && c.c > 0);
-        $('#lv2').onclick = restSite;
-    };
+    const hl = Math.round(S.mhp * .25);
+    ov(`<div>Rest Site</div><div class='row'><button class='win big' id='rh'><div style="font-size:24px;margin-bottom:4px">☕</div>Heal ${hl}</button></div><button class='win pb' id='lv'>Skip</button>`);
+    $('#rh').onclick = () => { S.hp = Math.min(S.mhp, S.hp + hl); fight(); };
     $('#lv').onclick = fight;
 }
 
 function doors() {
-    if (S.f % 9 == 8) return fight();
-    const t = shuf(Object.keys(DR)).slice(0, 3), b = BOSSES[(S.f / 9 | 0) % 3];
-    ov(`<div>${S.f % 9 == 7 ? `Boss ahead <div style='width:44px;margin:6px auto'>${shape(b.s, b.col, 44)}</div>` : 'Choose a door'}</div><div class='row'>${t.map(k => `<button class='win big' data-k='${k}'><div style='width:54px'>${shape(DR[k][0], DR[k][1], 54)}</div><span>${DR[k][2]}</span><small>${DR[k][3]}</small></button>`).join('')}</div>`);
+    if (S.f % 9 == 8) return bossDoors();
+    let t = shuf(Object.keys(DR).filter(k => rnd(100) < DR[k][3])).slice(0, 3);
+    if (!t.length) t = ['f'];
+    ov(`<div>${t.length > 1 ? 'Choose a door' : 'A door appears'}</div><div class='row'>${t.map(k => `<button class='win big' data-k='${k}'><div style='width:54px'>${shape(DR[k][0], DR[k][1], 54)}</div><span>${DR[k][2]}</span></button>`).join('')}</div>`);
     document.querySelectorAll('#ov .big').forEach(b => b.onclick = () => {
         const k = b.dataset.k;
         if (k == 'f') fight();
         else if (k == 'e') { hide(); start(1); }
         else if (k == 'r') restSite();
         else k == 's' ? shop() : event();
+    });
+}
+
+function bossDoors() {
+    const b = BOSSES[(S.f / 9 | 0) % 3];
+    const sides = ['s', 'r'].filter(k => rnd(100) < DR[k][3]);
+    let L = '', Rt = '';
+    if (sides.length == 2) [L, Rt] = shuf(sides);
+    else if (sides.length) Math.random() < .5 ? L = sides[0] : Rt = sides[0];
+    const cell = k => k ? `<button class='win big' data-k='${k}' style='width:90px'><div style='width:54px'>${shape(DR[k][0], DR[k][1], 54)}</div><span>${DR[k][2]}</span></button>` : '<div></div>';
+    ov(`<div>The boss awaits</div><div style='display:grid;grid-template-columns:90px 130px 90px;gap:10px;align-items:center;justify-content:center'>${cell(L)}<button class='win big' data-k='b' style='width:130px;padding:16px 6px'><div style='width:84px'>${shape(b.s, b.col, 84)}</div><span>Boss</span></button>${cell(Rt)}</div>`);
+    document.querySelectorAll('#ov .big').forEach(el => el.onclick = () => {
+        const k = el.dataset.k;
+        if (k == 'b') fight();
+        else k == 's' ? shop() : restSite();
     });
 }
 
@@ -788,12 +821,17 @@ function pickCard(t, cb, bk, filt) {
 
 function shop() {
     const cs = shuf([...S.cl.pool, ...NEU]).slice(0, 3);
-    const rl = rollRel(1);
-    const pt = [ { ...pick(POTIONS) } ]; 
+    const isRel = Math.random() < .3;
+    const pt = isRel ? [] : [{ ...pick(POTIONS) }], rl = isRel ? rollRel(1) : [];
+    const rp = n => Math.round((RL[n].w < 2 ? 60 : 35) * fsc);
     const fsc = 1 + (S.f * 0.08);
     const pr = c => Math.round((c.pot ? 30 : 14 + c.c * 8) * fsc);
-    const rp = n => Math.round((RL[n].w < 2 ? 60 : 35) * fsc);
+    const ug = {
+        s: { t: 'Sharpen which?', n: 'Sharpen', d: '+40% to a card', i: '⚒️', p: Math.round(35 * fsc), done: 0, f: c => up(c), ok: c => !c.pot && (c.d || c.k || c.p || c.h) },
+        l: { t: 'Lighten which?', n: 'Lighten', d: '-1 cost on a card', i: '🪶', p: Math.round(45 * fsc), done: 0, f: c => ({ ...c, c: Math.max(0, c.c - 1) }), ok: c => !c.pot && c.c > 0 }
+    };
     const op = ok => ok ? '' : 'opacity:.4';
+    const full = () => S.potions.length >= 3;
     
     const dr = () => {
         const rm = Math.round((25 + 10 * S.rm) * fsc);
@@ -801,13 +839,19 @@ function shop() {
         <div class='row L'>${cs.map((c, i) => `<div>${c ? cardH(c, i) : '<div class=cd></div>'}<button class='win pb' data-c='${i}' style='${op(c && S.gold >= pr(c))}'>${c ? pr(c) : '-'}</button></div>`).join('')}</div>
         <div class='row'>
             ${rl.map((n, i) => `<button class='win big' data-r='${i}' style='${op(n && S.gold >= rp(n))}'>${n ? rs(n, 40) + `<small>${RL[n].t}</small><span>${rp(n)}</span>` : '-'}</button>`).join('')}
-            ${pt.map((p, i) => `<div>${p ? cardH(p, i) : '<div class=cd></div>'}<button class='win pb' data-p='${i}' style='${op(p && S.gold >= pr(p))}'>${p ? pr(p) : '-'}</button></div>`).join('')}
+            ${pt.map((p, i) => `<div>${p ? cardH(p, i) : '<div class=cd></div>'}<button class='win pb' data-p='${i}' style='${op(p && !full() && S.gold >= pr(p))}'>${p ? (full() ? 'Full' : pr(p)) : '-'}</button></div>`).join('')}
+            ${Object.entries(ug).map(([k, u]) => `<button class='win big' data-u='${k}' style='${op(!u.done && S.gold >= u.p)}'><div style="font-size:24px">${u.i}</div>${u.n}<small>${u.d}</small><span>${u.done ? 'Sold' : u.p}</span></button>`).join('')}
         </div>
         <div class='row'><button class='win pb' id='rm' style='${op(S.gold >= rm)}'>Remove ${rm}</button><button class='win pb' id='lv'>Leave</button></div>`);
         
         document.querySelectorAll('#ov [data-c]').forEach(b => b.onclick = () => { const i = +b.dataset.c, c = cs[i]; if (c && S.gold >= pr(c)) { S.gold -= pr(c); S.deck.push(c); cs[i] = null; dr(); } });
         document.querySelectorAll('#ov [data-r]').forEach(b => b.onclick = () => { const i = +b.dataset.r, n = rl[i]; if (n && S.gold >= rp(n)) { addRel(n, () => { S.gold -= rp(n); rl[i] = 0; dr(); }, dr); } });
-        document.querySelectorAll('#ov [data-p]').forEach(b => b.onclick = () => { const i = +b.dataset.p, p = pt[i]; if (p && S.gold >= pr(p)) { S.gold -= pr(p); S.deck.push(p); pt[i] = null; dr(); } });
+        document.querySelectorAll('#ov [data-p]').forEach(b => b.onclick = () => { const i = +b.dataset.p, p = pt[i]; if (p && !full() && S.gold >= pr(p)) { S.gold -= pr(p); S.potions.push(p); pt[i] = null; dr(); } });
+        document.querySelectorAll('#ov [data-u]').forEach(b => b.onclick = () => {
+            const u = ug[b.dataset.u];
+            if (u.done || S.gold < u.p) return;
+            pickCard(u.t, i => { S.gold -= u.p; S.deck[i] = u.f(S.deck[i]); u.done = 1; dr(); }, dr, u.ok);
+        });
         $('#rm').onclick = () => { if (S.gold >= rm) pickCard('Remove which?', i => { S.gold -= rm; S.rm++; S.deck.splice(i, 1); dr(); }, dr); };
         $('#lv').onclick = fight;
     };
