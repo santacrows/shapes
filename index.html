@@ -341,7 +341,7 @@ const rows = c => [
     c.bd && ['atk', '=' + ic('blk', 13)],
     c.cp && ['atk', '/' + ic('drw', 13)],
     c.hb && ['blk', '/' + ic('drw', 13)],
-    c.pn && ['atk', c.pn + 'x' + ic('hrt', 13)],
+    c.pn && ['atk', c.pn + 'x -' + ic('hrt', 13)],
     c.lh && ['HP <50%: X2'],
     c.k && ['blk', c.k],
     c.p && ['psn', c.p + (c.all ? ic('aoe', 14) : '')],
