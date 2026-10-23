@@ -74,6 +74,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .cd.sel { transform: translateY(-18px); z-index: 15; }
 .cd:hover { z-index: 20; }
 .cd.no { opacity: .45; }
+.upb { position: absolute; bottom: 2px; right: 4px; font-size: 11px; line-height: 1; color: var(--gold); letter-spacing: -1px; }
 .co { position: absolute; top: -9px; left: -9px; width: 22px; height: 22px; border-radius: 50%; background: var(--gold); color: #000; display: grid; place-items: center; border: 2px solid #000; }
 .r { display: flex; align-items: center; gap: 3px; font-size: 14px; text-align: center; line-height: 1.1; }
 .r small { font-size: 10px; opacity: .8; }
@@ -222,6 +223,7 @@ const SH = {
     bowtie: '<polygon points="4,20 50,50 96,20 96,80 50,50 4,80"/>',
     crown: '<polygon points="6,82 6,25 28,50 50,15 72,50 94,25 94,82"/>',
     arch: '<path d="M18 94 L18 48 A32 32 0 0 1 82 48 L82 94 Z"/>',
+    tag: '<path fill-rule="evenodd" d="M6 50 L32 14 H94 V86 H32 Z M26 50 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0 Z"/>',
     clover: '<path d="M27.6 41.0 A25 25 0 1 0 50.0 75.8 A25 25 0 1 0 72.4 41.0 A25 25 0 1 0 27.6 41.0 Z"/>',
     slash2: '<polygon points="8,92 26,92 62,8 44,8"/><polygon points="40,92 58,92 94,8 76,8"/>',
     castle: '<polygon points="8,92 8,14 30,14 30,30 42,30 42,14 58,14 58,30 70,30 70,14 92,14 92,92"/>',
@@ -252,23 +254,23 @@ const shape = (s, col, z = 100) => `<svg class="sh" viewBox="0 0 100 100" width=
 const K = { c: 1, d: 6 }, D = { c: 1, k: 5 }, rep = (c, n) => Array(n).fill(c);
 
 const CL = [
-    { s: 'tri', col: '#ff4d5e', hp: 74, deck: [...rep(K, 5), ...rep(D, 4), { c: 2, d: 8, v: 2 }], pool: [{ c: 1, d: 3, n: 3 }, { c: 2, d: 8, all: 1 }, { c: 1, s: 2 }, { c: 2, d: 15 }, { c: 0, d: 4 }, { c: 2, d: 5, n: 3 }, { c: 1, d: 7, v: 1 }, { c: 1, d: 5, w: 1 }, { c: 3, d: 7, n: 4 }, { c: 1, d: 6, s: 1 }, { c: 2, d: 6, all: 1, v: 1 }, { c: 0, s: 2, x: 1 }, { c: 3, d: 26, x: 1 }, { c: 1, m: 40, d: 4 }, { c: 2, m: 60, d: 6, n: 2 }, { c: 3, d: 32 }, { c: 3, d: 20, all: 1, n: 2 }] },
+    { s: 'tri', col: '#ff4d5e', hp: 74, deck: [...rep(K, 5), ...rep(D, 4), { c: 2, d: 8, v: 2 }], pool: [{ c: 0, d: 3, n: 2 }, { c: 2, d: 10, n: 2, v: 1 }, { c: 1, d: 3, n: 3 }, { c: 2, d: 8, all: 1 }, { c: 1, s: 2 }, { c: 2, d: 15 }, { c: 0, d: 4 }, { c: 2, d: 5, n: 3 }, { c: 1, d: 7, v: 1 }, { c: 1, d: 5, w: 1 }, { c: 3, d: 7, n: 4 }, { c: 1, d: 6, s: 1 }, { c: 2, d: 6, all: 1, v: 1 }, { c: 0, s: 2, x: 1 }, { c: 3, d: 26, x: 1 }, { c: 1, m: 40, d: 4 }, { c: 2, m: 60, d: 6, n: 2 }, { c: 3, d: 32 }, { c: 3, d: 20, all: 1, n: 2 }] },
     
-    { s: 'sq', col: '#4da3ff', hp: 75, deck: [...rep(K, 4), ...rep(D, 5), { c: 2, bd: 1 }], pool: [{ c: 2, k: 13 }, { c: 1, k: 7, w: 1 }, { c: 1, k: 6, d: 5 }, { c: 1, k: 9 }, { c: 0, k: 4 }, { c: 3, k: 19, x: 1 }, { c: 1, k: 4, v: 2 }, { c: 2, k: 8, bd: 1 }, { c: 1, bd: 1, v: 1 }, { c: 2, k: 9, w: 2 }, { c: 0, k: 5, x: 1 }, { c: 2, k: 9, v: 1, all: 1 }, { c: 1, k: 6, h: 3 }, { c: 1, m: 30, k: 6 }, { c: 3, k: 25, bd: 1 }, { c: 2, k: 10, w: 2, bd: 1 }, { c: 3, k: 35, x: 1 }] },
+    { s: 'sq', col: '#4da3ff', hp: 75, deck: [...rep(K, 4), ...rep(D, 5), { c: 2, bd: 1 }], pool: [{ c: 1, k: 8, h: 2 }, { c: 2, k: 6, bd: 1, v: 1 }, { c: 2, k: 13 }, { c: 1, k: 7, w: 1 }, { c: 1, k: 6, d: 5 }, { c: 1, k: 9 }, { c: 0, k: 4 }, { c: 3, k: 19, x: 1 }, { c: 1, k: 4, v: 2 }, { c: 2, k: 8, bd: 1 }, { c: 1, bd: 1, v: 1 }, { c: 2, k: 9, w: 2 }, { c: 0, k: 5, x: 1 }, { c: 2, k: 9, v: 1, all: 1 }, { c: 1, k: 6, h: 3 }, { c: 1, m: 30, k: 6 }, { c: 3, k: 25, bd: 1 }, { c: 2, k: 10, w: 2, bd: 1 }, { c: 3, k: 35, x: 1 }] },
     
-    { s: 'cir', col: '#a29bfe', hp: 72, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, p: 10 }, { c: 1, w: 2 }], pool: [{ c: 2, p: 14 }, { c: 1, d: 4, p: 7 }, { c: 0, e: 1, x: 1 }, { c: 1, w: 3, x: 1 }, { c: 2, p: 10, all: 1 }, { c: 1, k: 5, w: 1 }, { c: 0, d: 3, w: 1 }, { c: 1, p: 8, v: 1 }, { c: 2, px: 1, x: 1 }, { c: 0, p: 8, x: 1 }, { c: 2, p: 9, w: 2 }, { c: 1, p: 7, all: 1 }, { c: 2, k: 5, p: 11 }, { c: 1, m: 35, p: 7 }, { c: 1, pt: 1 }, { c: 2, p: 6, pt: 1 }, { c: 3, p: 20, all: 1 }, { c: 2, px: 1, w: 1 }, { c: 2, p: 12, pt: 1 }] },
+    { s: 'cir', col: '#a29bfe', hp: 72, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, p: 13 }, { c: 1, w: 2 }], pool: [{ c: 0, p: 6 }, { c: 1, k: 6, p: 6 }, { c: 2, p: 12, all: 1, v: 1 }, { c: 2, p: 18 }, { c: 1, d: 4, p: 9 }, { c: 0, e: 1, x: 1 }, { c: 1, w: 3, x: 1 }, { c: 2, p: 13, all: 1 }, { c: 1, k: 5, w: 1 }, { c: 0, d: 3, w: 1 }, { c: 1, p: 10, v: 1 }, { c: 2, px: 1, x: 1 }, { c: 0, p: 10, x: 1 }, { c: 2, p: 12, w: 2 }, { c: 1, p: 9, all: 1 }, { c: 2, k: 5, p: 14 }, { c: 1, m: 35, p: 9 }, { c: 1, pt: 1 }, { c: 2, p: 8, pt: 1 }, { c: 3, p: 26, all: 1 }, { c: 2, px: 1, w: 1 }, { c: 2, p: 16, pt: 1 }] },
     
-    { s: 'dia', col: '#ff6bcb', hp: 60, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, d: 7, z: 1 }, { c: 1, k: 6, z: 1 }], pool: [{ c: 2, d: 12, z: 1 }, { c: 0, d: 5, z: 1 }, { c: 2, p: 8, z: 1 }, { c: 1, k: 10, z: 1 }, { c: 3, d: 20, z: 1 }, { c: 0, e: 2, sd: 6, x: 1 }, { c: 1, m: 60, sd: 4 }, { c: 1, d: 4, n: 3, z: 1 }, { c: 3, d: 12, n: 3, z: 1 }, { c: 2, k: 18, w: 2, z: 1 }, { c: 3, m: 80, z: 1 }] },
+    { s: 'dia', col: '#ff6bcb', hp: 68, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, d: 7, z: 1 }, { c: 1, k: 6, z: 1 }], pool: [{ c: 1, d: 9, v: 1 }, { c: 0, k: 6, z: 1 }, { c: 2, d: 11, all: 1, z: 1 }, { c: 2, d: 12, z: 1 }, { c: 0, d: 5, z: 1 }, { c: 2, p: 8, z: 1 }, { c: 1, k: 10, z: 1 }, { c: 3, d: 20, z: 1 }, { c: 0, e: 2, sd: 6, x: 1 }, { c: 1, m: 60, sd: 4 }, { c: 1, d: 4, n: 3, z: 1 }, { c: 3, d: 12, n: 3, z: 1 }, { c: 2, k: 18, w: 2, z: 1 }, { c: 3, m: 80, z: 1 }] },
     
-    { s: 'moon', col: '#00cec9', hp: 64, deck: [...rep(K, 4), ...rep(D, 4), { c: 0, m: 30, d: 5 }, { c: 0, m: 25, k: 3 }], pool: [{ c: 2, m: 55, d: 8 }, { c: 0, m: 30, x: 1 }, { c: 1, m: 35, d: 3, n: 2 }, { c: 2, d: 4, n: 4 }, { c: 3, m: 95, x: 1 }, { c: 1, m: 25, w: 1 }, { c: 2, m: 45, d: 6, all: 1 }, { c: 1, m: 20, k: 6 }, { c: 3, m: 100, x: 1 }, { c: 2, m: 40, w: 2 }, { c: 3, m: 60, d: 10 }] },
+    { s: 'moon', col: '#00cec9', hp: 68, deck: [...rep(K, 4), ...rep(D, 4), { c: 0, m: 30, d: 5 }, { c: 0, m: 25, k: 3 }], pool: [{ c: 2, d: 14, m: 20 }, { c: 1, d: 6, m: 30, w: 1 }, { c: 3, d: 12, n: 3, m: 40 }, { c: 2, m: 55, d: 8 }, { c: 0, m: 30, x: 1 }, { c: 1, m: 35, d: 3, n: 2 }, { c: 2, d: 4, n: 4 }, { c: 3, m: 95, x: 1 }, { c: 1, m: 25, w: 1 }, { c: 2, m: 45, d: 6, all: 1 }, { c: 1, m: 20, k: 6 }, { c: 3, m: 100, x: 1 }, { c: 2, m: 40, w: 2 }, { c: 3, m: 60, d: 10 }] },
     
-    { s: 'star', col: '#2ecc71', hp: 62, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, d: 4, h: 3 }, { c: 1, d: 5, pi: 1 }], pool: [{ c: 2, d: 9, h: 6 }, { c: 1, d: 5, h: 2, v: 1 }, { c: 0, d: 3, h: 2 }, { c: 2, d: 6, all: 1, h: 4 }, { c: 1, k: 5, h: 3 }, { c: 2, d: 10, pi: 1 }, { c: 3, d: 14, h: 10, x: 1 }, { c: 1, v: 2, h: 3 }, { c: 3, d: 20, h: 10 }, { c: 2, d: 12, all: 1, h: 6 }, { c: 3, d: 30, h: 15, x: 1 }] },
+    { s: 'star', col: '#2ecc71', hp: 66, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, d: 4, h: 3 }, { c: 1, d: 5, pi: 1 }], pool: [{ c: 2, d: 15, h: 4 }, { c: 1, d: 6, v: 2, h: 2 }, { c: 0, k: 4, h: 2 }, { c: 1, d: 8, h: 2, pi: 1 }, { c: 2, k: 12, h: 8 }, { c: 2, d: 9, h: 6 }, { c: 1, d: 5, h: 2, v: 1 }, { c: 0, d: 3, h: 2 }, { c: 2, d: 6, all: 1, h: 4 }, { c: 1, k: 5, h: 3 }, { c: 2, d: 10, pi: 1 }, { c: 3, d: 14, h: 10, x: 1 }, { c: 1, v: 2, h: 3 }, { c: 3, d: 20, h: 10 }, { c: 2, d: 12, all: 1, h: 6 }, { c: 3, d: 30, h: 15, x: 1 }] },
     
-    { s: 'cross', col: '#333333', hp: 76, deck: [...rep(K, 4), ...rep(D, 4), { c: 0, d: 9, sd: 3 }, { c: 1, k: 8, x: 1 }], pool: [{ c: 1, h: 5 }, { c: 2, d: 16, sd: 3, all: 1 }, { c: 2, s: 2, x: 1 }, { c: 1, d: 9, h: 3 }, { c: 0, sd: 2, w: 2 }, { c: 3, d: 25, sd: 6 }, { c: 3, d: 40, sd: 8 }, { c: 2, d: 20, all: 1, sd: 5 }, { c: 0, d: 12, sd: 3, w: 2 }] },
+    { s: 'cross', col: '#333333', r: [14], hp: 82, deck: [...rep(K, 4), ...rep(D, 4), { c: 0, d: 9, sd: 3 }, { c: 1, k: 8 }], pool: [{ c: 2, pn: 2 }, { c: 1, d: 8, lh: 1 }, { c: 3, pn: 3, x: 1 }, { c: 0, d: 5, lh: 1, sd: 2 }, { c: 1, k: 11, sd: 2 }, { c: 2, k: 8, h: 8 }, { c: 0, d: 6, h: 2, sd: 1 }, { c: 0, e: 1, sd: 3, x: 1 }, { c: 1, d: 7, k: 5 }, { c: 2, k: 12, v: 1 }, { c: 2, d: 14, v: 2, sd: 3 }, { c: 1, h: 8 }, { c: 2, d: 16, sd: 3, all: 1 }, { c: 2, s: 2, x: 1 }, { c: 1, d: 9, h: 3 }, { c: 0, sd: 2, w: 2 }, { c: 3, d: 25, sd: 6 }, { c: 3, d: 40, sd: 6 }, { c: 2, d: 20, all: 1, sd: 4 }, { c: 0, d: 12, sd: 3, w: 2 }] },
     
-    { s: 'ring', col: '#ffe14d', hp: 66, deck: [...rep(K, 4), ...rep(D, 4), { c: 0, d: 5, w: 1, dc: 1 }, { c: 1, s: 1, x: 1 }], pool: [{ c: 0, w: 2, dc: 1 }, { c: 1, d: 6, w: 1 }, { c: 0, k: 4, w: 1 }, { c: 2, d: 10, s: 2, x: 1 }, { c: 1, k: 12, x: 1 }, { c: 2, e: 2, w: 2, x: 1 }, { c: 3, d: 8, n: 3, w: 2 }, { c: 0, k: 10, dc: 2 }, { c: 2, e: 3, x: 1 }] },
+    { s: 'ring', col: '#ffe14d', r: [5], hp: 76, deck: [...rep(K, 4), ...rep(D, 4), { c: 0, d: 5, w: 1, dc: 1 }, { c: 1, s: 1, w: 1, x: 1 }], pool: [{ c: 0, cp: 2 }, { c: 1, cp: 4 }, { c: 2, hb: 3, w: 1 }, { c: 1, hb: 2 }, { c: 3, cp: 7, x: 1 }, { c: 1, k: 10, w: 1 }, { c: 2, d: 14, k: 6 }, { c: 0, k: 6, dc: 1 }, { c: 1, k: 4, w: 2, x: 1 }, { c: 1, k: 9, w: 1 }, { c: 2, d: 16, w: 1 }, { c: 1, d: 7, w: 1, k: 3 }, { c: 0, k: 5, w: 1, dc: 1 }, { c: 2, d: 12, w: 2 }, { c: 1, s: 1, w: 1 }, { c: 0, w: 2, dc: 1 }, { c: 1, d: 6, w: 1 }, { c: 0, k: 4, w: 1 }, { c: 2, d: 10, s: 2, x: 1 }, { c: 1, k: 12, x: 1 }, { c: 2, e: 1, w: 3, x: 1 }, { c: 3, d: 8, n: 3, w: 2 }, { c: 0, k: 10, dc: 2 }, { c: 2, e: 3, x: 1 }] },
     
-    { s: 'hex', col: '#ff9f43', hp: 68, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, d: 3, n: 2 }, { c: 1, v: 2, w: 1 }], pool: [{ c: 2, d: 6, n: 3 }, { c: 1, v: 3}, { c: 2, k: 8, v: 2 }, { c: 0, d: 5, v: 1 }, { c: 3, d: 5, n: 4 }, { c: 2, k: 14, x: 1 }, { c: 3, d: 6, n: 5, v: 2 }, { c: 2, v: 3, all: 1 }, { c: 1, d: 4, n: 3 }] }
+    { s: 'hex', col: '#ff9f43', hp: 78, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, d: 3, n: 2 }, { c: 1, v: 2, w: 1 }], pool: [{ c: 1, k: 8, v: 1 }, { c: 2, d: 8, n: 3, k: 4 }, { c: 1, d: 4, n: 3, s: 1 }, { c: 2, k: 12, v: 2 }, { c: 0, s: 1, x: 1 }, { c: 2, s: 2, x: 1 }, { c: 1, d: 5, n: 2, v: 1 }, { c: 0, v: 1, w: 1 }, { c: 2, d: 5, n: 4, v: 1 }, { c: 1, k: 6, v: 1, w: 1 }, { c: 2, d: 6, n: 3 }, { c: 1, v: 3}, { c: 2, k: 8, v: 2 }, { c: 0, d: 5, v: 1 }, { c: 3, d: 5, n: 4 }, { c: 2, k: 14, x: 1 }, { c: 3, d: 6, n: 5, v: 2 }, { c: 2, v: 3, all: 1 }, { c: 1, d: 4, n: 3 }] }
 ];
 
 const NEU = [{ c: 1, d: 9 }, { c: 1, k: 7 }, { c: 2, d: 10, w: 1 }, { c: 0, k: 3, w: 1 }, { c: 1, d: 8, pi: 1 }, { c: 2, d: 5, h: 5 }, { c: 2, d: 7, k: 7 }, { c: 0, d: 5, x: 1 }, { c: 1, v: 2, w: 1 }, { c: 3, d: 13, all: 1 }, { c: 1, s: 1, k: 4 }, { c: 1, m: 50 }, { c: 0, m: 25, x: 1 }, { c: 3, d: 25 }, { c: 3, k: 25 }, { c: 2, d: 10, w: 2 }, { c: 3, e: 2, w: 3, x: 1 }];
@@ -281,6 +283,8 @@ const POTIONS = [
     { c: 0, w: 3, pot: 1 }
 ];
 
+const ENM = { drop: 'Droplet', chevron: 'Chevron', pill: 'Capsule', pent: 'Pentagon', trap: 'Trapezoid', leaf: 'Leaf', para: 'Parallelogram', pie: 'Pie', oct: 'Octagon', kite: 'Kite', bowtie: 'Bowtie', semi: 'Semicircle', arrow: 'Arrow', shield: 'Shield', 'ring+star': 'Ring Star', 'hex+dia': 'Hex Diamond', 'cross+cir': 'Cross Circle' };
+const nm = e => ENM[e.s] || 'Enemy';
 const E1 = [
     { s: 'drop', col: '#ffb347', g: '💧', hp: 16, mv: [{ a: 4 }, { a: 5, k: 4 }, { u: 1 }] }, 
     { s: 'chevron', col: '#7bed9f', g: '⌃', hp: 12, mv: [{ a: 6 }, { a: 4, u: 1 }, { k: 6 }] }, 
@@ -301,7 +305,7 @@ const E3 = [
     { s: 'arrow', col: '#ff9f1a', g: '▶', hp: 42, mv: [{ u: 3, k: 5 }, { a: 6, n: 3 }, { a: 20 }] },
     { s: 'shield', col: '#eccc68', g: '🛡', hp: 60, mv: [{ k: 20, h: 5 }, { a: 10, u: 2 }, { a: 15, k: 10 }] }
 ];
-const BOSSES = [{ b: 1, s: 'ring+star', col: '#ff3860', g: '◎', hp: 85, mv: [{ u: 2 }, { a: 14 }, { a: 5, n: 3 }, { k: 15 }, { a: 18 }] }, { b: 1, s: 'hex+dia', col: '#a29bfe', g: '◈', hp: 105, mv: [{ k: 12, u: 1 }, { a: 6, n: 4 }, { a: 18 }, { u: 2, k: 8 }, { a: 9, n: 3 }] }, { b: 1, s: 'cross+cir', col: '#fdcb6e', g: '✦', hp: 130, mv: [{ a: 12, k: 12 }, { a: 30 }, { u: 4, k: 10 }, { a: 8, n: 5 }, { h: 30, k: 10 }] }];
+const BOSSES = [{ b: 1, s: 'ring+star', col: '#ff3860', g: '◎', hp: 95, mv: [{ u: 2 }, { a: 14 }, { a: 5, n: 3 }, { k: 15 }, { a: 18 }, { a: 8, k: 8 }] }, { b: 1, s: 'hex+dia', col: '#a29bfe', g: '◈', hp: 135, mv: [{ k: 12, u: 1 }, { a: 6, n: 4 }, { a: 18 }, { u: 2, k: 8 }, { a: 9, n: 3 }, { a: 24 }] }, { b: 1, s: 'cross+cir', col: '#fdcb6e', g: '✦', hp: 180, mv: [{ a: 12, k: 12 }, { a: 30 }, { u: 4, k: 10 }, { a: 8, n: 5 }, { h: 30, k: 10 }, { a: 22, u: 2 }] }];
 const ALLE = [...E1.map(x => ({ ...x, w: 1 })), ...E2.map(x => ({ ...x, w: 2 })), ...E3.map(x => ({ ...x, w: 3 }))];
 
 function mkEnc(f) {
@@ -335,6 +339,10 @@ const rows = c => [
     c.pot && ['pot', ''],
     c.d && ['atk', c.d + (c.n ? 'x' + c.n : '') + (c.all ? ic('aoe', 14) : '')],
     c.bd && ['atk', '=' + ic('blk', 13)],
+    c.cp && ['atk', c.cp + '/card'],
+    c.pn && ['atk', c.pn + 'x' + ic('hrt', 13)],
+    c.hb && ['blk', c.hb + '/card'],
+    c.lh && ['hrt', '2x <50%'],
     c.k && ['blk', c.k],
     c.p && ['psn', c.p + (c.all ? ic('aoe', 14) : '')],
   	c.v && ['vul', c.v + (c.all ? ic('aoe', 14) : '')],
@@ -353,7 +361,7 @@ const rows = c => [
 ].filter(Boolean);
 
 const ctype = c => c.pot ? 'pot' : c.d || c.bd ? 'atk' : c.k ? 'blk' : c.p || c.px || c.pt ? 'psn' : 'drw';
-const cardH = (c, i, cls = '') => `<div class="cd ${cls}" style="--c:${c.pot ? 'var(--gold)' : COL[ctype(c)]};${c.pot ? ' border-color: var(--gold)' : ''}" data-i="${i}"><div class="co">${c.c}</div>${rows(c).map(([k, t]) => `<div class="r">${k ? ic(k) : ''}${t}</div>`).join('')}</div>`;
+const cardH = (c, i, cls = '') => `<div class="cd ${cls}" style="--c:${c.pot ? 'var(--gold)' : COL[ctype(c)]};${c.pot ? ' border-color: var(--gold)' : ''}" data-i="${i}"><div class="co">${c.c}</div>${(c.su || c.lu) ? `<div class="upb">${'+'.repeat((c.su || 0) + (c.lu || 0))}</div>` : ''}${rows(c).map(([k, t]) => `<div class="r">${k ? ic(k) : ''}${t}</div>`).join('')}</div>`;
 
 function fl(el, t, c) {
     const d = document.createElement('div');
@@ -484,7 +492,7 @@ function start(el) {
         return { ...x, hp: h, mhp: h, sz, mv: x.mv.map(m => ({ ...m, a: m.a && Math.round(m.a * dm), k: m.k && Math.round(m.k * dm) })), blk: 0, vul: R(13) ? 2 : 0, psn: 0, str: 0, i: x.b ? 0 : rnd(x.mv.length) };
     });
     
-    B = { en, draw: shuf(S.deck), hand: [], disc: [], energy: 0, blk: R(11) ? 8 : 0, str: R(6) ? 2 : 0, amp: 0, lk: 0, el, cn: 0, fa: 0, busy: true, sel: null };
+    B = { en, draw: shuf(S.deck), hand: [], disc: [], energy: 0, blk: R(11) ? 8 : 0, str: R(6) ? 2 : 0, amp: 0, lk: 0, el, cn: 0, fa: 0, pc: 0, hp0: S.hp, busy: true, sel: null };
     if (R(20)) B.en.forEach(e => e.hp = Math.max(1, e.hp - 5));
     build(); turn(true);
 }
@@ -504,7 +512,7 @@ function turn(first) {
     B.energy = S.me + (R(9) ? Math.min(B.energy, 2) : 0);
     B.blk = first ? B.blk : (R(2) ? Math.floor(B.blk / 2) : 0);
     B.amp = Math.max(R(8) ? 20 : 0, B.amp / 2 | 0);
-    B.cn = 0; B.fa = 0;
+    B.cn = 0; B.fa = 0; B.r17 = 0; B.pc = 0;
     drawN(5 + (R(5) ? 1 : 0));
     if (R(14)) S.hp = Math.min(S.mhp, S.hp + 2);
     B.busy = false; B.sel = null;
@@ -564,7 +572,7 @@ function kill(e) {
 async function play(i, t) {
     const o = B.hand[i]; let c = o;
     if (c.z && !B.busy && cost(c) <= B.energy) {
-        const g = Math.random() < .5 + B.lk ? (B.lk = 0, 2.4) : (B.lk = Math.min(.4, B.lk + .1), .4);
+        const g = Math.random() < .5 + B.lk ? (B.lk = 0, 2.4) : (B.lk = Math.min(.4, B.lk + .1), .7);
         c = { ...o };
         ['d', 'k', 'p'].forEach(k => c[k] && (c[k] = Math.max(1, Math.round(c[k] * g))));
         fl($('#hpw'), g > 1 ? 'JACKPOT' : 'miss', g > 1 ? '#ffd54a' : '#aaa');
@@ -573,22 +581,23 @@ async function play(i, t) {
     
     B.busy = true; B.energy -= cost(c);
     if (R(4)) B.cn++;
-    B.hand.splice(i, 1); B.sel = null;
+    B.hand.splice(i, 1); B.sel = null; B.pc++;
     B.en.forEach(e => e.el.classList.remove('tg'));
     const tg = c.all ? B.en.filter(e => e.hp > 0) : [t];
     
     if (c.m) B.amp += c.m; if (c.s) B.str += c.s; if (c.k) { B.blk += c.k; fx('#4da3ff55'); }
+    if (c.hb) { B.blk += c.hb * B.hand.length; fx('#4da3ff55'); }
     if (R(18) && (c.d || c.bd)) B.blk += 2;
     if (c.dc) { B.hand = shuf(B.hand); for (let j = 0; j < c.dc; j++) if (B.hand.length) B.disc.push(B.hand.pop()); }
     hud();
     
-    if (c.d || c.bd) {
-        say(`${tg[0].g} is struck!`);
+    if (c.d || c.bd || c.cp || c.pn) {
+        say(`${nm(tg[0])} is struck!`);
         const hn = c.n || 1, fm = R(1) && !B.fa ? 1.5 : 1;
         B.fa = 1;
         for (let h = 0; h < hn; h++) {
             for (const e of tg) if (e.hp > 0) {
-                dmgE(e, Math.floor(amp(c.bd ? B.blk : c.d + B.str) * fm), c.pi);
+                dmgE(e, Math.floor(amp(c.bd ? B.blk : c.cp ? c.cp * B.pc + B.str : c.pn ? c.pn * Math.max(0, B.hp0 - S.hp) + B.str : c.d + B.str) * fm * (c.lh && S.hp * 2 <= S.mhp ? 2 : 1)), c.pi);
                 if (e.hp <= 0 && R(7)) S.hp = Math.min(S.mhp, S.hp + 3);
             }
             await sleep(170);
@@ -607,7 +616,7 @@ async function play(i, t) {
     if (c.sd) { S.hp = Math.max(1, S.hp - c.sd); fl($('#hpw'), '-' + c.sd, '#ff4d5e'); }
     if (c.h) { S.hp = Math.min(S.mhp, S.hp + c.h); fl($('#hpw'), '+' + c.h, '#59e07a'); }
     if (c.w) drawN(c.w); if (c.e) B.energy += c.e;
-    if (R(17) && c.c === 0) drawN(1);
+    if (R(17) && c.c === 0 && (B.r17 || 0) < 2) { B.r17 = (B.r17 || 0) + 1; drawN(1); }
     
     if (!c.x || R(19)) B.disc.push(o);
     
@@ -626,7 +635,7 @@ $('#end').onclick = async () => {
         e.blk = 0;
         if (e.psn) {
             e.hp -= e.psn; fl(e.el.querySelector('.sw'), '-' + e.psn, '#b46bff');
-            if (!R(3)) e.psn--;
+            if (!R(3)) e.psn -= Math.max(1, Math.round(e.psn / 3));
             upd(e); if (e.hp <= 0) kill(e);
         }
     }
@@ -636,13 +645,13 @@ $('#end').onclick = async () => {
     for (const e of B.en) {
         if (e.hp <= 0) continue;
         const m = e.mv[e.i++ % e.mv.length], sh = e.el.querySelector('.sh'); e.hid = 1;
-        if (m.k) { e.blk += m.k; say(`${e.g} braces itself.`); }
-        if (m.u) { e.str += m.u; say(`${e.g} grows stronger.`); fl(e.el.querySelector('.sw'), '+' + m.u, '#ffd54a'); }
-        if (m.h) { e.hp = Math.min(e.mhp, e.hp + m.h); say(`${e.g} heals!`); fl(e.el.querySelector('.sw'), '+' + m.h, '#59e07a'); }
+        if (m.k) { e.blk += m.k; say(`${nm(e)} braces itself.`); }
+        if (m.u) { e.str += m.u; say(`${nm(e)} grows stronger.`); fl(e.el.querySelector('.sw'), '+' + m.u, '#ffd54a'); }
+        if (m.h) { e.hp = Math.min(e.mhp, e.hp + m.h); say(`${nm(e)} heals!`); fl(e.el.querySelector('.sw'), '+' + m.h, '#59e07a'); }
         upd(e); if (m.k || m.u || m.h) await sleep(600);
         
         if (m.a) {
-            say(`${e.g} ${m.n ? 'strikes ' + m.n + ' times' : 'strikes'}!`); await sleep(350);
+            say(`${nm(e)} ${m.n ? 'strikes ' + m.n + ' times' : 'strikes'}!`); await sleep(350);
             for (let h = 0; h < (m.n || 1); h++) {
                 sh.animate([{ transform: 'none' }, { transform: 'scale(1.4) translateY(40px)' }, { transform: 'none' }], { duration: 380 }); await sleep(190);
                 const d = m.a + e.str, a = Math.min(B.blk, d);
@@ -677,7 +686,7 @@ const ascDec = str => {
 };
 
 function startRun(c, asc) {
-    S = { cl: c, hp: c.hp, mhp: c.hp, me: 3, f: 0, gold: 20, rel: [], rm: 0, deck: [...c.deck], potions: [], asc: asc || 0 };
+    S = { cl: c, hp: c.hp, mhp: c.hp, me: 3, f: 0, gold: 20, rel: [...(c.r || [])], rm: 0, deck: [...c.deck], potions: [], asc: asc || 0 };
     dv = S.hp; $('#hpn').textContent = String(dv); $('#hpm').textContent = `/${S.mhp}`; $('#avw').innerHTML = shape(c.s, c.col, 34);
     hide(); start();
 }
@@ -745,7 +754,7 @@ const RL = [0, { t: 'First attack each turn deals 1.5x damage', s: 'slash2', c: 
     { t: 'Heal 2 at the start of each turn', s: 'ankh', c: '#59e07a', w: 3 },
     { t: 'Poison you apply is 30% stronger', s: 'fang', c: '#b46bff', w: 3 },
     { t: 'Vulnerable you apply lasts 1 turn longer', s: 'hourglass', c: '#ff9f43', w: 3 },
-    { t: '0-cost cards draw a card', s: 'uturn', c: '#9be7ff', w: 2 },
+    { t: '0-cost cards draw a card (first 2 each turn)', s: 'uturn', c: '#9be7ff', w: 2 },
     { t: 'Playing an attack gives 2 block', s: 'sword', c: '#4da3ff', w: 3 },
     { t: 'Exhausted cards go to discard instead', s: 'bin', c: '#fd79a8', w: 1 },
     { t: 'Fights start with 5 damage to all enemies', s: 'blast', c: '#ff4d5e', w: 3 },
@@ -775,7 +784,7 @@ function addRel(n, onSuccess, onCancel) {
 }
 
 // [shape, color, name, subtitle, % chance the door appears]
-const DR = { f: ['bolt', '#70a1ff', 'Proceed', 80], e: ['crown', '#ff4d5e', 'Elite', 30], s: ['arch', '#ffd54a', 'Shop', 35], v: ['clover', '#c56cf0', 'Event', 40], r: ['heart', '#59e07a', 'Rest', 30] };
+const DR = { f: ['arch', '#70a1ff', 'Proceed', 80], e: ['crown', '#ff4d5e', 'Elite', 30], s: ['tag', '#ffd54a', 'Shop', 35], v: ['clover', '#c56cf0', 'Event', 40], r: ['heart', '#59e07a', 'Rest', 30] };
 
 function restSite() {
     const hl = Math.round(S.mhp * .25);
@@ -827,8 +836,8 @@ function shop() {
     const fsc = 1 + (S.f * 0.08);
     const pr = c => Math.round((c.pot ? 30 : 14 + c.c * 8) * fsc);
     const ug = {
-        s: { t: 'Sharpen which?', n: 'Sharpen', d: '+40% to a card', i: '⚒️', p: Math.round(35 * fsc), done: 0, f: c => up(c), ok: c => !c.pot && (c.d || c.k || c.p || c.h) },
-        l: { t: 'Lighten which?', n: 'Lighten', d: '-1 cost on a card', i: '🪶', p: Math.round(45 * fsc), done: 0, f: c => ({ ...c, c: Math.max(0, c.c - 1) }), ok: c => !c.pot && c.c > 0 }
+        s: { t: 'Sharpen which?', n: 'Sharpen', d: '+40%, max 2 per card', i: '⚒️', p: Math.round(35 * fsc), done: 0, f: c => up(c), ok: c => !c.pot && (c.su || 0) < 2 && (c.d || c.k || c.p || c.h) },
+        l: { t: 'Lighten which?', n: 'Lighten', d: '-1 cost, max 2 per card', i: '🪶', p: Math.round(45 * fsc), done: 0, f: c => ({ ...c, lu: (c.lu || 0) + 1, c: Math.max(0, c.c - 1) }), ok: c => !c.pot && (c.lu || 0) < 2 && c.c > 0 }
     };
     const op = ok => ok ? '' : 'opacity:.4';
     const full = () => S.potions.length >= 3;
@@ -859,8 +868,8 @@ function shop() {
 }
 
 let cur;
-const ok = t => { ov(`<div>${t}</div><button class='win pb' id='ok'>Continue</button>`); $('#ok').onclick = fight; }, bk = () => event(cur), up = c => { const o = { ...c }; ['d', 'k', 'p', 'h'].forEach(k => o[k] && (o[k] = Math.ceil(o[k] * 1.4))); return o; };
-const EV = [['A coin spins in the dark.', [['Flip it', () => Math.random() < .5 ? (S.gold += 45, ok('+45 gold')) : (S.hp = Math.max(1, S.hp - 10), ok('-10 hp'))], ['Leave', fight]]], ['An altar hums, hungry.', [['Pay 12% hp for a relic', () => { S.hp = Math.max(1, S.hp - Math.round(S.mhp * .12)); relicPick(fight); }], ['Leave', fight]]], ['A hollow shape offers gold.', [['Take 60 gold and a dead card', () => { S.gold += 60; S.deck.push({ c: 3, st: 1, nm: 'Dead Weight' }); fight(); }], ['Leave', fight]]], ['Dead weight can be shed.', [['Remove a card', () => pickCard('Remove which?', i => { S.deck.splice(i, 1); fight(); }, bk)], ['Leave', fight]]], ['An echo repeats itself.', [['Duplicate a card', () => pickCard('Copy which?', i => { S.deck.push(S.deck[i]); fight(); }, bk)], ['Leave', fight]]], ['A whetstone and a feather.', [['Sharpen a card (+40%)', () => pickCard('Sharpen which?', i => { S.deck[i] = up(S.deck[i]); fight(); }, bk, c => !c.pot && (c.d || c.k || c.p || c.h))], ['Lighten a card (-1 cost)', () => pickCard('Lighten which?', i => { S.deck[i] = { ...S.deck[i], c: Math.max(0, S.deck[i].c - 1) }; fight(); }, bk, c => !c.pot && c.c > 0)], ['Leave', fight]]]];
+const ok = t => { ov(`<div>${t}</div><button class='win pb' id='ok'>Continue</button>`); $('#ok').onclick = fight; }, bk = () => event(cur), up = c => { const o = { ...c, su: (c.su || 0) + 1 }; ['d', 'k', 'p', 'h'].forEach(k => o[k] && (o[k] = Math.ceil(o[k] * 1.4))); return o; };
+const EV = [['A coin spins in the dark.', [['Flip it', () => Math.random() < .5 ? (S.gold += 45, ok('+45 gold')) : (S.hp = Math.max(1, S.hp - 10), ok('-10 hp'))], ['Leave', fight]]], ['An altar hums, hungry.', [['Pay 12% hp for a relic', () => { S.hp = Math.max(1, S.hp - Math.round(S.mhp * .12)); relicPick(fight); }], ['Leave', fight]]], ['A hollow shape offers gold.', [['Take 60 gold and a dead card', () => { S.gold += 60; S.deck.push({ c: 3, st: 1, nm: 'Dead Weight' }); fight(); }], ['Leave', fight]]], ['Dead weight can be shed.', [['Remove a card', () => pickCard('Remove which?', i => { S.deck.splice(i, 1); fight(); }, bk)], ['Leave', fight]]], ['An echo repeats itself.', [['Duplicate a card', () => pickCard('Copy which?', i => { S.deck.push(S.deck[i]); fight(); }, bk)], ['Leave', fight]]], ['A whetstone and a feather.', [['Sharpen a card (+40%, max 2)', () => pickCard('Sharpen which?', i => { S.deck[i] = up(S.deck[i]); fight(); }, bk, c => !c.pot && (c.su || 0) < 2 && (c.d || c.k || c.p || c.h))], ['Lighten a card (-1 cost, max 2)', () => pickCard('Lighten which?', i => { S.deck[i] = { ...S.deck[i], lu: (S.deck[i].lu || 0) + 1, c: Math.max(0, S.deck[i].c - 1) }; fight(); }, bk, c => !c.pot && (c.lu || 0) < 2 && c.c > 0)], ['Leave', fight]]]];
 
 function event(e) {
     cur = e = e || pick(EV);
@@ -869,7 +878,7 @@ function event(e) {
 }
 
 function lose() {
-    say('You fade away…');
+    say('You fade away.');
     setTimeout(() => ov(`<div>${shape(S.cl.s, '#444', 80)}</div><div style="font-size:16px">Reached floor ${S.f + 1}${S.asc ? ' · ASC ' + S.asc : ''}</div><button class="win big" style="width:auto;padding:10px 24px" id="re">Again</button>`) || ($('#re').onclick = menu), 900);
 }
 
