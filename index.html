@@ -341,7 +341,7 @@ const rows = c => [
     c.bd && ['atk', '=' + ic('blk', 13)],
     c.cp && ['atk', '/' + ic('drw', 13)],
     c.hb && ['blk', '/' + ic('drw', 13)],
-    c.pn && ['atk', 'x' + c.pn + ' -' + ic('hrt', 14)],
+    c.pn && ['atk', 'x' + c.pn + ' -' + ic('hrt', 15)],
     c.lh && ['hrt', '<½: x2'],
     c.k && ['blk', c.k],
     c.p && ['psn', c.p + (c.all ? ic('aoe', 14) : '')],
@@ -361,7 +361,7 @@ const rows = c => [
 ].filter(Boolean);
 
 const ctype = c => c.pot ? 'pot' : c.d || c.bd ? 'atk' : c.k ? 'blk' : c.p || c.px || c.pt ? 'psn' : 'drw';
-const cardH = (c, i, cls = '') => `<div class="cd ${cls}" style="--c:${c.pot ? 'var(--gold)' : COL[ctype(c)]};${c.pot ? ' border-color: var(--gold)' : ''}" data-i="${i}"><div class="co">${c.c}</div>${(c.su || c.lu) ? `<div class="upb">${'+'.repeat((c.su || 0) + (c.lu || 0))}</div>` : ''}${rows(c).map(([k, t]) => `<div class="r">${k ? ic(k) : ''}${t}</div>`).join('')}</div>`;
+const cardH = (c, i, cls = '') => `<div class="cd ${cls}" style="--c:${c.pot ? 'pot' : COL[ctype(c)]};${c.pot ? ' border-color: #e843d5' : ''}" data-i="${i}"><div class="co">${c.c}</div>${(c.su || c.lu) ? `<div class="upb">${'+'.repeat((c.su || 0) + (c.lu || 0))}</div>` : ''}${rows(c).map(([k, t]) => `<div class="r">${k ? ic(k) : ''}${t}</div>`).join('')}</div>`;
 
 function fl(el, t, c) {
     const d = document.createElement('div');
