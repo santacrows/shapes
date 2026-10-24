@@ -863,4 +863,110 @@ function addRel(n, onSuccess, onCancel) {
     document.querySelectorAll('#ov .big').forEach(b => b.onclick = () => {
         const o = S.rel[+b.dataset.i];
         S.rel[+b.dataset.i] = n; if (B) hud(); onSuccess();
-    }
+    });
+    $('#sk').onclick = onCancel;
+}
+
+// [shape, color, name, subtitle, % chance the door appears]
+const DR = { f: ['arch', '#70a1ff', 'Proceed', 80], e: ['crown', '#ff4d5e', 'Elite', 30], s: ['tag', '#ffd54a', 'Shop', 35], v: ['clover', '#c56cf0', 'Event', 40], r: ['heart', '#59e07a', 'Rest', 30] };
+
+function restSite() {
+    const hl = Math.round(S.mhp * .25);
+    ov(`<div>Rest Site</div><div class='row'><button class='win big' id='rh'><div style="font-size:24px;margin-bottom:4px">☕</div>Heal ${hl}</button></div><button class='win pb' id='lv'>Skip</button>`);
+    $('#rh').onclick = () => { S.hp = Math.min(S.mhp, S.hp + hl); fight(); };
+    $('#lv').onclick = fight;
+}
+
+function doors() {
+    if (S.f % 9 == 8) return bossDoors();
+    let t = shuf(Object.keys(DR).filter(k => rnd(100) < DR[k][3])).slice(0, 3);
+    if (!t.length) t = ['f'];
+    ov(`<div>${t.length > 1 ? 'Choose a door' : 'A door appears'}</div><div class='row'>${t.map(k => `<button class='win big' data-k='${k}'><div style='width:54px'>${shape(DR[k][0], DR[k][1], 54)}</div><span>${DR[k][2]}</span></button>`).join('')}</div>`);
+    document.querySelectorAll('#ov .big').forEach(b => b.onclick = () => {
+        const k = b.dataset.k;
+        if (k == 'f') fight();
+        else if (k == 'e') { hide(); start(1); }
+        else if (k == 'r') restSite();
+        else k == 's' ? shop() : event();
+    });
+}
+
+function bossDoors() {
+    const b = BOSSES[(S.f / 9 | 0) % 3];
+    const sides = ['s', 'r'].filter(k => rnd(100) < DR[k][3]);
+    let L = '', Rt = '';
+    if (sides.length == 2) [L, Rt] = shuf(sides);
+    else if (sides.length) Math.random() < .5 ? L = sides[0] : Rt = sides[0];
+    const cell = k => k ? `<button class='win big' data-k='${k}' style='width:90px'><div style='width:54px'>${shape(DR[k][0], DR[k][1], 54)}</div><span>${DR[k][2]}</span></button>` : '<div></div>';
+    ov(`<div>The boss awaits</div><div style='display:grid;grid-template-columns:90px 130px 90px;gap:10px;align-items:center;justify-content:center'>${cell(L)}<button class='win big' data-k='b' style='width:130px;padding:16px 6px'><div style='width:84px'>${shape(b.s, b.col, 84)}</div><span>Boss</span></button>${cell(Rt)}</div>`);
+    document.querySelectorAll('#ov .big').forEach(el => el.onclick = () => {
+        const k = el.dataset.k;
+        if (k == 'b') fight();
+        else k == 's' ? shop() : restSite();
+    });
+}
+
+function pickCard(t, cb, bk, filt) {
+    ov(`<div>${t}</div><div class='row' style='max-height:62%;overflow-y:auto;gap:14px 8px;padding-top:12px'>${S.deck.map((c, i) => cardH(c, i, filt && !filt(c) ? 'no' : '')).join('')}</div><button class='win pb' id='cn'>Back</button>`);
+    document.querySelectorAll('#ov .cd:not(.no)').forEach(el => el.onclick = () => cb(+el.dataset.i));
+    $('#cn').onclick = bk;
+}
+
+function shop() {
+    const cs = shuf([...S.cl.pool, ...NEU]).slice(0, 3);
+    const isRel = Math.random() < .3;
+    const pt = isRel ? [] : [{ ...pick(POTIONS) }], rl = isRel ? rollRel(1) : [];
+    const rp = n => Math.round((RL[n].w < 2 ? 60 : 35) * fsc);
+    const fsc = 1 + (S.f * 0.08);
+    const pr = c => Math.round((c.pot ? 30 : 14 + c.c * 8) * fsc);
+    const ug = {
+        s: { t: 'Sharpen which?', n: 'Sharpen', d: '+40%, max 2 per card', i: '⚒️', p: Math.round(35 * fsc), done: 0, f: c => up(c), ok: c => !c.pot && (c.su || 0) < 2 && (c.d || c.k || c.p || c.h) },
+        l: { t: 'Lighten which?', n: 'Lighten', d: '-1 cost, max 2 per card', i: '🪶', p: Math.round(45 * fsc), done: 0, f: c => ({ ...c, lu: (c.lu || 0) + 1, c: Math.max(0, c.c - 1) }), ok: c => !c.pot && (c.lu || 0) < 2 && c.c > 0 }
+    };
+    const op = ok => ok ? '' : 'opacity:.4';
+    const full = () => S.potions.length >= 3;
+    
+    const dr = () => {
+        const rm = Math.round((25 + 10 * S.rm) * fsc);
+        ov(`<div style="color:var(--silver)">${ic('mny', 14)} ${S.money}</div>
+        <div class='row L'>${cs.map((c, i) => `<div>${c ? cardH(c, i) : '<div class=cd></div>'}<button class='win pb' data-c='${i}' style='${op(c && S.money >= pr(c))}'>${c ? pr(c) : '-'}</button></div>`).join('')}</div>
+        <div class='row'>
+            ${rl.map((n, i) => `<button class='win big' data-r='${i}' style='${op(n && S.money >= rp(n))}'>${n ? rs(n, 40) + `<small>${RL[n].t}</small><span>${rp(n)}</span>` : '-'}</button>`).join('')}
+            ${pt.map((p, i) => `<div>${p ? cardH(p, i) : '<div class=cd></div>'}<button class='win pb' data-p='${i}' style='${op(p && !full() && S.money >= pr(p))}'>${p ? (full() ? 'Full' : pr(p)) : '-'}</button></div>`).join('')}
+            ${Object.entries(ug).map(([k, u]) => `<button class='win big' data-u='${k}' style='${op(!u.done && S.money >= u.p)}'><div style="font-size:24px">${u.i}</div>${u.n}<small>${u.d}</small><span>${u.done ? 'Sold' : u.p}</span></button>`).join('')}
+        </div>
+        <div class='row'><button class='win pb' id='rm' style='${op(S.money >= rm)}'>Remove ${rm}</button><button class='win pb' id='lv'>Leave</button></div>`);
+        
+        document.querySelectorAll('#ov [data-c]').forEach(b => b.onclick = () => { const i = +b.dataset.c, c = cs[i]; if (c && S.money >= pr(c)) { S.money -= pr(c); S.deck.push(c); cs[i] = null; dr(); } });
+        document.querySelectorAll('#ov [data-r]').forEach(b => b.onclick = () => { const i = +b.dataset.r, n = rl[i]; if (n && S.money >= rp(n)) { addRel(n, () => { S.money -= rp(n); rl[i] = 0; dr(); }, dr); } });
+        document.querySelectorAll('#ov [data-p]').forEach(b => b.onclick = () => { const i = +b.dataset.p, p = pt[i]; if (p && !full() && S.money >= pr(p)) { S.money -= pr(p); S.potions.push(p); pt[i] = null; dr(); } });
+        document.querySelectorAll('#ov [data-u]').forEach(b => b.onclick = () => {
+            const u = ug[b.dataset.u];
+            if (u.done || S.money < u.p) return;
+            pickCard(u.t, i => { S.money -= u.p; S.deck[i] = u.f(S.deck[i]); u.done = 1; dr(); }, dr, u.ok);
+        });
+        $('#rm').onclick = () => { if (S.money >= rm) pickCard('Remove which?', i => { S.money -= rm; S.rm++; S.deck.splice(i, 1); dr(); }, dr); };
+        $('#lv').onclick = fight;
+    };
+    dr();
+}
+
+let cur;
+const ok = t => { ov(`<div>${t}</div><button class='win pb' id='ok'>Continue</button>`); $('#ok').onclick = fight; }, bk = () => event(cur), up = c => { const o = { ...c, su: (c.su || 0) + 1 }; ['d', 'k', 'p', 'h'].forEach(k => o[k] && (o[k] = Math.ceil(o[k] * 1.4))); return o; };
+const EV = [['A coin spins in the dark.', [['Flip it', () => Math.random() < .5 ? (S.money += 45, ok('+45 money')) : (S.hp = Math.max(1, S.hp - 10), ok('-10 hp'))], ['Leave', fight]]], ['An altar hums, hungry.', [['Pay 12% hp for a relic', () => { S.hp = Math.max(1, S.hp - Math.round(S.mhp * .12)); relicPick(fight); }], ['Leave', fight]]], ['A hollow shape offers money.', [['Take 60 money and a dead card', () => { S.money += 60; S.deck.push({ c: 3, st: 1, nm: 'Dead Weight' }); fight(); }], ['Leave', fight]]], ['Dead weight can be shed.', [['Remove a card', () => pickCard('Remove which?', i => { S.deck.splice(i, 1); fight(); }, bk)], ['Leave', fight]]], ['An echo repeats itself.', [['Duplicate a card', () => pickCard('Copy which?', i => { S.deck.push(S.deck[i]); fight(); }, bk)], ['Leave', fight]]], ['A whetstone and a feather.', [['Sharpen a card (+40%, max 2)', () => pickCard('Sharpen which?', i => { S.deck[i] = up(S.deck[i]); fight(); }, bk, c => !c.pot && (c.su || 0) < 2 && (c.d || c.k || c.p || c.h))], ['Lighten a card (-1 cost, max 2)', () => pickCard('Lighten which?', i => { S.deck[i] = { ...S.deck[i], lu: (S.deck[i].lu || 0) + 1, c: Math.max(0, S.deck[i].c - 1) }; fight(); }, bk, c => !c.pot && (c.lu || 0) < 2 && c.c > 0)], ['Leave', fight]]]];
+
+function event(e) {
+    cur = e = e || pick(EV);
+    ov(`<div style='max-width:300px'>${e[0]}</div>${e[1].map((o, i) => `<button class='win pb' data-o='${i}' style='padding:8px 16px;margin:6px auto'>${o[0]}</button>`).join('')}`);
+    document.querySelectorAll('#ov [data-o]').forEach(b => b.onclick = () => e[1][+b.dataset.o][1]());
+}
+
+function lose() {
+    say('You fade away.');
+    setTimeout(() => ov(`<div>${shape(S.cl.s, '#444', 80)}</div><div style="font-size:16px">Reached floor ${S.f + 1}${S.asc ? ' · ASC ' + S.asc : ''}</div><button class="win big" style="width:auto;padding:10px 24px" id="re">Again</button>`) || ($('#re').onclick = menu), 900);
+}
+
+menu();
+</script>
+</body>
+</html>
