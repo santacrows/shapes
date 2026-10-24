@@ -7,7 +7,7 @@
 <style>
 :root {
     --bg: #0b0618; --ink: #fff; --atk: #ff4d5e; --blk: #4da3ff; 
-    --sp: #59e07a; --gold: #ffd54a; --drw: #9be7ff;
+    --sp: #59e07a; --yel: #ffd54a; --silver: #c8d0dc; --drw: #9be7ff;
     box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
@@ -21,7 +21,7 @@ html, body {
 #top { display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; flex-wrap: wrap; gap: 4px; }
 #pips { display: flex; gap: 3px; align-items: center; }
 #pips i { width: 12px; height: 12px; border: 2px solid #fff; border-radius: 3px; }
-#pips i.d { background: var(--gold); }
+#pips i.d { background: var(--yel); }
 #pips i.c { background: #fff; }
 #pips i:nth-child(9) { border-radius: 50%; }
 
@@ -43,7 +43,7 @@ html, body {
 .sw { width: 100%; position: relative; animation: wob 2.4s ease-in-out infinite; display: flex; justify-content: center; }
 .sh { display: block; filter: drop-shadow(0 4px 0 #0008); }
 .e.tg .sw { filter: drop-shadow(0 0 10px #fff); }
-.int { padding: 2px 6px; display: flex; gap: 6px; min-height: 24px; align-items: center; font-size: 13px; }
+.int { padding: 2px 6px; display: flex; flex-wrap: wrap; justify-content: center; gap: 2px 6px; min-height: 24px; align-items: center; font-size: 13px; }
 .int span, .ch { display: inline-flex; align-items: center; gap: 2px; }
 .int:empty { visibility: hidden; }
 .hp { height: 9px; width: 90%; background: #000; border: 2px solid #fff; border-radius: 6px; overflow: hidden; }
@@ -55,7 +55,7 @@ html, body {
 #log { flex: 1; min-width: 0; margin: 0; padding: 3px 8px; font-size: 12px; line-height: 1.15; display: flex; align-items: center; overflow: hidden; }
 #pots { display: flex; gap: 4px; padding: 3px; align-items: center; flex: none; }
 .ps { width: 32px; height: 38px; padding: 0; border: 2px dashed #555; border-radius: 7px; background: transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px; line-height: 1; color: #fff; }
-.ps.f { border: 2px solid var(--gold); background: #14102a; box-shadow: 0 0 6px #ffd54a55; }
+.ps.f { border: 2px solid #7a5cff; background: #14102a; box-shadow: 0 0 6px #7a5cff66; }
 .ps.f:active { background: #333; }
 #pl { display: flex; gap: 6px; padding: 0 6px; height: 58px; }
 #hpw { position: relative; padding: 3px 10px; display: flex; flex-direction: column; justify-content: center; flex: 1.4; }
@@ -63,8 +63,8 @@ html, body {
 #hpn.lo { color: var(--atk); }
 #hpm { font-size: 14px; color: #aaa; margin-left: 2px; }
 #nrg { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 4px; transition: border-color .2s; }
-.o { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--gold); }
-.o.f { background: var(--gold); }
+.o { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--yel); }
+.o.f { background: var(--yel); }
 button { font: inherit; color: inherit; cursor: pointer; }
 #end { flex: .5; font-size: 14px; padding: 0; }
 #end:active { background: #333; }
@@ -74,8 +74,10 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .cd.sel { transform: translateY(-18px); z-index: 15; }
 .cd:hover { z-index: 20; }
 .cd.no { opacity: .45; }
-.upb { position: absolute; bottom: 2px; right: 4px; font-size: 11px; line-height: 1; color: var(--gold); letter-spacing: -1px; }
-.co { position: absolute; top: -9px; left: -9px; width: 22px; height: 22px; border-radius: 50%; background: var(--gold); color: #000; display: grid; place-items: center; border: 2px solid #000; }
+.cd.hdn { background: repeating-linear-gradient(45deg, #14102a 0 6px, #1e1940 6px 12px); }
+.cd .lkx { position: absolute; inset: 0; border-radius: 6px; background: #000b; display: grid; place-items: center; }
+.upb { position: absolute; bottom: 2px; right: 4px; font-size: 11px; line-height: 1; color: var(--yel); letter-spacing: -1px; }
+.co { position: absolute; top: -9px; left: -9px; width: 22px; height: 22px; border-radius: 50%; background: var(--yel); color: #000; display: grid; place-items: center; border: 2px solid #000; }
 .r { display: flex; align-items: center; gap: 3px; font-size: 14px; text-align: center; line-height: 1.1; }
 .r small { font-size: 10px; opacity: .8; }
 
@@ -92,13 +94,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
 @keyframes dl { from { transform: translateY(60px); opacity: 0; } }
 
 #nrg .or { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
-#nrg .fc { display: flex; align-items: center; gap: 3px; font-size: 10px; color: var(--gold); }
-#nrg .fc i { width: 8px; height: 8px; border: 1.5px solid var(--gold); border-radius: 2px; }
-#nrg .fc i.d { background: var(--gold); }
+#nrg .fc { display: flex; align-items: center; gap: 3px; font-size: 10px; color: var(--yel); }
+#nrg .fc i { width: 8px; height: 8px; border: 1.5px solid var(--yel); border-radius: 2px; }
+#nrg .fc i.d { background: var(--yel); }
 #nrg .fc i.l { border-radius: 50%; }
 #nrg .fc b { margin-left: 3px; letter-spacing: 1px; }
-#nrg.free { border-color: var(--gold); animation: freeGlow .8s ease-in-out infinite alternate; }
-#nrg.free .o { background: var(--gold); animation: freeOrb .8s ease-in-out infinite alternate; }
+#nrg.free { border-color: var(--yel); animation: freeGlow .8s ease-in-out infinite alternate; }
+#nrg.free .o { background: var(--yel); animation: freeOrb .8s ease-in-out infinite alternate; }
 @keyframes freeGlow { from { box-shadow: 0 0 0 2px #000, inset 0 0 6px 1px #ffd54a55, 0 0 6px 1px #ffd54a55; } to { box-shadow: 0 0 0 2px #000, inset 0 0 14px 4px #ffd54acc, 0 0 16px 4px #ffd54a99; } }
 @keyframes freeOrb { from { transform: scale(.85); } to { transform: scale(1.2); box-shadow: 0 0 8px #ffd54a; } }
 .co.fr { background: #59e07a; }
@@ -106,7 +108,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 #pips .as { margin-left: 6px; padding: 0 5px; border: 2px solid #c56cf0; border-radius: 6px; color: #c56cf0; font-size: 11px; line-height: 14px; }
 #pips .as.z { border-color: #555; color: #777; }
 input.cin { font: 700 16px ui-monospace, Menlo, Consolas, monospace; letter-spacing: 3px; text-align: center; text-transform: uppercase; width: 150px; padding: 7px 6px; background: #000; color: #fff; border: 3px solid #fff; border-radius: 10px; outline: none; user-select: text; -webkit-user-select: text; }
-input.cin:focus { border-color: var(--gold); }
+input.cin:focus { border-color: var(--yel); }
 #vic { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
 #vic .ttl { font-size: 34px; letter-spacing: 4px; background: linear-gradient(90deg,#ff4d5e,#ffd54a,#59e07a,#4da3ff,#c56cf0,#ff4d5e); background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: vPop .7s cubic-bezier(.2,1.6,.4,1) both, vHue 3s linear infinite; filter: drop-shadow(0 0 10px #ffd54a99); }
 #vic .rays { position: absolute; left: 50%; top: 110px; width: 420px; height: 420px; margin: -210px 0 0 -210px; z-index: -1; background: repeating-conic-gradient(#ffd54a33 0 8deg, transparent 8deg 24deg); -webkit-mask: radial-gradient(circle, #000 20%, transparent 70%); mask: radial-gradient(circle, #000 20%, transparent 70%); animation: spin 14s linear infinite; }
@@ -114,7 +116,7 @@ input.cin:focus { border-color: var(--gold); }
 #vic .sub { font-size: 15px; animation: vUp .6s .35s both; }
 #vic .stats { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; animation: vUp .6s .55s both; }
 #vic .stats span { padding: 3px 8px; font-size: 12px; }
-#vic .code { user-select: text; -webkit-user-select: text; font-size: 22px; letter-spacing: 4px; color: var(--gold); padding: 8px 14px; animation: vUp .6s .8s both, codeGlow 1.2s 1.4s ease-in-out infinite alternate; }
+#vic .code { user-select: text; -webkit-user-select: text; font-size: 22px; letter-spacing: 4px; color: var(--yel); padding: 8px 14px; animation: vUp .6s .8s both, codeGlow 1.2s 1.4s ease-in-out infinite alternate; }
 #vic .lbl { font-size: 12px; color: #ccc; animation: vUp .6s .75s both; }
 #vic .btns { display: flex; gap: 10px; animation: vUp .6s 1s both; }
 #vic .btns button { padding: 8px 16px; }
@@ -178,22 +180,35 @@ const P = {
     str: '<path d="M12 2l9 10h-6v10H9V12H3z"/>',
     hrt: '<path d="M12 21s-8-5.3-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.7-8 11-8 11z"/>',
     amp: `<path d='M12 2l9 9h-6l-3-3-3 3H3zM12 12l9 9h-6l-3-3-3 3H3z'/>`,
-    gld: `<circle cx='12' cy='12' r='9'/>`,
+    mny: `<path fill-rule='evenodd' d='M7 2h10l5 10-5 10H7L2 12zm5 6a4 4 0 100 8 4 4 0 000-8z'/>`,
     pot: '<path d="M10 2v4.5l-4.5 9c-.8 1.5.2 3.5 2 3.5h9c1.8 0 2.8-2 2-3.5L14 6.5V2h-4zm1 6.5l3.5 7h-7l3.5-7z"/>',
     exh: '<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>',
     pi: '<path d="M11 2v10.17l-3.59-3.58L6 10l6 6 6-6-1.41-1.41L13 12.17V2h-2zm-7 16v2h16v-2H4z"/>',
     rnd: '<path fill-rule="evenodd" d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm3 6.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm8 8a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm-8 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm8-8a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm-4 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" clip-rule="evenodd"/>',
-    aoe: '<path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>'
+    aoe: '<path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>',
+    jk: '<path d="M3 3h8v8H3zM13 13h8v8h-8z"/>',
+    hid: '<path fill-rule="evenodd" d="M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7zm0 3a4 4 0 110 8 4 4 0 010-8z"/><path d="M3.6 2.2l18.2 18.2-1.4 1.4L2.2 3.6z"/>',
+    lock: '<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>'
 };
 
 const COL = {
     atk: '#ff4d5e', blk: '#4da3ff', drw: '#9be7ff', nrg: '#ffd54a', 
     psn: '#b46bff', vul: '#ff9f43', str: '#ffd54a', hrt: '#59e07a', 
-    amp: '#ff8a3d', gld: '#ffd54a', pot: '#e843d5',
-    exh: '#ff7675', pi: '#fff', rnd: '#ffd54a', aoe: '#ff9f43'
+    amp: '#ff8a3d', mny: '#c8d0dc', pot: '#7a5cff',
+    exh: '#ff7675', pi: '#fff', rnd: '#ffd54a', aoe: '#ff9f43',
+    jk: '#8a86a8', hid: '#cfd8ff', lock: '#cfd8ff'
 };
 
 const ic = (k, s = 16) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="${COL[k]}">${P[k]}</svg>`;
+
+const gp = (n, ro, ri) => {
+    let d = '';
+    for (let i = 0; i < n; i++) {
+        const a = i * 2 * Math.PI / n, p = (r, t) => (50 + r * Math.sin(t)).toFixed(1) + ' ' + (50 - r * Math.cos(t)).toFixed(1);
+        d += (i ? 'L' : 'M') + p(ri, a - .2) + 'L' + p(ro, a - .13) + 'L' + p(ro, a + .13) + 'L' + p(ri, a + .2);
+    }
+    return d + 'Z';
+};
 
 const SH = {
     tri: '<polygon points="50,8 94,88 6,88"/>',
@@ -246,34 +261,52 @@ const SH = {
     bin: '<rect x="6" y="22" width="88" height="14" rx="3"/><path d="M38 22 V8 H62 V22 Z"/><polygon points="14,40 86,40 77,94 23,94"/>',
     blast: '<polygon points="50,2 58,28 84,10 72,38 98,44 74,58 92,84 62,72 56,98 44,74 16,92 28,62 2,50 30,40 14,14 40,30"/>',
     sack: '<path d="M38 8 H62 L56 26 C84 40 92 70 80 86 C70 98 30 98 20 86 C8 70 16 40 44 26 Z"/><path fill="none" d="M44 26 H56"/>',
-    ghost: '<path fill-rule="evenodd" d="M12 94 V48 A38 38 0 0 1 88 48 V94 L74 82 L62 94 L50 82 L38 94 L26 82 Z M28 40 h12 v16 h-12 Z M60 40 h12 v16 h-12 Z"/>'
+    ghost: '<path fill-rule="evenodd" d="M12 94 V48 A38 38 0 0 1 88 48 V94 L74 82 L62 94 L50 82 L38 94 L26 82 Z M28 40 h12 v16 h-12 Z M60 40 h12 v16 h-12 Z"/>',
+    gear: `<path fill-rule="evenodd" d="${gp(8, 47, 35)}M50 36a14 14 0 100 28 14 14 0 100-28z"/>`,
+    prism: '<path fill-rule="evenodd" d="M50 4L96 88H4ZM50 72L30 40H70Z"/>',
+    needle: '<polygon points="50,2 66,50 50,98 34,50"/>',
+    anvil: '<polygon points="6,18 94,18 94,38 70,46 70,70 90,70 90,92 10,92 10,70 30,70 30,46 6,38"/>',
+    obelisk: '<polygon points="50,2 74,22 74,98 26,98 26,22"/>',
+    comet: '<path d="M4 50L50 26A25 25 0 1 1 50 74Z"/>',
+    trefoil: '<circle cx="50" cy="31" r="25"/><circle cx="31" cy="65" r="25"/><circle cx="69" cy="65" r="25"/>',
+    lattice: '<rect x="6" y="6" width="28" height="28" rx="3"/><rect x="66" y="6" width="28" height="28" rx="3"/><rect x="36" y="36" width="28" height="28" rx="3"/><rect x="6" y="66" width="28" height="28" rx="3"/><rect x="66" y="66" width="28" height="28" rx="3"/>',
+    frame: '<path fill-rule="evenodd" d="M8 8H92V92H8ZM50 22L78 50L50 78L22 50ZM50 44a6 6 0 110 12 6 6 0 110-12z"/>',
+    zigzag: '<polygon points="4,34 26,10 50,34 74,10 96,34 96,66 74,42 50,66 26,42 4,66"/>',
+    spire: '<polygon points="50,2 66,34 58,34 74,66 62,66 80,98 20,98 38,66 26,66 42,34 34,34"/>'
 };
 
-const shape = (s, col, z = 100) => `<svg class="sh" viewBox="0 0 100 100" width="${z}" fill="${col}" stroke="#fff" stroke-width="4" stroke-linejoin="round">${s.split('+').map((k, i) => `<g transform="${i ? 'translate(25 25) scale(.5)' : ''}">${SH[k]}</g>`).join('')}</svg>`;
+// bosses are drawn as one hand-built form (several shapes working as a single creature); parts may override fill
+const COMP = {
+    watcher: `<polygon points="40,30 50,2 60,30"/><polygon points="12,46 14,18 34,34"/><polygon points="88,46 86,18 66,34"/><polygon points="40,74 50,98 60,74"/><polygon points="12,58 14,86 34,70"/><polygon points="88,58 86,86 66,70"/><path d="M2 52Q50 -2 98 52Q50 106 2 52Z"/><circle cx="50" cy="52" r="21" fill="#1b0a2e"/><ellipse cx="50" cy="52" rx="6" ry="16" fill="#fff" stroke="none"/>`,
+    weaver: `<path fill-rule="evenodd" d="M50 6A44 44 0 1 0 50 94A44 44 0 1 0 50 6ZM50 14A36 36 0 1 1 50 86A36 36 0 1 1 50 14Z"/><path fill-rule="evenodd" d="M50 28A22 22 0 1 0 50 72A22 22 0 1 0 50 28ZM50 35A15 15 0 1 1 50 65A15 15 0 1 1 50 35Z"/><g stroke-width="3"><rect x="47" y="14" width="6" height="72"/><rect x="47" y="14" width="6" height="72" transform="rotate(45 50 50)"/><rect x="47" y="14" width="6" height="72" transform="rotate(90 50 50)"/><rect x="47" y="14" width="6" height="72" transform="rotate(135 50 50)"/></g><circle cx="50" cy="50" r="11" fill="#1b0a2e"/><circle cx="50" cy="50" r="4" fill="#fff" stroke="none"/>`,
+    sovereign: `<path d="M14 40H86V58C86 78 68 90 50 98C32 90 14 78 14 58Z"/><polygon points="26,40 24,10 38,22 50,2 62,22 76,10 74,40"/><polygon points="50,46 64,64 50,82 36,64" fill="#1b0a2e"/><circle cx="50" cy="64" r="5" fill="#fff" stroke="none"/>`
+};
+
+const shape = (s, col, z = 100, rot = 0) => `<svg class="sh" viewBox="0 0 100 100" width="${z}" fill="${col}" stroke="#fff" stroke-width="4" stroke-linejoin="round"><g transform="rotate(${rot} 50 50)">${COMP[s] || s.split('+').map((k, i) => `<g transform="${i ? 'translate(25 25) scale(.5)' : ''}">${SH[k]}</g>`).join('')}</g></svg>`;
 
 const K = { c: 1, d: 6 }, D = { c: 1, k: 5 }, rep = (c, n) => Array(n).fill(c);
 
 const CL = [
-    { s: 'tri', col: '#ff4d5e', hp: 74, deck: [...rep(K, 5), ...rep(D, 4), { c: 2, d: 8, v: 2 }], pool: [{ c: 0, d: 3, n: 2 }, { c: 2, d: 10, n: 2, v: 1 }, { c: 1, d: 3, n: 3 }, { c: 2, d: 8, all: 1 }, { c: 1, s: 2 }, { c: 2, d: 15 }, { c: 0, d: 4 }, { c: 2, d: 5, n: 3 }, { c: 1, d: 7, v: 1 }, { c: 1, d: 5, w: 1 }, { c: 3, d: 7, n: 4 }, { c: 1, d: 6, s: 1 }, { c: 2, d: 6, all: 1, v: 1 }, { c: 0, s: 2, x: 1 }, { c: 3, d: 26, x: 1 }, { c: 1, m: 40, d: 4 }, { c: 2, m: 60, d: 6, n: 2 }, { c: 3, d: 32 }, { c: 3, d: 20, all: 1, n: 2 }] },
+    { s: 'tri', col: '#ff4d5e', hp: 74, deck: [...rep(K, 5), ...rep(D, 4), { c: 2, d: 8, v: 2 }], pool: [{ c: 0, d: 3, n: 2 }, { c: 2, d: 10, n: 2, v: 1 }, { c: 1, d: 3, n: 3 }, { c: 2, d: 8, all: 1 }, { c: 1, s: 2 }, { c: 2, d: 15 }, { c: 0, d: 4 }, { c: 2, d: 5, n: 3 }, { c: 1, d: 7, v: 1 }, { c: 1, d: 5, w: 1 }, { c: 3, d: 7, n: 4 }, { c: 1, d: 6, s: 1 }, { c: 2, d: 6, all: 1, v: 1 }, { c: 0, s: 2, x: 1 }, { c: 2, d: 24, x: 1 }, { c: 1, m: 40, d: 4 }, { c: 2, m: 60, d: 6, n: 2 }, { c: 3, d: 32 }, { c: 3, d: 20, all: 1, n: 2 }] },
     
-    { s: 'sq', col: '#4da3ff', hp: 75, deck: [...rep(K, 4), ...rep(D, 5), { c: 2, bd: 1 }], pool: [{ c: 1, k: 8, h: 2 }, { c: 2, k: 6, bd: 1, v: 1 }, { c: 2, k: 13 }, { c: 1, k: 7, w: 1 }, { c: 1, k: 6, d: 5 }, { c: 1, k: 9 }, { c: 0, k: 4 }, { c: 3, k: 19, x: 1 }, { c: 1, k: 4, v: 2 }, { c: 2, k: 8, bd: 1 }, { c: 1, bd: 1, v: 1 }, { c: 2, k: 9, w: 2 }, { c: 0, k: 5, x: 1 }, { c: 2, k: 9, v: 1, all: 1 }, { c: 1, k: 6, h: 3 }, { c: 1, m: 30, k: 6 }, { c: 3, k: 25, bd: 1 }, { c: 2, k: 10, w: 2, bd: 1 }, { c: 3, k: 35, x: 1 }] },
+    { s: 'sq', col: '#4da3ff', hp: 75, deck: [...rep(K, 4), ...rep(D, 5), { c: 2, bd: 1 }], pool: [{ c: 1, k: 8, h: 2 }, { c: 2, k: 6, bd: 1, v: 1 }, { c: 2, k: 13 }, { c: 1, k: 7, w: 1 }, { c: 1, k: 6, d: 5 }, { c: 1, k: 9 }, { c: 0, k: 4 }, { c: 2, k: 18, x: 1 }, { c: 1, k: 4, v: 2 }, { c: 1, k: 6, bd: 1 }, { c: 1, bd: 1, v: 1 }, { c: 2, k: 9, w: 3 }, { c: 0, k: 5, x: 1 }, { c: 2, k: 9, v: 1, all: 1 }, { c: 1, k: 6, h: 3 }, { c: 1, m: 30, k: 6 }, { c: 3, k: 25, bd: 1 }, { c: 2, k: 10, w: 2, bd: 1 }, { c: 3, k: 35, x: 1 }] },
     
-    { s: 'cir', col: '#a29bfe', hp: 72, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, p: 13 }, { c: 1, w: 2 }], pool: [{ c: 0, p: 6 }, { c: 1, k: 6, p: 6 }, { c: 2, p: 12, all: 1, v: 1 }, { c: 2, p: 18 }, { c: 1, d: 4, p: 9 }, { c: 0, e: 1, x: 1 }, { c: 1, w: 3, x: 1 }, { c: 2, p: 13, all: 1 }, { c: 1, k: 5, w: 1 }, { c: 0, d: 3, w: 1 }, { c: 1, p: 10, v: 1 }, { c: 2, px: 1, x: 1 }, { c: 0, p: 10, x: 1 }, { c: 2, p: 12, w: 2 }, { c: 1, p: 9, all: 1 }, { c: 2, k: 5, p: 14 }, { c: 1, m: 35, p: 9 }, { c: 1, pt: 1 }, { c: 2, p: 8, pt: 1 }, { c: 3, p: 26, all: 1 }, { c: 2, px: 1, w: 1 }, { c: 2, p: 16, pt: 1 }] },
+    { s: 'cir', col: '#a29bfe', hp: 72, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, p: 13 }, { c: 1, w: 2 }], pool: [{ c: 0, p: 6 }, { c: 1, k: 6, p: 6 }, { c: 2, p: 12, all: 1, v: 1 }, { c: 2, p: 18 }, { c: 1, d: 4, p: 9 }, { c: 0, e: 1, x: 1 }, { c: 2, p: 13, all: 1 }, { c: 1, k: 5, w: 1 }, { c: 0, d: 3, w: 1 }, { c: 1, p: 10, v: 1 }, { c: 1, px: 1, x: 1 }, { c: 0, p: 10, x: 1 }, { c: 2, p: 12, w: 2 }, { c: 1, p: 9, all: 1 }, { c: 2, k: 5, p: 14 }, { c: 1, m: 35, p: 9 }, { c: 1, pt: 1 }, { c: 2, p: 8, pt: 1, w: 1 }, { c: 3, p: 26, all: 1 }, { c: 2, px: 1, w: 1 }, { c: 2, p: 16, pt: 1 }] },
     
     { s: 'dia', col: '#ff6bcb', hp: 68, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, d: 7, z: 1 }, { c: 1, k: 6, z: 1 }], pool: [{ c: 1, d: 9, v: 1 }, { c: 0, k: 6, z: 1 }, { c: 2, d: 11, all: 1, z: 1 }, { c: 2, d: 12, z: 1 }, { c: 0, d: 5, z: 1 }, { c: 2, p: 8, z: 1 }, { c: 1, k: 10, z: 1 }, { c: 3, d: 20, z: 1 }, { c: 0, e: 2, sd: 6, x: 1 }, { c: 1, m: 60, sd: 4 }, { c: 1, d: 4, n: 3, z: 1 }, { c: 3, d: 12, n: 3, z: 1 }, { c: 2, k: 18, w: 2, z: 1 }, { c: 3, m: 80, z: 1 }] },
     
-    { s: 'moon', col: '#00cec9', hp: 68, deck: [...rep(K, 4), ...rep(D, 4), { c: 0, m: 30, d: 5 }, { c: 0, m: 25, k: 3 }], pool: [{ c: 2, d: 14, m: 20 }, { c: 1, d: 6, m: 30, w: 1 }, { c: 3, d: 12, n: 3, m: 40 }, { c: 2, m: 55, d: 8 }, { c: 0, m: 30, x: 1 }, { c: 1, m: 35, d: 3, n: 2 }, { c: 2, d: 4, n: 4 }, { c: 3, m: 95, x: 1 }, { c: 1, m: 25, w: 1 }, { c: 2, m: 45, d: 6, all: 1 }, { c: 1, m: 20, k: 6 }, { c: 3, m: 100, x: 1 }, { c: 2, m: 40, w: 2 }, { c: 3, m: 60, d: 10 }] },
+    { s: 'moon', col: '#00cec9', hp: 68, deck: [...rep(K, 4), ...rep(D, 4), { c: 0, m: 30, d: 5 }, { c: 0, m: 25, k: 3 }], pool: [{ c: 2, d: 14, m: 20 }, { c: 1, d: 6, m: 30, w: 1 }, { c: 3, d: 12, n: 3, m: 40 }, { c: 2, m: 55, d: 8 }, { c: 0, m: 30, x: 1 }, { c: 1, m: 35, d: 3, n: 2 }, { c: 2, d: 4, n: 4 }, { c: 2, m: 65, x: 1 }, { c: 0, m: 15, w: 1 }, { c: 2, m: 45, d: 6, all: 1 }, { c: 1, m: 20, k: 6 }, { c: 3, m: 100, x: 1 }, { c: 2, m: 40, w: 2 }, { c: 3, m: 60, d: 10 }] },
     
-    { s: 'star', col: '#2ecc71', hp: 66, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, d: 4, h: 3 }, { c: 1, d: 5, pi: 1 }], pool: [{ c: 2, d: 15, h: 4 }, { c: 1, d: 6, v: 2, h: 2 }, { c: 0, k: 4, h: 2 }, { c: 1, d: 8, h: 2, pi: 1 }, { c: 2, k: 12, h: 8 }, { c: 2, d: 9, h: 6 }, { c: 1, d: 5, h: 2, v: 1 }, { c: 0, d: 3, h: 2 }, { c: 2, d: 6, all: 1, h: 4 }, { c: 1, k: 5, h: 3 }, { c: 2, d: 10, pi: 1 }, { c: 3, d: 14, h: 10, x: 1 }, { c: 1, v: 2, h: 3 }, { c: 3, d: 20, h: 10 }, { c: 2, d: 12, all: 1, h: 6 }, { c: 3, d: 30, h: 15, x: 1 }] },
+    { s: 'star', col: '#2ecc71', hp: 66, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, d: 4, h: 3 }, { c: 1, d: 5, pi: 1 }], pool: [{ c: 2, d: 15, h: 4 }, { c: 1, d: 6, v: 2, h: 2 }, { c: 0, k: 4, h: 2 }, { c: 1, d: 8, h: 2, pi: 1 }, { c: 2, k: 12, h: 8 }, { c: 1, d: 5, h: 4 }, { c: 1, d: 4, v: 1, h: 4 }, { c: 0, d: 3, h: 2 }, { c: 1, d: 5, all: 1, h: 3 }, { c: 1, k: 5, h: 3 }, { c: 2, d: 10, pi: 1 }, { c: 2, d: 12, h: 10, x: 1 }, { c: 1, v: 2, h: 3 }, { c: 3, d: 20, h: 10 }, { c: 2, d: 12, all: 1, h: 6 }, { c: 3, d: 30, h: 15, x: 1 }] },
     
-    { s: 'cross', col: '#333333', r: [14], hp: 82, deck: [...rep(K, 4), ...rep(D, 4), { c: 0, d: 9, sd: 3 }, { c: 1, k: 8 }], pool: [{ c: 2, pn: 2 }, { c: 1, d: 8, lh: 1 }, { c: 3, pn: 3, x: 1 }, { c: 0, d: 5, lh: 1, sd: 2 }, { c: 1, k: 11, sd: 2 }, { c: 2, k: 8, h: 8 }, { c: 0, e: 1, sd: 3, x: 1 }, { c: 1, d: 7, k: 5 }, { c: 2, k: 12, v: 1 }, { c: 2, d: 14, v: 2, sd: 3 }, { c: 1, h: 8 }, { c: 2, d: 16, sd: 3, all: 1 }, { c: 2, s: 2, x: 1 }, { c: 1, d: 9, h: 3 }, { c: 0, sd: 2, w: 2 }, { c: 3, d: 25, sd: 6 }, { c: 3, d: 40, sd: 6 }, { c: 2, d: 20, all: 1, sd: 4 }, { c: 0, d: 12, sd: 3, w: 2 }] },
+    { s: 'cross', col: '#333333', r: [14], hp: 82, deck: [...rep(K, 4), ...rep(D, 4), { c: 0, d: 9, sd: 3 }, { c: 1, k: 8 }], pool: [{ c: 2, pn: 2 }, { c: 1, d: 8, lh: 1 }, { c: 3, pn: 3, x: 1 }, { c: 0, d: 5, lh: 1, sd: 2 }, { c: 1, k: 11, sd: 2 }, { c: 2, k: 8, h: 8 }, { c: 0, e: 1, sd: 3, x: 1 }, { c: 1, d: 7, k: 5 }, { c: 2, k: 12, v: 1 }, { c: 2, d: 14, v: 2, sd: 3 }, { c: 1, h: 8 }, { c: 2, d: 16, sd: 3, all: 1 }, { c: 2, s: 2, x: 1 }, { c: 1, d: 9, h: 3 }, { c: 0, sd: 2, w: 2 }, { c: 2, d: 28, sd: 8 }, { c: 3, d: 40, sd: 6 }, { c: 2, d: 20, all: 1, sd: 4 }, { c: 0, d: 12, sd: 3, w: 2 }] },
     
-    { s: 'ring', col: '#ffe14d', r: [5], hp: 76, deck: [...rep(K, 4), ...rep(D, 4), { c: 0, d: 5, w: 1, dc: 1 }, { c: 1, s: 1, w: 1, x: 1 }], pool: [{ c: 0, cp: 2 }, { c: 1, cp: 4 }, { c: 2, hb: 3, w: 1 }, { c: 1, hb: 2 }, { c: 3, cp: 7, x: 1 }, { c: 1, k: 10, w: 1 }, { c: 2, d: 14, k: 6 }, { c: 0, k: 6, dc: 1 }, { c: 1, k: 4, w: 2, x: 1 }, { c: 1, k: 9, w: 1 }, { c: 2, d: 16, w: 1 }, { c: 1, d: 7, w: 1, k: 3 }, { c: 0, k: 5, w: 1, dc: 1 }, { c: 2, d: 12, w: 2 }, { c: 1, s: 1, w: 1 }, { c: 0, w: 2, dc: 1 }, { c: 1, d: 6, w: 1 }, { c: 0, k: 4, w: 1 }, { c: 2, d: 10, s: 2, x: 1 }, { c: 1, k: 12, x: 1 }, { c: 2, e: 1, w: 3, x: 1 }, { c: 3, d: 8, n: 3, w: 2 }, { c: 0, k: 10, dc: 2 }, { c: 2, e: 3, x: 1 }] },
+    { s: 'ring', col: '#ffe14d', r: [5], hp: 76, deck: [...rep(K, 4), ...rep(D, 4), { c: 0, d: 5 }, { c: 1, s: 1, w: 1, x: 1 }], pool: [{ c: 0, cp: 2 }, { c: 1, cp: 4 }, { c: 2, hb: 3, w: 1 }, { c: 1, hb: 2 }, { c: 3, cp: 7, x: 1 }, { c: 1, k: 10, w: 1 }, { c: 2, d: 14, k: 6 }, { c: 0, k: 6, dc: 1 }, { c: 1, k: 4, w: 2, x: 1 }, { c: 2, d: 16, w: 1 }, { c: 1, d: 7, w: 1, k: 3 }, { c: 0, k: 5 }, { c: 2, d: 12, w: 2 }, { c: 1, s: 1, w: 1 }, { c: 0, w: 2, dc: 1 }, { c: 0, d: 4, w: 1 }, { c: 0, k: 4, w: 1 }, { c: 2, d: 10, s: 2, x: 1 }, { c: 1, k: 12, x: 1 }, { c: 3, d: 8, n: 3, w: 2 }, { c: 0, k: 10, dc: 2 }, { c: 0, e: 1, x: 1 }] },
     
-    { s: 'hex', col: '#ff9f43', hp: 78, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, d: 3, n: 2 }, { c: 1, v: 2, w: 1 }], pool: [{ c: 1, k: 8, v: 1 }, { c: 2, d: 8, n: 3, k: 4 }, { c: 1, d: 4, n: 3, s: 1 }, { c: 2, k: 12, v: 2 }, { c: 0, s: 1, x: 1 }, { c: 2, s: 2, x: 1 }, { c: 1, d: 5, n: 2, v: 1 }, { c: 0, v: 1, w: 1 }, { c: 2, d: 5, n: 4, v: 1 }, { c: 1, k: 6, v: 1, w: 1 }, { c: 2, d: 6, n: 3 }, { c: 1, v: 3}, { c: 2, k: 8, v: 2 }, { c: 0, d: 5, v: 1 }, { c: 3, d: 5, n: 4 }, { c: 2, k: 14, x: 1 }, { c: 3, d: 6, n: 5, v: 2 }, { c: 2, v: 3, all: 1 }, { c: 1, d: 4, n: 3 }] }
+    { s: 'hex', col: '#ff9f43', hp: 78, deck: [...rep(K, 4), ...rep(D, 4), { c: 1, d: 3, n: 2 }, { c: 1, v: 2, w: 1 }], pool: [{ c: 1, k: 8, v: 1 }, { c: 2, d: 8, n: 3, k: 4 }, { c: 1, d: 4, n: 3, s: 1 }, { c: 2, k: 12, v: 2 }, { c: 0, s: 1, x: 1 }, { c: 2, s: 2, x: 1 }, { c: 1, d: 5, n: 2, v: 1 }, { c: 0, v: 1, w: 1 }, { c: 2, d: 5, n: 4, v: 1 }, { c: 1, k: 6, v: 1, w: 1 }, { c: 1, d: 6, n: 2 }, { c: 1, v: 3}, { c: 1, k: 6, v: 2 }, { c: 0, d: 5, v: 1 }, { c: 3, d: 4, n: 4, all: 1 }, { c: 2, k: 14, x: 1 }, { c: 3, d: 6, n: 5, v: 2 }, { c: 2, v: 3, all: 1 }, { c: 0, d: 2, n: 3 }] }
 ];
 
-const NEU = [{ c: 1, d: 9 }, { c: 1, k: 7 }, { c: 2, d: 10, w: 1 }, { c: 0, k: 3, w: 1 }, { c: 1, d: 8, pi: 1 }, { c: 2, d: 5, h: 5 }, { c: 2, d: 7, k: 7 }, { c: 0, d: 5, x: 1 }, { c: 1, v: 2, w: 1 }, { c: 3, d: 13, all: 1 }, { c: 1, s: 1, k: 4 }, { c: 1, m: 50 }, { c: 0, m: 25, x: 1 }, { c: 3, d: 25 }, { c: 3, k: 25 }, { c: 2, d: 10, w: 2 }, { c: 3, e: 2, w: 3, x: 1 }];
+const NEU = [{ c: 1, d: 9 }, { c: 1, k: 7 }, { c: 1, d: 8, w: 1 }, { c: 0, k: 3, w: 1 }, { c: 1, d: 8, pi: 1 }, { c: 2, d: 5, h: 5 }, { c: 2, d: 7, k: 7 }, { c: 0, d: 5, x: 1 }, { c: 1, v: 2, w: 1 }, { c: 3, d: 13, all: 1 }, { c: 1, s: 1, k: 4 }, { c: 1, m: 50 }, { c: 0, m: 25, x: 1 }, { c: 3, d: 25 }, { c: 3, k: 25 }, { c: 2, d: 10, w: 2 }, { c: 1, w: 3, x: 1 }];
 
 const POTIONS = [
     { c: 0, h: 15, pot: 1 },
@@ -283,7 +316,7 @@ const POTIONS = [
     { c: 0, w: 3, pot: 1 }
 ];
 
-const ENM = { drop: 'Droplet', chevron: 'Chevron', pill: 'Capsule', pent: 'Pentagon', trap: 'Trapezoid', leaf: 'Leaf', para: 'Parallelogram', pie: 'Pie', oct: 'Octagon', kite: 'Kite', bowtie: 'Bowtie', semi: 'Semicircle', arrow: 'Arrow', shield: 'Shield', 'ring+star': 'Ring Star', 'hex+dia': 'Hex Diamond', 'cross+cir': 'Cross Circle' };
+const ENM = { drop: 'Droplet', chevron: 'Chevron', pill: 'Capsule', pent: 'Pentagon', trap: 'Trapezoid', leaf: 'Leaf', para: 'Parallelogram', pie: 'Pie', oct: 'Octagon', kite: 'Kite', bowtie: 'Bowtie', semi: 'Semicircle', arrow: 'Arrow', shield: 'Shield', 'ring+star': 'Ring Star', 'hex+dia': 'Hex Diamond', 'cross+cir': 'Cross Circle', gear: 'Gear', prism: 'Prism', needle: 'Needle', anvil: 'Anvil', obelisk: 'Obelisk', comet: 'Comet', trefoil: 'Trefoil', lattice: 'Lattice', frame: 'Frame', zigzag: 'Zigzag', spire: 'Spire', watcher: 'The Watcher', weaver: 'The Weaver', sovereign: 'The Sovereign' };
 const nm = e => ENM[e.s] || 'Enemy';
 const E1 = [
     { s: 'drop', col: '#ffb347', g: '💧', hp: 16, mv: [{ a: 4 }, { a: 5, k: 4 }, { u: 1 }] }, 
@@ -300,13 +333,39 @@ const E2 = [
     { s: 'kite', col: '#ff7f50', g: '⟠', hp: 26, mv: [{ k: 12, u: 1 }, { a: 2, n: 4 }, { a: 10 }] }
 ];
 const E3 = [
-    { s: 'bowtie', col: '#ff7675', g: '⧓', hp: 50, mv: [{ h: 10, u: 2 }, { a: 12 }, { a: 5, n: 3 }] }, 
-    { s: 'semi', col: '#00cec9', g: '◗', hp: 48, mv: [{ k: 15, u: 2 }, { a: 18 }, { a: 8, k: 10 }] }, 
-    { s: 'arrow', col: '#ff9f1a', g: '▶', hp: 42, mv: [{ u: 3, k: 5 }, { a: 6, n: 3 }, { a: 20 }] },
+    { s: 'bowtie', col: '#ff7675', g: '⧓', hp: 50, mv: [{ h: 10, u: 2 }, { a: 12 }, { a: 5, n: 3 }, { j: 1, a: 6 }] }, 
+    { s: 'semi', col: '#00cec9', g: '◗', hp: 48, mv: [{ k: 15, u: 1, ds: 1 }, { a: 18 }, { a: 8, k: 10 }] }, 
+    { s: 'arrow', col: '#ff9f1a', g: '▶', hp: 42, mv: [{ u: 3, k: 5 }, { a: 6, n: 3 }, { a: 20, hd: 1 }] },
     { s: 'shield', col: '#eccc68', g: '🛡', hp: 60, mv: [{ k: 20, h: 5 }, { a: 10, u: 2 }, { a: 15, k: 10 }] }
 ];
-const BOSSES = [{ b: 1, s: 'ring+star', col: '#ff3860', g: '◎', hp: 95, mv: [{ u: 2 }, { a: 14 }, { a: 5, n: 3 }, { k: 15 }, { a: 18 }, { a: 8, k: 8 }] }, { b: 1, s: 'hex+dia', col: '#a29bfe', g: '◈', hp: 135, mv: [{ k: 12, u: 1 }, { a: 6, n: 4 }, { a: 18 }, { u: 2, k: 8 }, { a: 9, n: 3 }, { a: 24 }] }, { b: 1, s: 'cross+cir', col: '#fdcb6e', g: '✦', hp: 180, mv: [{ a: 12, k: 12 }, { a: 30 }, { u: 4, k: 10 }, { a: 8, n: 5 }, { h: 30, k: 10 }, { a: 22, u: 2 }] }];
+const BOSSES = [
+    { b: 1, s: 'watcher', col: '#ff3860', g: '◉', hp: 100, mv: [{ u: 2 }, { a: 12, hd: 1 }, { a: 5, dz: 1 }, { k: 14, da: 30 }, { a: 5, n: 3, hd: 1 }, { a: 16 }] },
+    { b: 1, s: 'weaver', col: '#a29bfe', g: '✱', hp: 140, mv: [{ k: 12, j: 2 }, { a: 6, n: 4 }, { a: 14, ds: 1 }, { u: 2, bl: 2 }, { a: 9, n: 3, j: 1 }, { a: 24, hd: 1 }] },
+    { b: 1, s: 'sovereign', col: '#fdcb6e', g: '♛', hp: 190, mv: [{ a: 12, k: 12 }, { a: 28, hd: 1 }, { u: 3, dz: 2 }, { a: 7, n: 5, ds: 1 }, { h: 25, k: 10, j: 2 }, { a: 20, u: 2, bl: 3 }] }
+];
 const ALLE = [...E1.map(x => ({ ...x, w: 1 })), ...E2.map(x => ({ ...x, w: 2 })), ...E3.map(x => ({ ...x, w: 3 }))];
+
+// elites: single or duo fights, each with its own shape and kit. t = tier (act 1-3)
+const EL = (t, ...e) => ({ t, e });
+const ELITES = [
+    EL(1, { s: 'gear', col: '#ff8a5c', g: '⚙', hp: 62, el: 1, z: 1.35, mv: [{ a: 7 }, { j: 2, k: 8 }, { a: 4, n: 3 }, { u: 2, a: 5 }] }),
+    EL(1, { s: 'needle', col: '#7ee8fa', g: '↟', hp: 26, el: 1, z: 1.1, mv: [{ a: 2, n: 4 }, { a: 3, n: 3 }, { u: 1, a: 2, n: 2 }] },
+          { s: 'anvil', col: '#b2bec3', g: '⏶', hp: 42, el: 1, z: 1.1, mv: [{ k: 10, ds: 1 }, { a: 9 }, { k: 8, u: 1 }, { a: 6, ds: 1 }] }),
+    EL(1, { s: 'prism', col: '#55efc4', g: '△', hp: 56, el: 1, z: 1.35, mv: [{ a: 5, n: 2 }, { a: 13, hd: 1 }, { k: 9, da: 30 }, { a: 4, n: 3, hd: 1 }, { u: 1, k: 6 }] }),
+    EL(2, { s: 'obelisk', col: '#e17055', g: '▮', hp: 105, el: 1, z: 1.35, mv: [{ u: 2, k: 10 }, { a: 14, dz: 1 }, { a: 8, n: 2, hd: 1 }, { dz: 2, k: 12 }, { a: 22 }] }),
+    EL(2, { s: 'comet', col: '#fab1a0', g: '☄', hp: 36, el: 1, z: 1.1, mv: [{ a: 5, n: 3 }, { a: 8, ds: 1 }, { a: 14, hd: 1 }] },
+          { s: 'trefoil', col: '#fd79a8', g: '☘', hp: 58, el: 1, z: 1.1, mv: [{ j: 2, k: 8 }, { h: 8, u: 1 }, { a: 7, n: 2 }, { a: 11, da: 25 }] }),
+    EL(2, { s: 'lattice', col: '#81ecec', g: '▦', hp: 92, el: 1, z: 1.35, mv: [{ bl: 3, k: 10 }, { a: 9, n: 2 }, { j: 2, a: 5 }, { a: 15, bl: 2 }, { u: 2, k: 8 }] }),
+    EL(3, { s: 'frame', col: '#74b9ff', g: '▣', hp: 150, el: 1, z: 1.35, mv: [{ k: 16, u: 1 }, { a: 18, dz: 2 }, { a: 6, n: 4, ds: 1 }, { bl: 3, u: 2 }, { a: 28, hd: 1 }] }),
+    EL(3, { s: 'zigzag', col: '#ffeaa7', g: '≋', hp: 62, el: 1, z: 1.1, mv: [{ a: 4, n: 4, ds: 1 }, { a: 12 }, { u: 2, k: 10 }, { a: 7, n: 3, hd: 1 }] },
+          { s: 'spire', col: '#a29bfe', g: '▲', hp: 88, el: 1, z: 1.1, mv: [{ k: 14, h: 6 }, { j: 2, a: 8 }, { a: 18, hd: 1 }, { dz: 1, da: 30 }, { a: 12, n: 2 }] })
+];
+const JUNK = { c: 1, jk: 1, x: 1 };
+
+function mkElite(f) {
+    const t = Math.min(3, (f / 9 | 0) + 1), c = ELITES.filter(x => x.t <= t && x.t >= t - 1);
+    return pick(c).e;
+}
 
 function mkEnc(f) {
     if (f % 9 == 8) return [BOSSES[(f / 9 | 0) % 3]];
@@ -335,13 +394,22 @@ const say = t => {
     }, 14);
 };
 
-const rows = c => [
+const rows = (c, lv) => {
+    const L = lv && B && S, fm = L && R(1) && !B.fa ? 1.5 : 1;
+    return [
     c.pot && ['pot', ''],
+    c.jk && ['jk', ''],
     c.d && ['atk', c.d + (c.n ? 'x' + c.n : '') + (c.all ? ic('aoe', 14) : '')],
     c.bd && ['atk', '=' + ic('blk', 13)],
-    c.cp && ['atk', '/' + ic('drw', 13)],
-    c.hb && ['blk', '/' + ic('drw', 13)],
-    c.pn && ['atk', 'x' + c.pn + ' -' + ic('hrt', 15)],
+    c.cp && ['atk', c.cp],
+    c.cp && ['', '<small>per card<br>played</small>'],
+    c.cp && L && ['atk', '=' + Math.max(0, Math.floor(amp(c.cp * (B.pc + 1) + B.str) * fm))],
+    c.hb && ['blk', c.hb],
+    c.hb && ['', '<small>per card<br>in hand</small>'],
+    c.hb && L && ['blk', '=' + c.hb * Math.max(0, B.hand.length - 1)],
+    c.pn && ['atk', 'x' + c.pn],
+    c.pn && ['', '<small>per ' + ic('hrt', 11) + '<br>missing</small>'],
+    c.pn && L && ['atk', '=' + Math.max(0, Math.floor(amp(c.pn * Math.max(0, S.mhp - S.hp) + B.str) * fm))],
     c.lh && ['hrt', '<½: x2'],
     c.k && ['blk', c.k],
     c.p && ['psn', c.p + (c.all ? ic('aoe', 14) : '')],
@@ -359,9 +427,13 @@ const rows = c => [
     c.dc && ['drw', '-' + c.dc],
     c.x && ['exh', '']
 ].filter(Boolean);
+};
 
-const ctype = c => c.pot ? 'pot' : c.d || c.bd ? 'atk' : c.k ? 'blk' : c.p || c.px || c.pt ? 'psn' : 'drw';
-const cardH = (c, i, cls = '') => `<div class="cd ${cls}" style="--c:${c.pot ? 'pot' : COL[ctype(c)]};${c.pot ? ' border-color: #e843d5' : ''}" data-i="${i}"><div class="co">${c.c}</div>${(c.su || c.lu) ? `<div class="upb">${'+'.repeat((c.su || 0) + (c.lu || 0))}</div>` : ''}${rows(c).map(([k, t]) => `<div class="r">${k ? ic(k) : ''}${t}</div>`).join('')}</div>`;
+const ctype = c => c.pot ? 'pot' : c.jk ? 'jk' : c.d || c.bd || c.cp || c.pn ? 'atk' : c.k ? 'blk' : c.p || c.px || c.pt ? 'psn' : 'drw';
+const cardH = (c, i, cls = '') => {
+    const hd = cls.includes('hdn'), lk = cls.includes('lkd');
+    return `<div class="cd ${cls}" style="--c:${hd ? COL.jk : COL[ctype(c)]}" data-i="${i}"><div class="co">${hd ? '?' : c.c}</div>${!hd && (c.su || c.lu) ? `<div class="upb">${'+'.repeat((c.su || 0) + (c.lu || 0))}</div>` : ''}${hd ? '<div class="r" style="font-size:38px;opacity:.6">?</div>' : rows(c, cls.includes('lv')).map(([k, t]) => `<div class="r">${k ? ic(k) : ''}${t}</div>`).join('')}${lk ? `<div class="lkx">${ic('lock', 30)}</div>` : ''}</div>`;
+};
 
 function fl(el, t, c) {
     const d = document.createElement('div');
@@ -399,7 +471,7 @@ function hud() {
     $('#hpx').innerHTML = `${B && B.amp ? `<span class='ch'>${ic('amp', 13)}${B.amp}%</span>` : ''}${B && B.blk ? `<span class="ch" style="color:var(--blk)">${ic('blk', 13)}${B.blk}</span>` : ''}${B && B.str ? `<span class="ch">${ic('str', 13)}${B.str}</span>` : ''}`;
     
     if (B) {
-        $('#piles').innerHTML = `${S.rel.map(n => `<span title="${RL[n].t}" onclick='say(RL[${n}].t)' style="cursor:help">${rs(n, 18)}</span>`).join('')} <span id="p-drw" style="cursor:pointer;color:var(--drw)">${ic('drw', 13)} ${B.draw.length}</span>·<span id="p-dsc" style="cursor:pointer;color:#aaa">${B.disc.length}</span> <span style="color:var(--gold)">${ic('gld', 13)} ${S.gold}</span>`;
+        $('#piles').innerHTML = `${S.rel.map(n => `<span title="${RL[n].t}" onclick='say(RL[${n}].t)' style="cursor:help">${rs(n, 18)}</span>`).join('')} <span id="p-drw" style="cursor:pointer;color:var(--drw)">${ic('drw', 13)} ${B.draw.length}</span>·<span id="p-dsc" style="cursor:pointer;color:#aaa">${B.disc.length}</span> <span style="color:var(--silver)">${ic('mny', 13)} ${S.money}</span>`;
         $('#p-drw').onclick = () => viewCards('Draw Pile', [...B.draw].reverse());
         $('#p-dsc').onclick = () => viewCards('Discard Pile', [...B.disc].reverse());
         const fr = freeNow();
@@ -407,7 +479,7 @@ function hud() {
         $('#nrg').innerHTML = `<div class="or">${Array.from({ length: Math.max(S.me, B.energy) }, (_, i) => `<div class="o ${i < B.energy ? 'f' : ''}"></div>`).join('')}</div>` + (R(4) ? `<div class="fc" title="Every 5th card is free">${Array.from({ length: 5 }, (_, i) => `<i class="${i < B.cn % 5 || (fr && i == 4) ? 'd' : ''}${i == 4 ? ' l' : ''}"></i>`).join('')}${fr ? '<b>FREE</b>' : `<b>${B.cn % 5}/5</b>`}</div>` : '');
         
         const h = $('#hand'), n = B.hand.length, ovh = n > 5 ? -Math.ceil((n * 74 - (h.clientWidth - 8)) / (n - 1)) : 4;
-        h.innerHTML = B.hand.map((c, i) => cardH(c, i, (cost(c) > B.energy ? 'no ' : '') + (freeNow() ? 'fr ' : '') + (B.sel === i ? 'sel' : '')).replace('class="cd', 'style0 class="cd').replace('style0 ', '')).join('');
+        h.innerHTML = B.hand.map((c, i) => cardH(c, i, (cost(c) > B.energy ? 'no ' : '') + 'lv ' + (c.hd ? 'hdn ' : '') + (c.sl ? 'lkd no ' : '') + (freeNow() ? 'fr ' : '') + (B.sel === i ? 'sel' : '')).replace('class="cd', 'style0 class="cd').replace('style0 ', '')).join('');
         h.querySelectorAll('.cd').forEach((el, i) => { el.style.marginLeft = i ? ovh + 'px' : 0; el.onclick = () => tapCard(i); if (freeNow()) { const co = el.querySelector('.co'); co.textContent = '0'; co.classList.add('fr'); } });
         
         $('#pots').innerHTML = Array.from({ length: 3 }, (_, i) => {
@@ -425,7 +497,10 @@ function hud() {
 
 const intent = e => {
     const m = e.mv[e.i % e.mv.length];
-    return [m.a && ic('atk', 14) + (m.a + e.str) + (m.n ? 'x' + m.n : ''), m.k && ic('blk', 14) + m.k, m.u && ic('str', 14) + '+' + m.u, m.h && ic('hrt', 14) + m.h].filter(Boolean).map(s => `<span>${s}</span>`).join('');
+    if (m.hd) return '<span title="Concealed" style="font-size:18px;line-height:1">?</span>';
+    return [m.a && ic('atk', 14) + (m.a + e.str) + (m.n ? 'x' + m.n : ''), m.k && ic('blk', 14) + m.k, m.u && ic('str', 14) + '+' + m.u, m.h && ic('hrt', 14) + m.h,
+        m.j && ic('jk', 14) + '+' + m.j, m.ds && ic('str', 14) + '-' + m.ds, m.da && ic('amp', 14) + '-' + m.da + '%', m.bl && ic('hid', 14) + m.bl, m.dz && ic('lock', 14) + m.dz
+    ].filter(Boolean).map(s => `<span>${s}</span>`).join('');
 };
 
 function upd(e) {
@@ -440,7 +515,7 @@ function build() {
     const en = $('#en'); en.className = 'n' + B.en.length; en.innerHTML = '';
     B.en.forEach((e, i) => {
         const d = document.createElement('div'); d.className = 'e';
-        d.innerHTML = `<div class="int win"></div><div class="sw" style="animation-delay:-${i * .7}s">${shape(e.s, e.col, 100 * e.sz)}</div><div class="hp"><i></i></div><div class="st"></div>`;
+        d.innerHTML = `<div class="int win"></div><div class="sw" style="animation-delay:-${i * .7}s">${shape(e.s, e.col, 100 * e.sz, e.rot)}</div><div class="hp"><i></i></div><div class="st"></div>`;
         d.onclick = () => B.sel != null && !B.busy && e.hp > 0 && play(B.sel, e);
         en.appendChild(d); e.el = d;
     });
@@ -474,10 +549,10 @@ function start(el) {
     const pals = [['#6a1b9a', '#1b0a4d', '#ff2e88', '#1b0a4d'], ['#009432', '#00220a', '#c4e538', '#00220a'], ['#0652dd', '#000b22', '#9980fa', '#000b22'], ['#ea2027', '#220000', '#ffc312', '#220000']], p = pals[Math.min(f / 9 | 0, 3)];
     bgFx(Math.min(f / 9 | 0, 3), p);
     
-    const A = S.asc || 0, hb = (1 + f * .04) * (el ? 1.5 : 1), hm = hb * (1 + .08 * A), dm = (1 + f * .02) * (el ? 1.2 : 1) * (1 + .06 * A);
+    const A = S.asc || 0, hb = 1 + f * .04, hm = hb * (1 + .08 * A), dm = (1 + f * .02) * (1 + .06 * A);
     let raw_en = [];
-    mkEnc(f).forEach(x => {
-        if (!x.b && Math.random() < .15) {
+    (el && f % 9 != 8 ? mkElite(f) : mkEnc(f)).forEach(x => {
+        if (!x.b && !x.el && Math.random() < .15) {
             let e1 = JSON.parse(JSON.stringify(x)), e2 = JSON.parse(JSON.stringify(x));
             e1.hp = Math.max(1, e1.hp / 2 | 0); e2.hp = Math.max(1, e2.hp / 2 | 0);
             e1.split = 1; e2.split = 1;
@@ -488,11 +563,11 @@ function start(el) {
     
     const en = raw_en.map(x => {
         const h = Math.round(x.hp * hm);
-        let sz = 1 + (hb - 1) * 0.2; if (x.split) sz *= 0.7; if (x.b) sz *= 1.5;
-        return { ...x, hp: h, mhp: h, sz, mv: x.mv.map(m => ({ ...m, a: m.a && Math.round(m.a * dm), k: m.k && Math.round(m.k * dm) })), blk: 0, vul: R(13) ? 2 : 0, psn: 0, str: 0, i: x.b ? 0 : rnd(x.mv.length) };
+        let sz = 1 + (hb - 1) * 0.2; if (x.split) sz *= 0.7; if (x.b) sz *= 1.5; if (x.z) sz *= x.z;
+        return { ...x, hp: h, mhp: h, sz, mv: x.mv.map(m => ({ ...m, a: m.a && Math.round(m.a * dm), k: m.k && Math.round(m.k * dm) })), blk: 0, vul: R(13) ? 2 : 0, psn: 0, str: 0, rot: pick([0, 90, 180, 270]), i: x.b || x.el ? 0 : rnd(x.mv.length) };
     });
     
-    B = { en, draw: shuf(S.deck), hand: [], disc: [], energy: 0, blk: R(11) ? 8 : 0, str: R(6) ? 2 : 0, amp: 0, lk: 0, el, cn: 0, fa: 0, pc: 0, hp0: S.hp, busy: true, sel: null };
+    B = { en, draw: shuf(S.deck), hand: [], disc: [], energy: 0, blk: R(11) ? 8 : 0, str: R(6) ? 2 : 0, amp: 0, lk: 0, el, cn: 0, fa: 0, pc: 0, hp0: S.hp, bl: 0, dz: 0, da: 0, busy: true, sel: null };
     if (R(20)) B.en.forEach(e => e.hp = Math.max(1, e.hp - 5));
     build(); turn(true);
 }
@@ -509,11 +584,14 @@ function drawN(n) {
 
 function turn(first) {
     B.en.forEach(e => e.hid = 0);
+    [...B.draw, ...B.disc, ...B.hand].forEach(c => { delete c.hd; delete c.sl; });
     B.energy = S.me + (R(9) ? Math.min(B.energy, 2) : 0);
     B.blk = first ? B.blk : (R(2) ? Math.floor(B.blk / 2) : 0);
-    B.amp = Math.max(R(8) ? 20 : 0, B.amp / 2 | 0);
+    B.amp = Math.max(-75, Math.max(R(8) ? 20 : 0, B.amp / 2 | 0) - B.da); B.da = 0;
     B.cn = 0; B.fa = 0; B.r17 = 0; B.pc = 0;
     drawN(5 + (R(5) ? 1 : 0));
+    const flag = (n, k) => shuf(B.hand.map((_, i) => i)).slice(0, n).forEach(i => B.hand[i] = { ...B.hand[i], [k]: 1 });
+    flag(B.bl, 'hd'); flag(B.dz, 'sl'); B.bl = B.dz = 0;
     if (R(14)) S.hp = Math.min(S.mhp, S.hp + 2);
     B.busy = false; B.sel = null;
     hud(); $('#hand').classList.remove('deal'); void $('#hand').offsetWidth; $('#hand').classList.add('deal');
@@ -536,11 +614,12 @@ function usePotion(i) {
 function tapCard(i) {
     if (B.busy) return;
     const c = B.hand[i];
+    if (c.sl) return say('That card is sealed.');
     if (cost(c) > B.energy) return say('Not enough energy.');
     if (c.sd && S.hp <= c.sd) return say('Need more HP.');
     const alive = B.en.filter(e => e.hp > 0);
     
-    if ((c.d || c.bd || c.p || c.v || c.px || c.pt) && !c.all && alive.length > 1) {
+    if ((c.d || c.bd || c.cp || c.pn || c.p || c.v || c.px || c.pt) && !c.all && alive.length > 1) {
         B.sel = B.sel === i ? null : i;
         hud();
         B.en.forEach(e => e.el.classList.toggle('tg', B.sel != null && e.hp > 0));
@@ -577,7 +656,7 @@ async function play(i, t) {
         ['d', 'k', 'p'].forEach(k => c[k] && (c[k] = Math.max(1, Math.round(c[k] * g))));
         fl($('#hpw'), g > 1 ? 'JACKPOT' : 'miss', g > 1 ? '#ffd54a' : '#aaa');
     }
-    if (B.busy || cost(c) > B.energy) return;
+    if (B.busy || o.sl || cost(c) > B.energy) return;
     
     B.busy = true; B.energy -= cost(c);
     if (R(4)) B.cn++;
@@ -597,7 +676,7 @@ async function play(i, t) {
         B.fa = 1;
         for (let h = 0; h < hn; h++) {
             for (const e of tg) if (e.hp > 0) {
-                dmgE(e, Math.floor(amp(c.bd ? B.blk : c.cp ? c.cp * B.pc + B.str : c.pn ? c.pn * Math.max(0, B.hp0 - S.hp) + B.str : c.d + B.str) * fm * (c.lh && S.hp * 2 <= S.mhp ? 2 : 1)), c.pi);
+                dmgE(e, Math.max(0, Math.floor(amp(c.bd ? B.blk : c.cp ? c.cp * B.pc + B.str : c.pn ? c.pn * Math.max(0, S.mhp - S.hp) + B.str : c.d + B.str) * fm * (c.lh && S.hp * 2 <= S.mhp ? 2 : 1))), c.pi);
                 if (e.hp <= 0 && R(7)) S.hp = Math.min(S.mhp, S.hp + 3);
             }
             await sleep(170);
@@ -648,7 +727,12 @@ $('#end').onclick = async () => {
         if (m.k) { e.blk += m.k; say(`${nm(e)} braces itself.`); }
         if (m.u) { e.str += m.u; say(`${nm(e)} grows stronger.`); fl(e.el.querySelector('.sw'), '+' + m.u, '#ffd54a'); }
         if (m.h) { e.hp = Math.min(e.mhp, e.hp + m.h); say(`${nm(e)} heals!`); fl(e.el.querySelector('.sw'), '+' + m.h, '#59e07a'); }
-        upd(e); if (m.k || m.u || m.h) await sleep(600);
+        if (m.j) { B.draw = shuf([...B.draw, ...Array.from({ length: m.j }, () => ({ ...JUNK }))]); say(`${nm(e)} clutters your deck!`); fl($('#hpw'), '+' + m.j + ' junk', '#8a86a8'); }
+        if (m.ds) { B.str -= m.ds; say(`${nm(e)} saps your strength!`); fl($('#hpw'), '-' + m.ds + ' str', '#ffd54a'); }
+        if (m.da) { B.da += m.da; say(`${nm(e)} dampens your amp!`); fl($('#hpw'), '-' + m.da + '% amp', '#ff8a3d'); }
+        if (m.bl) { B.bl += m.bl; say(`${nm(e)} clouds your cards!`); fl($('#hpw'), 'blind x' + m.bl, '#cfd8ff'); }
+        if (m.dz) { B.dz += m.dz; say(`${nm(e)} seals your cards!`); fl($('#hpw'), 'seal x' + m.dz, '#cfd8ff'); }
+        upd(e); hud(); if (m.k || m.u || m.h || m.j || m.ds || m.da || m.bl || m.dz) await sleep(600);
         
         if (m.a) {
             say(`${nm(e)} ${m.n ? 'strikes ' + m.n + ' times' : 'strikes'}!`); await sleep(350);
@@ -686,7 +770,7 @@ const ascDec = str => {
 };
 
 function startRun(c, asc) {
-    S = { cl: c, hp: c.hp, mhp: c.hp, me: 3, f: 0, gold: 20, rel: [...(c.r || [])], rm: 0, deck: [...c.deck], potions: [], asc: asc || 0 };
+    S = { cl: c, hp: c.hp, mhp: c.hp, me: 3, f: 0, money: 20, rel: [...(c.r || [])], rm: 0, deck: [...c.deck], potions: [], asc: asc || 0 };
     dv = S.hp; $('#hpn').textContent = String(dv); $('#hpm').textContent = `/${S.mhp}`; $('#avw').innerHTML = shape(c.s, c.col, 34);
     hide(); start();
 }
@@ -721,7 +805,7 @@ function win() {
         const bs = S.f % 9 == 8; 
         if (bs && S.f === 26) { victory(); return; }
         S.f++; if (bs) S.me++;
-        S.gold += Math.round((R(21) ? 1.5 : 1) * (8 + rnd(6) + S.f) * (bs ? 3 : B.el ? 2 : 1)) + Math.min(R(12) ? 10 : 5, S.gold / 10 | 0);
+        S.money += Math.round((R(21) ? 1.5 : 1) * (8 + rnd(6) + S.f) * (bs ? 3 : B.el ? 2 : 1)) + Math.min(R(12) ? 10 : 5, S.money / 10 | 0);
         S.hp = bs ? S.mhp : Math.min(S.mhp, S.hp + 9);
         B.hand = []; hud();
         say(bs ? 'The void shudders. Fully healed. +1 energy.' : 'Quiet. You recover a little.');
@@ -737,7 +821,7 @@ function reward(bs, el) {
     const aft = doors;
     const nx = () => {
         if (bs) {
-            ov(`<div>Boss Defeated!</div><div style="font-size:24px;margin:20px 0;color:var(--gold)">+1 Maximum Energy</div><button class='win pb' id='ok'>Continue</button>`);
+            ov(`<div>Boss Defeated!</div><div style="font-size:24px;margin:20px 0;color:var(--yel)">+1 Maximum Energy</div><button class='win pb' id='ok'>Continue</button>`);
             $('#ok').onclick = fight;
         } else if (el) {
             relicPick(aft, 2);
@@ -750,7 +834,7 @@ function reward(bs, el) {
     $('#sk').onclick = nx;
 }
 
-const RL = [0, { t: 'First attack each turn deals 1.5x damage', s: 'slash2', c: '#ff4d5e', w: 4 }, { t: '50% of your block carries over', s: 'castle', c: '#4da3ff', w: 4 }, { t: 'Poison never decays', s: 'flask', c: '#b46bff', w: 1 }, { t: 'Every 5th card is free', s: 'ticket', c: '#ffd54a', w: 3 }, { t: 'Draw 1 extra card', s: 'page', c: '#9be7ff', w: 3 }, { t: 'Fights start with +2 strength', s: 'dumbbell', c: '#ff9f43', w: 4 }, { t: 'Heal 3 on every kill', s: 'sprout', c: '#59e07a', w: 4 }, { t: 'Turns start with +20% amp', s: 'stairs', c: '#ff8a3d', w: 3 }, { t: 'Up to 2 unspent energy carries over', s: 'battery', c: '#fff', w: 1 }, { t: 'Keep 3 random cards between turns', s: 'magnet', c: '#fd79a8', w: 1 }, { t: 'Start each fight with 8 block', s: 'helm', c: '#4da3ff', w: 3 }, { t: 'Double gold interest', s: 'gem', c: '#ffe14d', w: 3 }, { t: 'Enemies start vulnerable', s: 'eye', c: '#ff9ff3', w: 3 },
+const RL = [0, { t: 'First attack each turn deals 1.5x damage', s: 'slash2', c: '#ff4d5e', w: 4 }, { t: '50% of your block carries over', s: 'castle', c: '#4da3ff', w: 4 }, { t: 'Poison never decays', s: 'flask', c: '#b46bff', w: 1 }, { t: 'Every 5th card is free', s: 'ticket', c: '#ffd54a', w: 3 }, { t: 'Draw 1 extra card', s: 'page', c: '#9be7ff', w: 3 }, { t: 'Fights start with +2 strength', s: 'dumbbell', c: '#ff9f43', w: 4 }, { t: 'Heal 3 on every kill', s: 'sprout', c: '#59e07a', w: 4 }, { t: 'Turns start with +20% amp', s: 'stairs', c: '#ff8a3d', w: 3 }, { t: 'Up to 2 unspent energy carries over', s: 'battery', c: '#fff', w: 1 }, { t: 'Keep 3 random cards between turns', s: 'magnet', c: '#fd79a8', w: 1 }, { t: 'Start each fight with 8 block', s: 'helm', c: '#4da3ff', w: 3 }, { t: 'Double money interest', s: 'gem', c: '#c8d0dc', w: 3 }, { t: 'Enemies start vulnerable', s: 'eye', c: '#ff9ff3', w: 3 },
     { t: 'Heal 2 at the start of each turn', s: 'ankh', c: '#59e07a', w: 3 },
     { t: 'Poison you apply is 30% stronger', s: 'fang', c: '#b46bff', w: 3 },
     { t: 'Vulnerable you apply lasts 1 turn longer', s: 'hourglass', c: '#ff9f43', w: 3 },
@@ -758,7 +842,7 @@ const RL = [0, { t: 'First attack each turn deals 1.5x damage', s: 'slash2', c: 
     { t: 'Playing an attack gives 2 block', s: 'sword', c: '#4da3ff', w: 3 },
     { t: 'Exhausted cards go to discard instead', s: 'bin', c: '#fd79a8', w: 1 },
     { t: 'Fights start with 5 damage to all enemies', s: 'blast', c: '#ff4d5e', w: 3 },
-    { t: 'Fights award 50% more gold', s: 'sack', c: '#ffd54a', w: 3 },
+    { t: 'Fights award 50% more money', s: 'sack', c: '#c8d0dc', w: 3 },
     { t: 'Once per run: survive death at 30% HP', s: 'ghost', c: '#fff', w: 1 }];
 const rs = (n, z = 22) => `<svg viewBox='0 0 100 100' width='${z}' height='${z}' fill='${RL[n].c}' stroke='#fff' stroke-width='5'>${SH[RL[n].s]}</svg>`;
 const rollRel = k => { const p = []; RL.forEach((r, n) => { if (n && !S.rel.includes(n)) for (let i = 0; i < r.w; i++) p.push(n); }); const o = []; while (o.length < k) { const n = pick(p); if (!o.includes(n)) o.push(n); } return o; };
@@ -766,7 +850,7 @@ const fight = () => { hide(); start(); };
 
 function relicPick(next, count = 3) {
     const o = rollRel(count);
-    ov(`<div>Take a relic</div><div class='row'>${o.map(n => `<button class='win big' data-n='${n}'>${rs(n, 44)}<small>${RL[n].t}</small>${RL[n].w < 2 ? '<small style="color:var(--gold)">wild</small>' : ''}</button>`).join('')}</div><button class='win pb' id='sk'>Skip</button>`);
+    ov(`<div>Take a relic</div><div class='row'>${o.map(n => `<button class='win big' data-n='${n}'>${rs(n, 44)}<small>${RL[n].t}</small>${RL[n].w < 2 ? '<small style="color:var(--yel)">wild</small>' : ''}</button>`).join('')}</div><button class='win pb' id='sk'>Skip</button>`);
     document.querySelectorAll('#ov .big').forEach(b => b.onclick = () => addRel(+b.dataset.n, next, next));
     $('#sk').onclick = next;
 }
@@ -779,110 +863,4 @@ function addRel(n, onSuccess, onCancel) {
     document.querySelectorAll('#ov .big').forEach(b => b.onclick = () => {
         const o = S.rel[+b.dataset.i];
         S.rel[+b.dataset.i] = n; if (B) hud(); onSuccess();
-    });
-    $('#sk').onclick = onCancel;
-}
-
-// [shape, color, name, subtitle, % chance the door appears]
-const DR = { f: ['arch', '#70a1ff', 'Proceed', 80], e: ['crown', '#ff4d5e', 'Elite', 30], s: ['tag', '#ffd54a', 'Shop', 35], v: ['clover', '#c56cf0', 'Event', 40], r: ['heart', '#59e07a', 'Rest', 30] };
-
-function restSite() {
-    const hl = Math.round(S.mhp * .25);
-    ov(`<div>Rest Site</div><div class='row'><button class='win big' id='rh'><div style="font-size:24px;margin-bottom:4px">☕</div>Heal ${hl}</button></div><button class='win pb' id='lv'>Skip</button>`);
-    $('#rh').onclick = () => { S.hp = Math.min(S.mhp, S.hp + hl); fight(); };
-    $('#lv').onclick = fight;
-}
-
-function doors() {
-    if (S.f % 9 == 8) return bossDoors();
-    let t = shuf(Object.keys(DR).filter(k => rnd(100) < DR[k][3])).slice(0, 3);
-    if (!t.length) t = ['f'];
-    ov(`<div>${t.length > 1 ? 'Choose a door' : 'A door appears'}</div><div class='row'>${t.map(k => `<button class='win big' data-k='${k}'><div style='width:54px'>${shape(DR[k][0], DR[k][1], 54)}</div><span>${DR[k][2]}</span></button>`).join('')}</div>`);
-    document.querySelectorAll('#ov .big').forEach(b => b.onclick = () => {
-        const k = b.dataset.k;
-        if (k == 'f') fight();
-        else if (k == 'e') { hide(); start(1); }
-        else if (k == 'r') restSite();
-        else k == 's' ? shop() : event();
-    });
-}
-
-function bossDoors() {
-    const b = BOSSES[(S.f / 9 | 0) % 3];
-    const sides = ['s', 'r'].filter(k => rnd(100) < DR[k][3]);
-    let L = '', Rt = '';
-    if (sides.length == 2) [L, Rt] = shuf(sides);
-    else if (sides.length) Math.random() < .5 ? L = sides[0] : Rt = sides[0];
-    const cell = k => k ? `<button class='win big' data-k='${k}' style='width:90px'><div style='width:54px'>${shape(DR[k][0], DR[k][1], 54)}</div><span>${DR[k][2]}</span></button>` : '<div></div>';
-    ov(`<div>The boss awaits</div><div style='display:grid;grid-template-columns:90px 130px 90px;gap:10px;align-items:center;justify-content:center'>${cell(L)}<button class='win big' data-k='b' style='width:130px;padding:16px 6px'><div style='width:84px'>${shape(b.s, b.col, 84)}</div><span>Boss</span></button>${cell(Rt)}</div>`);
-    document.querySelectorAll('#ov .big').forEach(el => el.onclick = () => {
-        const k = el.dataset.k;
-        if (k == 'b') fight();
-        else k == 's' ? shop() : restSite();
-    });
-}
-
-function pickCard(t, cb, bk, filt) {
-    ov(`<div>${t}</div><div class='row' style='max-height:62%;overflow-y:auto;gap:14px 8px;padding-top:12px'>${S.deck.map((c, i) => cardH(c, i, filt && !filt(c) ? 'no' : '')).join('')}</div><button class='win pb' id='cn'>Back</button>`);
-    document.querySelectorAll('#ov .cd:not(.no)').forEach(el => el.onclick = () => cb(+el.dataset.i));
-    $('#cn').onclick = bk;
-}
-
-function shop() {
-    const cs = shuf([...S.cl.pool, ...NEU]).slice(0, 3);
-    const isRel = Math.random() < .3;
-    const pt = isRel ? [] : [{ ...pick(POTIONS) }], rl = isRel ? rollRel(1) : [];
-    const rp = n => Math.round((RL[n].w < 2 ? 60 : 35) * fsc);
-    const fsc = 1 + (S.f * 0.08);
-    const pr = c => Math.round((c.pot ? 30 : 14 + c.c * 8) * fsc);
-    const ug = {
-        s: { t: 'Sharpen which?', n: 'Sharpen', d: '+40%, max 2 per card', i: '⚒️', p: Math.round(35 * fsc), done: 0, f: c => up(c), ok: c => !c.pot && (c.su || 0) < 2 && (c.d || c.k || c.p || c.h) },
-        l: { t: 'Lighten which?', n: 'Lighten', d: '-1 cost, max 2 per card', i: '🪶', p: Math.round(45 * fsc), done: 0, f: c => ({ ...c, lu: (c.lu || 0) + 1, c: Math.max(0, c.c - 1) }), ok: c => !c.pot && (c.lu || 0) < 2 && c.c > 0 }
-    };
-    const op = ok => ok ? '' : 'opacity:.4';
-    const full = () => S.potions.length >= 3;
-    
-    const dr = () => {
-        const rm = Math.round((25 + 10 * S.rm) * fsc);
-        ov(`<div>${ic('gld', 14)} ${S.gold}</div>
-        <div class='row L'>${cs.map((c, i) => `<div>${c ? cardH(c, i) : '<div class=cd></div>'}<button class='win pb' data-c='${i}' style='${op(c && S.gold >= pr(c))}'>${c ? pr(c) : '-'}</button></div>`).join('')}</div>
-        <div class='row'>
-            ${rl.map((n, i) => `<button class='win big' data-r='${i}' style='${op(n && S.gold >= rp(n))}'>${n ? rs(n, 40) + `<small>${RL[n].t}</small><span>${rp(n)}</span>` : '-'}</button>`).join('')}
-            ${pt.map((p, i) => `<div>${p ? cardH(p, i) : '<div class=cd></div>'}<button class='win pb' data-p='${i}' style='${op(p && !full() && S.gold >= pr(p))}'>${p ? (full() ? 'Full' : pr(p)) : '-'}</button></div>`).join('')}
-            ${Object.entries(ug).map(([k, u]) => `<button class='win big' data-u='${k}' style='${op(!u.done && S.gold >= u.p)}'><div style="font-size:24px">${u.i}</div>${u.n}<small>${u.d}</small><span>${u.done ? 'Sold' : u.p}</span></button>`).join('')}
-        </div>
-        <div class='row'><button class='win pb' id='rm' style='${op(S.gold >= rm)}'>Remove ${rm}</button><button class='win pb' id='lv'>Leave</button></div>`);
-        
-        document.querySelectorAll('#ov [data-c]').forEach(b => b.onclick = () => { const i = +b.dataset.c, c = cs[i]; if (c && S.gold >= pr(c)) { S.gold -= pr(c); S.deck.push(c); cs[i] = null; dr(); } });
-        document.querySelectorAll('#ov [data-r]').forEach(b => b.onclick = () => { const i = +b.dataset.r, n = rl[i]; if (n && S.gold >= rp(n)) { addRel(n, () => { S.gold -= rp(n); rl[i] = 0; dr(); }, dr); } });
-        document.querySelectorAll('#ov [data-p]').forEach(b => b.onclick = () => { const i = +b.dataset.p, p = pt[i]; if (p && !full() && S.gold >= pr(p)) { S.gold -= pr(p); S.potions.push(p); pt[i] = null; dr(); } });
-        document.querySelectorAll('#ov [data-u]').forEach(b => b.onclick = () => {
-            const u = ug[b.dataset.u];
-            if (u.done || S.gold < u.p) return;
-            pickCard(u.t, i => { S.gold -= u.p; S.deck[i] = u.f(S.deck[i]); u.done = 1; dr(); }, dr, u.ok);
-        });
-        $('#rm').onclick = () => { if (S.gold >= rm) pickCard('Remove which?', i => { S.gold -= rm; S.rm++; S.deck.splice(i, 1); dr(); }, dr); };
-        $('#lv').onclick = fight;
-    };
-    dr();
-}
-
-let cur;
-const ok = t => { ov(`<div>${t}</div><button class='win pb' id='ok'>Continue</button>`); $('#ok').onclick = fight; }, bk = () => event(cur), up = c => { const o = { ...c, su: (c.su || 0) + 1 }; ['d', 'k', 'p', 'h'].forEach(k => o[k] && (o[k] = Math.ceil(o[k] * 1.4))); return o; };
-const EV = [['A coin spins in the dark.', [['Flip it', () => Math.random() < .5 ? (S.gold += 45, ok('+45 gold')) : (S.hp = Math.max(1, S.hp - 10), ok('-10 hp'))], ['Leave', fight]]], ['An altar hums, hungry.', [['Pay 12% hp for a relic', () => { S.hp = Math.max(1, S.hp - Math.round(S.mhp * .12)); relicPick(fight); }], ['Leave', fight]]], ['A hollow shape offers gold.', [['Take 60 gold and a dead card', () => { S.gold += 60; S.deck.push({ c: 3, st: 1, nm: 'Dead Weight' }); fight(); }], ['Leave', fight]]], ['Dead weight can be shed.', [['Remove a card', () => pickCard('Remove which?', i => { S.deck.splice(i, 1); fight(); }, bk)], ['Leave', fight]]], ['An echo repeats itself.', [['Duplicate a card', () => pickCard('Copy which?', i => { S.deck.push(S.deck[i]); fight(); }, bk)], ['Leave', fight]]], ['A whetstone and a feather.', [['Sharpen a card (+40%, max 2)', () => pickCard('Sharpen which?', i => { S.deck[i] = up(S.deck[i]); fight(); }, bk, c => !c.pot && (c.su || 0) < 2 && (c.d || c.k || c.p || c.h))], ['Lighten a card (-1 cost, max 2)', () => pickCard('Lighten which?', i => { S.deck[i] = { ...S.deck[i], lu: (S.deck[i].lu || 0) + 1, c: Math.max(0, S.deck[i].c - 1) }; fight(); }, bk, c => !c.pot && (c.lu || 0) < 2 && c.c > 0)], ['Leave', fight]]]];
-
-function event(e) {
-    cur = e = e || pick(EV);
-    ov(`<div style='max-width:300px'>${e[0]}</div>${e[1].map((o, i) => `<button class='win pb' data-o='${i}' style='padding:8px 16px;margin:6px auto'>${o[0]}</button>`).join('')}`);
-    document.querySelectorAll('#ov [data-o]').forEach(b => b.onclick = () => e[1][+b.dataset.o][1]());
-}
-
-function lose() {
-    say('You fade away.');
-    setTimeout(() => ov(`<div>${shape(S.cl.s, '#444', 80)}</div><div style="font-size:16px">Reached floor ${S.f + 1}${S.asc ? ' · ASC ' + S.asc : ''}</div><button class="win big" style="width:auto;padding:10px 24px" id="re">Again</button>`) || ($('#re').onclick = menu), 900);
-}
-
-menu();
-</script>
-</body>
-</html>
+    }
