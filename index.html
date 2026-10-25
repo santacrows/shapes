@@ -55,7 +55,7 @@ html, body {
 #log { flex: 1; min-width: 0; margin: 0; padding: 3px 8px; font-size: 12px; line-height: 1.15; display: flex; align-items: center; overflow: hidden; }
 #pots { display: flex; gap: 4px; padding: 3px; align-items: center; flex: none; }
 .ps { width: 32px; height: 38px; padding: 0; border: 2px dashed #555; border-radius: 7px; background: transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px; line-height: 1; color: #fff; }
-.ps.f { border: 2px solid #7a5cff; background: #14102a; box-shadow: 0 0 6px #7a5cff66; }
+.ps.f { border-color: transparent; background: #14102a; color: #3de0ff; }
 .ps.f:active { background: #333; }
 #pl { display: flex; gap: 6px; padding: 0 6px; height: 58px; }
 #hpw { position: relative; padding: 3px 10px; display: flex; flex-direction: column; justify-content: center; flex: 1.4; }
@@ -175,13 +175,12 @@ const P = {
     blk: '<path d="M12 2L21 5V12C21 17 17 20 12 22 7 20 3 17 3 12V5z"/>',
     drw: '<rect x="3" y="6" width="12" height="16" rx="2" opacity=".5"/><rect x="9" y="2" width="12" height="16" rx="2"/>',
     nrg: '<circle cx="12" cy="12" r="8"/>',
-    clk: '<path fill-rule="evenodd" d="M12 2a10 10 0 100 20 10 10 0 000-20zm-1 4h2v6l4 2.3-1 1.7-5-3V6z"/>',
+    bom: '<path d="M12.0 0.5 L14.0 7.2 L20.1 3.9 L16.8 10.0 L23.5 12.0 L16.8 14.0 L20.1 20.1 L14.0 16.8 L12.0 23.5 L10.0 16.8 L3.9 20.1 L7.2 14.0 L0.5 12.0 L7.2 10.0 L3.9 3.9 L10.0 7.2z"/>',
     psn: '<path d="M12 2C12 2 5 10 5 15a7 7 0 0014 0C19 10 12 2 12 2z"/>',
     vul: '<path fill-rule="evenodd" d="M12 1L3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5l-9-4zm-1 5h4l-2 4h3l-5 7 1-5H9l2-6z" clip-rule="evenodd"/>',
     str: '<path d="M12 2l9 10h-6v10H9V12H3z"/>',
     hrt: '<path d="M12 21s-8-5.3-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.7-8 11-8 11z"/>',
     amp: `<path d='M12 2l9 9h-6l-3-3-3 3H3zM12 12l9 9h-6l-3-3-3 3H3z'/>`,
-    mny: `<path fill-rule='evenodd' d='M7 2h10l5 10-5 10H7L2 12zm5 6a4 4 0 100 8 4 4 0 000-8z'/>`,
     pot: '<path d="M10 2v4.5l-4.5 9c-.8 1.5.2 3.5 2 3.5h9c1.8 0 2.8-2 2-3.5L14 6.5V2h-4zm1 6.5l3.5 7h-7l3.5-7z"/>',
     exh: '<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>',
     pi: '<path d="M11 2v10.17l-3.59-3.58L6 10l6 6 6-6-1.41-1.41L13 12.17V2h-2zm-7 16v2h16v-2H4z"/>',
@@ -194,8 +193,8 @@ const P = {
 
 const COL = {
     atk: '#ff4d5e', blk: '#4da3ff', drw: '#9be7ff', nrg: '#ffd54a', 
-    psn: '#b46bff', clk: '#b46bff', vul: '#ff9f43', str: '#ffd54a', hrt: '#59e07a', 
-    amp: '#ff8a3d', mny: '#c97a3e', pot: '#7a5cff',
+    psn: '#b46bff', bom: '#ffa63d', vul: '#ff9f43', str: '#ffd54a', hrt: '#59e07a', 
+    amp: '#ff8a3d', pot: '#3de0ff',
     exh: '#ff7675', pi: '#fff', rnd: '#ffd54a', aoe: '#ff9f43',
     jk: '#8a86a8', hid: '#cfd8ff', lock: '#cfd8ff'
 };
@@ -384,9 +383,10 @@ function mkEnc(f) {
 
 let S, B, dv = 0, tm, ty;
 
-const say = t => {
+const say = (t, now) => {
     clearInterval(ty);
     const l = $('#log');
+    if (now) { l.textContent = t; return; }
     let i = 0;
     l.textContent = '';
     ty = setInterval(() => {
@@ -421,7 +421,7 @@ const rows = (c, lv) => {
     c.e && ['nrg', '+' + c.e],
     c.pi && ['pi', ''],
     c.px && ['psn', 'x2'],
-    c.pt && ['psn', ic('clk', 16)],
+    c.pt && ['psn', ic('bom', 16)],
     c.h && ['hrt', '+' + c.h],
     c.m && ['amp', '+' + c.m + '%'],
     c.z && ['rnd', ''],
@@ -434,7 +434,7 @@ const rows = (c, lv) => {
 const ctype = c => c.pot ? 'pot' : c.jk ? 'jk' : c.d || c.bd || c.cp || c.pn ? 'atk' : c.k ? 'blk' : c.p || c.px || c.pt ? 'psn' : 'drw';
 const cardH = (c, i, cls = '') => {
     const hd = cls.includes('hdn'), lk = cls.includes('lkd');
-    return `<div class="cd ${cls}" style="--c:${hd ? COL.jk : COL[ctype(c)]}" data-i="${i}"><div class="co">${hd ? '?' : c.c}</div>${!hd && (c.su || c.lu) ? `<div class="upb">${'+'.repeat((c.su || 0) + (c.lu || 0))}</div>` : ''}${hd ? '<div class="r" style="font-size:38px;opacity:.6">?</div>' : rows(c, cls.includes('lv')).map(([k, t]) => `<div class="r">${k ? ic(k) : ''}${t}</div>`).join('')}${lk ? `<div class="lkx">${ic('lock', 30)}</div>` : ''}</div>`;
+    return `<div class="cd ${cls}" style="--c:${hd ? COL.jk : COL[ctype(c)]}" data-i="${i}">${c.pot ? '' : `<div class="co">${hd ? '?' : c.c}</div>`}${!hd && (c.su || c.lu) ? `<div class="upb">${'+'.repeat((c.su || 0) + (c.lu || 0))}</div>` : ''}${hd ? '<div class="r" style="font-size:38px;opacity:.6">?</div>' : rows(c, cls.includes('lv')).map(([k, t]) => `<div class="r">${k ? ic(k) : ''}${t}</div>`).join('')}${lk ? `<div class="lkx">${ic('lock', 30)}</div>` : ''}</div>`;
 };
 
 function fl(el, t, c) {
@@ -473,7 +473,7 @@ function hud() {
     $('#hpx').innerHTML = `${B && B.amp ? `<span class='ch'>${ic('amp', 13)}${B.amp}%</span>` : ''}${B && B.blk ? `<span class="ch" style="color:var(--blk)">${ic('blk', 13)}${B.blk}</span>` : ''}${B && B.str ? `<span class="ch">${ic('str', 13)}${B.str}</span>` : ''}`;
     
     if (B) {
-        $('#piles').innerHTML = `${S.rel.map(n => `<span title="${RL[n].t}" onclick='say(RL[${n}].t)' style="cursor:help">${rs(n, 18)}</span>`).join('')} <span id="p-drw" style="cursor:pointer;color:var(--drw)">${ic('drw', 13)} ${B.draw.length}</span>·<span id="p-dsc" style="cursor:pointer;color:#aaa">${B.disc.length}</span> <span style="color:var(--silver)">${ic('mny', 13)} ${S.money}</span>`;
+        $('#piles').innerHTML = `${S.rel.map(n => `<span title="${RL[n].t}" onclick='say(RL[${n}].t)' style="cursor:help">${rs(n, 18)}</span>`).join('')} <span id="p-drw" style="cursor:pointer;color:var(--drw)">${ic('drw', 13)} ${B.draw.length}</span>·<span id="p-dsc" style="cursor:pointer;color:#aaa">${B.disc.length}</span>`;
         $('#p-drw').onclick = () => viewCards('Draw Pile', [...B.draw].reverse());
         $('#p-dsc').onclick = () => viewCards('Discard Pile', [...B.disc].reverse());
         const fr = freeNow();
@@ -566,7 +566,7 @@ function start(el) {
     const en = raw_en.map(x => {
         const h = Math.round(x.hp * hm);
         let sz = 1 + (hb - 1) * 0.2; if (x.split) sz *= 0.7; if (x.b) sz *= 1.5; if (x.z) sz *= x.z;
-        return { ...x, hp: h, mhp: h, sz, mv: x.mv.map(m => ({ ...m, a: m.a && Math.round(m.a * dm), k: m.k && Math.round(m.k * dm) })), blk: 0, vul: R(13) ? 2 : 0, psn: 0, str: 0, rot: pick([0, 90, 180, 270]), i: x.b || x.el ? 0 : rnd(x.mv.length) };
+        return { ...x, hp: h, mhp: h, sz, mv: x.mv.map(m => ({ ...m, a: m.a && Math.round(m.a * dm), k: m.k && Math.round(m.k * dm) })), blk: 0, vul: R(13) ? 2 : 0, psn: R(21) ? 3 : 0, str: 0, rot: pick([0, 90, 180, 270]), i: x.b || x.el ? 0 : rnd(x.mv.length) };
     });
     
     B = { en, draw: shuf(S.deck), hand: [], disc: [], energy: 0, blk: R(11) ? 8 : 0, str: R(6) ? 2 : 0, amp: 0, lk: 0, el, cn: 0, fa: 0, pc: 0, hp0: S.hp, bl: 0, dz: 0, da: 0, busy: true, sel: null };
@@ -639,6 +639,9 @@ function dmgE(e, d, pi) {
     const a = pi ? 0 : Math.min(e.blk, d);
     e.blk -= a; e.hp -= d - a;
     fl(e.el.querySelector('.sw'), d - a ? '-' + (d - a) : '0', d - a ? '#ff4d5e' : '#4da3ff');
+    (B.lg = B.lg || []).push({ n: nm(e), d: d - a, b: a });
+    const g = {}; B.lg.forEach(x => (g[x.n] = g[x.n] || []).push(x));
+    say(Object.entries(g).map(([n, a]) => `${n} takes ${a.map(x => x.d).join('+')}${a.length > 1 ? '=' + a.reduce((t, x) => t + x.d, 0) : ''}${a.some(x => x.b) ? ' (' + a.reduce((t, x) => t + x.b, 0) + ' blocked)' : ''}`).join(', ') + '.', 1);
     e.el.querySelector('.sh').animate([{ filter: 'brightness(3)', transform: 'translateX(-8px)' }, { transform: 'translateX(8px)' }, { transform: 'none' }], { duration: 260 });
     shake(); upd(e);
     if (e.hp <= 0) kill(e);
@@ -673,7 +676,7 @@ async function play(i, t) {
     hud();
     
     if (c.d || c.bd || c.cp || c.pn) {
-        say(`${nm(tg[0])} is struck!`);
+        B.lg = [];
         const hn = c.n || 1, fm = R(1) && !B.fa ? 1.5 : 1;
         B.fa = 1;
         for (let h = 0; h < hn; h++) {
@@ -689,7 +692,7 @@ async function play(i, t) {
         if (c.v) e.vul += c.v + (R(16) ? 1 : 0);
         if (c.p) e.psn += R(15) ? Math.round(amp(c.p) * 1.3) : amp(c.p);
         if (c.px) e.psn *= 2;
-        if (c.pt && e.hp > 0) { const d = e.psn; e.hp -= d; fl(e.el.querySelector('.sw'), '-' + d, '#b46bff'); if (e.hp <= 0) kill(e); }
+        if (c.pt && e.hp > 0) { const d = e.psn; e.hp -= d; fl(e.el.querySelector('.sw'), '-' + d, '#b46bff'); say(`Detonate! ${nm(e)} takes ${d} poison.`, 1); if (e.hp <= 0) kill(e); }
         if (c.p || c.v || c.px || c.pt) upd(e);
     }
     
@@ -715,7 +718,7 @@ $('#end').onclick = async () => {
     for (const e of B.en) if (e.hp > 0) {
         e.blk = 0;
         if (e.psn) {
-            e.hp -= e.psn; fl(e.el.querySelector('.sw'), '-' + e.psn, '#b46bff');
+            e.hp -= e.psn; fl(e.el.querySelector('.sw'), '-' + e.psn, '#b46bff'); say(`${nm(e)} takes ${e.psn} poison.`, 1);
             if (!R(3)) e.psn = Math.floor(e.psn / 2);
             upd(e); if (e.hp <= 0) kill(e);
         }
@@ -743,7 +746,7 @@ $('#end').onclick = async () => {
                 const d = m.a + e.str, a = Math.min(B.blk, d);
                 B.blk -= a; S.hp -= d - a;
                 fx(d - a ? '#ff2a2aaa' : '#4da3ff55'); if (d - a) shake();
-                fl($('#hpw'), d - a ? '-' + (d - a) : 'blocked', d - a ? '#ff4d5e' : '#4da3ff'); hud();
+                fl($('#hpw'), d - a ? '-' + (d - a) : 'blocked', d - a ? '#ff4d5e' : '#4da3ff'); say(`${nm(e)} hits you for ${d - a}${a ? ' (' + a + ' blocked)' : ''}.`, 1); hud();
                 if (S.hp <= 0 && R(22)) { S.rel.splice(S.rel.indexOf(22), 1); S.hp = Math.round(S.mhp * .3); fl($('#hpw'), 'REVIVE', '#fff'); hud(); }
                 if (S.hp <= 0) return lose();
                 await sleep(300);
@@ -772,7 +775,7 @@ const ascDec = str => {
 };
 
 function startRun(c, asc) {
-    S = { cl: c, hp: c.hp, mhp: c.hp, me: 3, f: 0, money: 20, rel: [...(c.r || [])], rm: 0, deck: [...c.deck], potions: [], asc: asc || 0 };
+    S = { cl: c, hp: c.hp, mhp: c.hp, me: 3, f: 0, rel: [...(c.r || [])], deck: [...c.deck], potions: [], asc: asc || 0 };
     dv = S.hp; $('#hpn').textContent = String(dv); $('#hpm').textContent = `/${S.mhp}`; $('#avw').innerHTML = shape(c.s, c.col, 34);
     hide(); start();
 }
@@ -807,8 +810,7 @@ function win() {
         const bs = S.f % 9 == 8; 
         if (bs && S.f === 26) { victory(); return; }
         S.f++; if (bs) S.me++;
-        S.money += Math.round((R(21) ? 1.5 : 1) * (8 + rnd(6) + S.f) * (bs ? 3 : B.el ? 2 : 1)) + Math.min(R(12) ? 10 : 5, S.money / 10 | 0);
-        S.hp = bs ? S.mhp : Math.min(S.mhp, S.hp + 9);
+        S.hp = bs ? S.mhp : Math.min(S.mhp, S.hp + 9 + (R(12) ? 8 : 0));
         B.hand = []; hud();
         say(bs ? 'The void shudders. Fully healed. +1 energy.' : 'Quiet. You recover a little.');
         reward(bs, B.el);
@@ -836,7 +838,7 @@ function reward(bs, el) {
     $('#sk').onclick = nx;
 }
 
-const RL = [0, { t: 'First attack each turn deals 1.5x damage', s: 'slash2', c: '#ff4d5e', w: 4 }, { t: '50% of your block carries over', s: 'castle', c: '#4da3ff', w: 4 }, { t: 'Poison never decays', s: 'flask', c: '#b46bff', w: 1 }, { t: 'Every 5th card is free', s: 'ticket', c: '#ffd54a', w: 3 }, { t: 'Draw 1 extra card', s: 'page', c: '#9be7ff', w: 3 }, { t: 'Fights start with +2 strength', s: 'dumbbell', c: '#ff9f43', w: 4 }, { t: 'Heal 3 on every kill', s: 'sprout', c: '#59e07a', w: 4 }, { t: 'Turns start with +20% amp', s: 'stairs', c: '#ff8a3d', w: 3 }, { t: 'Up to 2 unspent energy carries over', s: 'battery', c: '#fff', w: 1 }, { t: 'Keep 3 random cards between turns', s: 'magnet', c: '#fd79a8', w: 1 }, { t: 'Start each fight with 8 block', s: 'helm', c: '#4da3ff', w: 3 }, { t: 'Double money interest', s: 'gem', c: '#c8d0dc', w: 3 }, { t: 'Enemies start vulnerable', s: 'eye', c: '#ff9ff3', w: 3 },
+const RL = [0, { t: 'First attack each turn deals 1.5x damage', s: 'slash2', c: '#ff4d5e', w: 4 }, { t: '50% of your block carries over', s: 'castle', c: '#4da3ff', w: 4 }, { t: 'Poison never decays', s: 'flask', c: '#b46bff', w: 1 }, { t: 'Every 5th card is free', s: 'ticket', c: '#ffd54a', w: 3 }, { t: 'Draw 1 extra card', s: 'page', c: '#9be7ff', w: 3 }, { t: 'Fights start with +2 strength', s: 'dumbbell', c: '#ff9f43', w: 4 }, { t: 'Heal 3 on every kill', s: 'sprout', c: '#59e07a', w: 4 }, { t: 'Turns start with +20% amp', s: 'stairs', c: '#ff8a3d', w: 3 }, { t: 'Up to 2 unspent energy carries over', s: 'battery', c: '#fff', w: 1 }, { t: 'Keep 3 random cards between turns', s: 'magnet', c: '#fd79a8', w: 1 }, { t: 'Start each fight with 8 block', s: 'helm', c: '#4da3ff', w: 3 }, { t: 'Heal 8 more after each fight', s: 'heart', c: '#59e07a', w: 3 }, { t: 'Enemies start vulnerable', s: 'eye', c: '#ff9ff3', w: 3 },
     { t: 'Heal 2 at the start of each turn', s: 'ankh', c: '#59e07a', w: 3 },
     { t: 'Poison you apply is 30% stronger', s: 'fang', c: '#b46bff', w: 3 },
     { t: 'Vulnerable you apply lasts 1 turn longer', s: 'hourglass', c: '#ff9f43', w: 3 },
@@ -844,7 +846,7 @@ const RL = [0, { t: 'First attack each turn deals 1.5x damage', s: 'slash2', c: 
     { t: 'Playing an attack gives 2 block', s: 'sword', c: '#4da3ff', w: 3 },
     { t: 'Exhausted cards go to discard instead', s: 'bin', c: '#fd79a8', w: 1 },
     { t: 'Fights start with 5 damage to all enemies', s: 'blast', c: '#ff4d5e', w: 3 },
-    { t: 'Fights award 50% more money', s: 'sack', c: '#c97a3e', w: 3 },
+    { t: 'Enemies start with 3 poison', s: 'needle', c: '#b46bff', w: 3 },
     { t: 'Once per run: survive death at 30% HP', s: 'ghost', c: '#fff', w: 1 }];
 const rs = (n, z = 22) => `<svg viewBox='0 0 100 100' width='${z}' height='${z}' fill='${RL[n].c}' stroke='#fff' stroke-width='5'>${SH[RL[n].s]}</svg>`;
 const rollRel = k => { const p = []; RL.forEach((r, n) => { if (n && !S.rel.includes(n)) for (let i = 0; i < r.w; i++) p.push(n); }); const o = []; while (o.length < k) { const n = pick(p); if (!o.includes(n)) o.push(n); } return o; };
@@ -870,7 +872,7 @@ function addRel(n, onSuccess, onCancel) {
 }
 
 // [shape, color, name, subtitle, % chance the door appears]
-const DR = { f: ['arch', '#70a1ff', 'Proceed', 80], e: ['crown', '#ff4d5e', 'Elite', 30], s: ['tag', '#ffd54a', 'Shop', 35], v: ['clover', '#c56cf0', 'Event', 40], r: ['heart', '#59e07a', 'Rest', 30], u: ['anvil', '#ff9f43', 'Upgrade', 30] };
+const DR = { f: ['arch', '#70a1ff', 'Proceed', 80], e: ['crown', '#ff4d5e', 'Elite', 30], v: ['clover', '#c56cf0', 'Event', 40], r: ['heart', '#59e07a', 'Rest', 30], u: ['anvil', '#ff9f43', 'Upgrade', 30] };
 
 function upgradeSite() {
     ov(`<div>Upgrade</div><div class='row'>
@@ -899,13 +901,13 @@ function doors() {
         else if (k == 'e') { hide(); start(1); }
         else if (k == 'r') restSite();
         else if (k == 'u') upgradeSite();
-        else k == 's' ? shop() : event();
+        else event();
     });
 }
 
 function bossDoors() {
     const b = BOSSES[(S.f / 9 | 0) % 3];
-    const sides = ['s', 'r'].filter(k => rnd(100) < DR[k][3]);
+    const sides = ['v', 'r'].filter(k => rnd(100) < DR[k][3]);
     let L = '', Rt = '';
     if (sides.length == 2) [L, Rt] = shuf(sides);
     else if (sides.length) Math.random() < .5 ? L = sides[0] : Rt = sides[0];
@@ -914,7 +916,7 @@ function bossDoors() {
     document.querySelectorAll('#ov .big').forEach(el => el.onclick = () => {
         const k = el.dataset.k;
         if (k == 'b') fight();
-        else k == 's' ? shop() : restSite();
+        else k == 'v' ? event() : restSite();
     });
 }
 
@@ -924,51 +926,33 @@ function pickCard(t, cb, bk, filt) {
     $('#cn').onclick = bk;
 }
 
-function shop() {
-    const cs = shuf([...S.cl.pool, ...NEU]).slice(0, 3);
-    const pt = shuf([...POTIONS]).slice(0, 2).map(p => ({ ...p })), rl = rollRel(1);
-    const rp = n => Math.round((RL[n].w < 2 ? 60 : 35) * fsc);
-    const fsc = 1 + (S.f * 0.08);
-    const pr = c => Math.round((c.pot ? 30 : 14 + c.c * 8) * fsc);
-    const sp = n => Math.round(rp(n) * .5);
-    const op = ok => ok ? '' : 'opacity:.4';
-    const full = () => S.potions.length >= 3;
-    
-    const dr = () => {
-        const rm = Math.round((25 + 10 * S.rm) * fsc);
-        ov(`<div style="color:#c97a3e">${ic('mny', 14)} ${S.money}</div>
-        <div class='row L'>${cs.map((c, i) => `<div>${c ? cardH(c, i) : '<div class=cd></div>'}<button class='win pb' data-c='${i}' style='${op(c && S.money >= pr(c))}'>${c ? pr(c) : '-'}</button></div>`).join('')}</div>
-        <div class='row'>
-            ${rl.map((n, i) => `<button class='win big' data-r='${i}' style='${op(n && S.money >= rp(n))}'>${n ? rs(n, 40) + `<small>${RL[n].t}</small><span>${rp(n)}</span>` : '-'}</button>`).join('')}
-            ${pt.map((p, i) => `<div>${p ? cardH(p, i) : '<div class=cd></div>'}<button class='win pb' data-p='${i}' style='${op(p && !full() && S.money >= pr(p))}'>${p ? (full() ? 'Full' : pr(p)) : '-'}</button></div>`).join('')}
-        </div>
-        ${S.rel.length ? `<div style="font-size:11px;color:#c97a3e">Sell a relic</div><div class='row'>${S.rel.map((n, i) => `<button class='win big' data-s='${i}' style='width:76px'>${rs(n, 28)}<span>+${sp(n)}</span></button>`).join('')}</div>` : ''}
-        <div class='row'><button class='win pb' id='rm' style='${op(S.money >= rm)}'>Remove ${rm}</button><button class='win pb' id='lv'>Leave</button></div>`);
-        
-        document.querySelectorAll('#ov [data-c]').forEach(b => b.onclick = () => { const i = +b.dataset.c, c = cs[i]; if (c && S.money >= pr(c)) { S.money -= pr(c); S.deck.push(c); cs[i] = null; dr(); } });
-        document.querySelectorAll('#ov [data-r]').forEach(b => b.onclick = () => { const i = +b.dataset.r, n = rl[i]; if (n && S.money >= rp(n)) { addRel(n, () => { S.money -= rp(n); rl[i] = 0; dr(); }, dr); } });
-        document.querySelectorAll('#ov [data-p]').forEach(b => b.onclick = () => { const i = +b.dataset.p, p = pt[i]; if (p && !full() && S.money >= pr(p)) { S.money -= pr(p); S.potions.push(p); pt[i] = null; dr(); } });
-        document.querySelectorAll('#ov [data-s]').forEach(b => b.onclick = () => { const n = S.rel[+b.dataset.s]; S.rel.splice(+b.dataset.s, 1); S.money += sp(n); dr(); });
-        $('#rm').onclick = () => { if (S.money >= rm) pickCard('Remove which?', i => { S.money -= rm; S.rm++; S.deck.splice(i, 1); dr(); }, dr); };
-        $('#lv').onclick = fight;
-    };
-    dr();
-}
-
 let cur;
 const ok = t => { ov(`<div>${t}</div><button class='win pb' id='ok'>Continue</button>`); $('#ok').onclick = fight; }, bk = () => event(cur), up = c => { const o = { ...c, su: (c.su || 0) + 1 }; ['d', 'k', 'p', 'h'].forEach(k => o[k] && (o[k] = Math.ceil(o[k] * 1.4))); return o; };
+function freeCard() {
+    const all = [...S.cl.pool, ...S.cl.pool, ...NEU], o = [];
+    while (o.length < 3) { const c = pick(all); if (!o.includes(c)) o.push(c); }
+    ov(`<div style="font-size:16px">Take a card</div><div class="row L">${o.map((c, i) => cardH(c, i)).join('')}</div><button class="win big" style="width:auto;padding:8px 22px" id="sk">Skip</button>`);
+    document.querySelectorAll('#ov .cd').forEach(el => el.onclick = () => { S.deck.push(o[el.dataset.i]); fight(); });
+    $('#sk').onclick = fight;
+}
+
+function freePotion() {
+    if (S.potions.length >= 3) return ok('Your potion slots are full.');
+    const o = shuf([...POTIONS]).slice(0, 3);
+    ov(`<div style="font-size:16px">Take a potion</div><div class="row L">${o.map((c, i) => cardH(c, i)).join('')}</div><button class="win big" style="width:auto;padding:8px 22px" id="sk">Skip</button>`);
+    document.querySelectorAll('#ov .cd').forEach(el => el.onclick = () => { S.potions.push({ ...o[el.dataset.i] }); fight(); });
+    $('#sk').onclick = fight;
+}
+
 const EV = [
     ['An altar hums, hungry.', [['Pay 12% hp for a relic', () => { S.hp = Math.max(1, S.hp - Math.round(S.mhp * .12)); relicPick(fight); }], ['Leave', fight]]],
-    ['A hollow shape offers money.', [['Take 60 money and a dead card', () => { S.money += 60; S.deck.push({ c: 3, st: 1, nm: 'Dead Weight' }); fight(); }], ['Leave', fight]]],
+    ['A shape offers a gift.', [['Choose a free card (1 of 3)', freeCard], ['Leave', fight]]],
+    ['A shape offers a gift.', [['Choose a free potion (1 of 3)', freePotion], ['Leave', fight]]],
     ['Dead weight can be shed.', [['Remove a card', () => pickCard('Remove which?', i => { S.deck.splice(i, 1); fight(); }, bk)], ['Leave', fight]]],
     ['An echo repeats itself.', [['Duplicate a card', () => pickCard('Copy which?', i => { S.deck.push(S.deck[i]); fight(); }, bk)], ['Leave', fight]]],
     ['A still pool glimmers.', [['Drink (heal 30%)', () => { const h = Math.round(S.mhp * .3); S.hp = Math.min(S.mhp, S.hp + h); ok('+' + h + ' hp'); }], ['Leave', fight]]],
-    ['A sealed chest, no lock.', [['Pay 40 money to open it', () => { if (S.money < 40) return ok('Not enough money'); S.money -= 40; relicPick(fight); }], ['Leave', fight]]],
-    ['A hungry mouth in the wall.', [['Feed it a card for 40 money', () => pickCard('Feed which?', i => { S.deck.splice(i, 1); S.money += 40; ok('+40 money'); }, bk)], ['Leave', fight]]],
     ['A strange tonic fizzes.', [['Drink: +8 max hp, gain a junk card', () => { S.mhp += 8; S.hp += 8; S.deck.push({ ...JUNK }); ok('+8 max hp'); }], ['Leave', fight]]],
-    ['A traveling shape sells a brew.', [['Pay 25 money for a random potion', () => { if (S.potions.length >= 3) return ok('Potion slots full'); if (S.money < 25) return ok('Not enough money'); S.money -= 25; S.potions.push({ ...pick(POTIONS) }); ok('Potion acquired'); }], ['Leave', fight]]],
-    ['A mirror shows another you.', [['Transform a card into a random one', () => pickCard('Transform which?', i => { S.deck[i] = { ...pick([...S.cl.pool, ...NEU]) }; ok('Transformed'); }, bk)], ['Leave', fight]]],
-    ['Old scars begin to ache.', [['Lose 10% hp, gain 35 money', () => { S.hp = Math.max(1, S.hp - Math.round(S.mhp * .1)); S.money += 35; ok('+35 money'); }], ['Leave', fight]]]
+    ['A mirror shows another you.', [['Transform a card into a random one', () => pickCard('Transform which?', i => { S.deck[i] = { ...pick([...S.cl.pool, ...NEU]) }; ok('Transformed'); }, bk)], ['Leave', fight]]]
 ];
 
 function event(e) {
