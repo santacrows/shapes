@@ -313,7 +313,8 @@ const POTIONS = [
     { c: 0, e: 2, pot: 1 },
     { c: 0, s: 3, pot: 1 },
     { c: 0, k: 20, pot: 1 },
-    { c: 0, w: 3, pot: 1 }
+    { c: 0, w: 3, pot: 1 },
+    { c: 0, clr: 1, pot: 1 }
 ];
 
 const ENM = { drop: 'Droplet', chevron: 'Chevron', pill: 'Capsule', pent: 'Pentagon', trap: 'Trapezoid', leaf: 'Leaf', para: 'Parallelogram', pie: 'Pie', oct: 'Octagon', kite: 'Kite', bowtie: 'Bowtie', semi: 'Semicircle', arrow: 'Arrow', shield: 'Shield', 'ring+star': 'Ring Star', 'hex+dia': 'Hex Diamond', 'cross+cir': 'Cross Circle', gear: 'Gear', prism: 'Prism', needle: 'Needle', anvil: 'Anvil', obelisk: 'Obelisk', comet: 'Comet', trefoil: 'Trefoil', lattice: 'Lattice', frame: 'Frame', zigzag: 'Zigzag', spire: 'Spire', watcher: 'The Watcher', weaver: 'The Weaver', sovereign: 'The Sovereign' };
@@ -399,6 +400,8 @@ const rows = (c, lv) => {
     const L = lv && B && S, fm = L && R(1) && !B.fa ? 1.5 : 1;
     return [
     c.pot && ['pot', ''],
+    c.clr && ['pi', 'Purify'],
+    c.clr && ['', '<small>debuffs<br>& junk</small>'],
     c.jk && ['jk', ''],
     c.d && ['atk', c.d + (c.n ? 'x' + c.n : '') + (c.all ? ic('aoe', 14) : '')],
     c.bd && ['atk', '=' + ic('blk', 13)],
@@ -566,10 +569,10 @@ function start(el) {
     const en = raw_en.map(x => {
         const h = Math.round(x.hp * hm);
         let sz = 1 + (hb - 1) * 0.2; if (x.split) sz *= 0.7; if (x.b) sz *= 1.5; if (x.z) sz *= x.z;
-        return { ...x, hp: h, mhp: h, sz, mv: x.mv.map(m => ({ ...m, a: m.a && Math.round(m.a * dm), k: m.k && Math.round(m.k * dm) })), blk: 0, vul: R(13) ? 2 : 0, psn: R(21) ? 3 : 0, str: 0, rot: pick([0, 90, 180, 270]), i: x.b || x.el ? 0 : rnd(x.mv.length) };
+        return { ...x, hp: h, mhp: h, sz, mv: x.mv.map(m => ({ ...m, a: m.a && Math.round(m.a * dm), k: m.k && Math.round(m.k * dm) })), blk: 0, vul: R(13) ? 2 : 0, psn: R(21) ? 3 : 0, str: 0, rot: 0, i: x.b || x.el ? 0 : rnd(x.mv.length) };
     });
     
-    B = { en, draw: shuf(S.deck), hand: [], disc: [], energy: 0, blk: R(11) ? 8 : 0, str: R(6) ? 2 : 0, amp: 0, lk: 0, el, cn: 0, fa: 0, pc: 0, hp0: S.hp, bl: 0, dz: 0, da: 0, busy: true, sel: null };
+    B = { en, draw: shuf(S.deck), hand: [], disc: [], energy: 0, blk: R(11) ? 8 : 0, str: R(6) ? 2 : 0, amp: 0, lk: 0, el, cn: 0, fa: 0, pc: 0, hp0: S.hp, bl: 0, dz: 0, da: 0, ds_amt: 0, ds_turns: 0, busy: true, sel: null };
     if (R(20)) B.en.forEach(e => e.hp = Math.max(1, e.hp - 5));
     build(); turn(true);
 }
@@ -590,6 +593,15 @@ function turn(first) {
     B.energy = S.me + (R(9) ? Math.min(B.energy, 2) : 0);
     B.blk = first ? B.blk : (R(2) ? Math.floor(B.blk / 2) : 0);
     B.amp = Math.max(-75, Math.max(R(8) ? 20 : 0, B.amp / 2 | 0) - B.da); B.da = 0;
+    
+    if (B.ds_turns > 0) {
+        B.ds_turns--;
+        if (B.ds_turns === 0) {
+            B.str += B.ds_amt; B.ds_amt = 0;
+            fl($('#hpw'), '+Str', '#ffd54a');
+        }
+    }
+    
     B.cn = 0; B.fa = 0; B.r17 = 0; B.pc = 0;
     drawN(5 + (R(5) ? 1 : 0));
     const flag = (n, k) => shuf(B.hand.map((_, i) => i)).slice(0, n).forEach(i => B.hand[i] = { ...B.hand[i], [k]: 1 });
@@ -605,6 +617,14 @@ function usePotion(i) {
     const p = S.potions[i];
     if (!p) return;
     S.potions.splice(i, 1);
+    
+    if (p.clr) {
+        if (B.ds_amt) { B.str += B.ds_amt; B.ds_amt = 0; B.ds_turns = 0; }
+        B.da = 0; B.bl = 0; B.dz = 0;
+        B.draw = B.draw.filter(c => !c.jk); B.disc = B.disc.filter(c => !c.jk); B.hand = B.hand.filter(c => !c.jk);
+        S.deck = S.deck.filter(c => !c.jk);
+        fl($('#hpw'), 'PURIFIED', '#fff');
+    }
     if (p.h) { S.hp = Math.min(S.mhp, S.hp + p.h); fl($('#hpw'), '+' + p.h, '#59e07a'); }
     if (p.e) B.energy += p.e;
     if (p.s) B.str += p.s;
@@ -733,7 +753,7 @@ $('#end').onclick = async () => {
         if (m.u) { e.str += m.u; say(`${nm(e)} grows stronger.`); fl(e.el.querySelector('.sw'), '+' + m.u, '#ffd54a'); }
         if (m.h) { e.hp = Math.min(e.mhp, e.hp + m.h); say(`${nm(e)} heals!`); fl(e.el.querySelector('.sw'), '+' + m.h, '#59e07a'); }
         if (m.j) { B.draw = shuf([...B.draw, ...Array.from({ length: m.j }, () => ({ ...JUNK }))]); say(`${nm(e)} clutters your deck!`); fl($('#hpw'), '+' + m.j + ' junk', '#8a86a8'); }
-        if (m.ds) { B.str -= m.ds; say(`${nm(e)} saps your strength!`); fl($('#hpw'), '-' + m.ds + ' str', '#ffd54a'); }
+        if (m.ds) { B.str -= m.ds; B.ds_amt += m.ds; B.ds_turns = 2; say(`${nm(e)} saps your strength!`); fl($('#hpw'), '-' + m.ds + ' str', '#ffd54a'); }
         if (m.da) { B.da += m.da; say(`${nm(e)} dampens your amp!`); fl($('#hpw'), '-' + m.da + '% amp', '#ff8a3d'); }
         if (m.bl) { B.bl += m.bl; say(`${nm(e)} clouds your cards!`); fl($('#hpw'), 'blind x' + m.bl, '#cfd8ff'); }
         if (m.dz) { B.dz += m.dz; say(`${nm(e)} seals your cards!`); fl($('#hpw'), 'seal x' + m.dz, '#cfd8ff'); }
